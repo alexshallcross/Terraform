@@ -7,6 +7,36 @@
     insecure = false
   }
 
+##### Data Sources
+
+  data "aci_tenant" "skyscape_mgmt" {
+    name = "skyscape_mgmt"
+  }
+  
+    data aci_l3_outside "skyscape_mgmt" {
+      tenant_dn = data.aci_tenant.skyscape_mgmt.id
+      name      = "l3_out_skyscape_mgmt"
+    }
+
+    data "aci_vrf" "skyscape_mgmt" {
+      tenant_dn = data.aci_tenant.skyscape_mgmt.id
+      name      = "vrf_skyscape_mgmt"
+    }
+
+  data "aci_tenant" "internet" {
+    name = "internet"
+  }
+
+    data aci_l3_outside "internet" {
+      tenant_dn = data.aci_tenant.internet.id
+      name      = "l3_out_internet"
+    }
+
+    data "aci_vrf" "internet" {
+      tenant_dn = data.aci_tenant.internet.id
+      name      = "vrf_internet"
+    }
+
 ##### Resources
 
 ### Application Profiles
@@ -14,7 +44,7 @@
   # openstack
 
     resource "aci_application_profile" "openstack" {
-      tenant_dn = "uni/tn-skyscape_mgmt"
+      tenant_dn = data.aci_tenant.skyscape_mgmt.id
       name      = "pod00024_openstack"
     }
 
@@ -41,7 +71,7 @@
 
           resource "aci_epg_to_domain" "internal_api" {
             application_epg_dn = aci_application_epg.internal_api.id
-            tdn                = "uni/phys-phys_domain_openstack_pod00024"
+            tdn                = aci_physical_domain.openstack.id
           }
 
       # ipmi
@@ -65,7 +95,7 @@
         
           resource "aci_epg_to_domain" "ipmi" {
             application_epg_dn = aci_application_epg.ipmi.id
-            tdn                = "uni/phys-phys_domain_openstack_pod00024"
+            tdn                = aci_physical_domain.openstack.id
           }
 
       # mgmt
@@ -89,7 +119,7 @@
         
           resource "aci_epg_to_domain" "mgmt" {
             application_epg_dn = aci_application_epg.mgmt.id
-            tdn                = "uni/phys-phys_domain_openstack_pod00024"
+            tdn                = aci_physical_domain.openstack.id
           }
       
       # mgmt_provisioning
@@ -113,7 +143,7 @@
         
           resource "aci_epg_to_domain" "mgmt_provisioning" {
             application_epg_dn = aci_application_epg.mgmt_provisioning.id
-            tdn                = "uni/phys-phys_domain_openstack_pod00024"
+            tdn                = aci_physical_domain.openstack.id
           }
 
       # storage
@@ -137,7 +167,7 @@
         
           resource "aci_epg_to_domain" "storage" {
             application_epg_dn = aci_application_epg.storage.id
-            tdn                = "uni/phys-phys_domain_openstack_pod00024"
+            tdn                = aci_physical_domain.openstack.id
           }
 
       # storage_mgmt
@@ -161,7 +191,7 @@
         
           resource "aci_epg_to_domain" "storage_mgmt" {
             application_epg_dn = aci_application_epg.storage_mgmt.id
-            tdn                = "uni/phys-phys_domain_openstack_pod00024"
+            tdn                = aci_physical_domain.openstack.id
           }
 
       # tenant
@@ -185,7 +215,7 @@
         
           resource "aci_epg_to_domain" "tenant" {
             application_epg_dn = aci_application_epg.tenant.id
-            tdn                = "uni/phys-phys_domain_openstack_pod00024"
+            tdn                = aci_physical_domain.openstack.id
           }
 
   # internet_tenants
@@ -219,7 +249,7 @@
 
           resource "aci_epg_to_domain" "mgmt_openstack" {
             application_epg_dn = aci_application_epg.mgmt_openstack.id
-            tdn                = "uni/phys-phys_domain_openstack_pod00024"
+            tdn                = aci_physical_domain.openstack.id
           }
 
       # nti0007ei2
@@ -245,19 +275,19 @@
 
           resource "aci_epg_to_domain" "nti0007ei2" {
             application_epg_dn = aci_application_epg.nti0007ei2.id
-            tdn                = "uni/phys-phys_domain_openstack_pod00024"
+            tdn                = aci_physical_domain.openstack.id
           }
 
 ### Bridge Domains
 
   resource "aci_bridge_domain" "internal_api" {
-    tenant_dn                = "uni/tn-skyscape_mgmt"
+    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
     name                     = "bd_pod00024_openstack_internal_api"
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
-      "uni/tn-skyscape_mgmt/out-l3_out_skyscape_mgmt",
+      data.aci_l3_outside.skyscape_mgmt.id
       ]
-    relation_fv_rs_ctx       = "uni/tn-skyscape_mgmt/ctx-vrf_skyscape_mgmt"
+    relation_fv_rs_ctx       = data.aci_vrf.skyscape_mgmt.id
   }
 
     resource "aci_subnet" "internal_api" {
@@ -269,13 +299,13 @@
     }
   
   resource "aci_bridge_domain" "ipmi" {
-    tenant_dn                = "uni/tn-skyscape_mgmt"
+    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
     name                     = "bd_pod00024_openstack_ipmi"
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
-      "uni/tn-skyscape_mgmt/out-l3_out_skyscape_mgmt",
+      data.aci_l3_outside.skyscape_mgmt.id
       ]
-    relation_fv_rs_ctx       = "uni/tn-skyscape_mgmt/ctx-vrf_skyscape_mgmt"
+    relation_fv_rs_ctx       = data.aci_vrf.skyscape_mgmt.id
   }
 
     resource "aci_subnet" "ipmi" {
@@ -287,13 +317,13 @@
     }
 
   resource "aci_bridge_domain" "mgmt" {
-    tenant_dn                = "uni/tn-skyscape_mgmt"
+    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
     name                     = "bd_pod00024_openstack_mgmt"
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
-      "uni/tn-skyscape_mgmt/out-l3_out_skyscape_mgmt",
+      data.aci_l3_outside.skyscape_mgmt.id
       ]
-    relation_fv_rs_ctx       = "uni/tn-skyscape_mgmt/ctx-vrf_skyscape_mgmt"
+    relation_fv_rs_ctx       = data.aci_vrf.skyscape_mgmt.id
   }
 
     resource "aci_subnet" "mgmt" {
@@ -305,13 +335,13 @@
     }
 
   resource "aci_bridge_domain" "mgmt_provisioning" {
-    tenant_dn                = "uni/tn-skyscape_mgmt"
+    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
     name                     = "bd_pod00024_openstack_mgmt_provisioning"
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
-      "uni/tn-skyscape_mgmt/out-l3_out_skyscape_mgmt",
+      data.aci_l3_outside.skyscape_mgmt.id
       ]
-    relation_fv_rs_ctx       = "uni/tn-skyscape_mgmt/ctx-vrf_skyscape_mgmt"
+    relation_fv_rs_ctx       = data.aci_vrf.skyscape_mgmt.id
   }
 
     resource "aci_subnet" "mgmt_provisioning" {
@@ -323,13 +353,13 @@
     }
 
   resource "aci_bridge_domain" "storage" {
-    tenant_dn                = "uni/tn-skyscape_mgmt"
+    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
     name                     = "bd_pod00024_openstack_storage"
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
-      "uni/tn-skyscape_mgmt/out-l3_out_skyscape_mgmt",
+      data.aci_l3_outside.skyscape_mgmt.id
       ]
-    relation_fv_rs_ctx       = "uni/tn-skyscape_mgmt/ctx-vrf_skyscape_mgmt"
+    relation_fv_rs_ctx       = data.aci_vrf.skyscape_mgmt.id
   }
 
     resource "aci_subnet" "storage" {
@@ -341,13 +371,13 @@
     }
 
   resource "aci_bridge_domain" "storage_mgmt" {
-    tenant_dn                = "uni/tn-skyscape_mgmt"
+    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
     name                     = "bd_pod00024_openstack_storage_mgmt"
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
-      "uni/tn-skyscape_mgmt/out-l3_out_skyscape_mgmt",
+      data.aci_l3_outside.skyscape_mgmt.id
       ]
-    relation_fv_rs_ctx       = "uni/tn-skyscape_mgmt/ctx-vrf_skyscape_mgmt"
+    relation_fv_rs_ctx       = data.aci_vrf.skyscape_mgmt.id
   }
 
     resource "aci_subnet" "storage_mgmt" {
@@ -359,11 +389,13 @@
     }
 
   resource "aci_bridge_domain" "tenant" {
-    tenant_dn                = "uni/tn-skyscape_mgmt"
+    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
     name                     = "bd_pod00024_openstack_tenant"
     ep_move_detect_mode      = "garp"
-    relation_fv_rs_bd_to_out = ["uni/tn-skyscape_mgmt/out-l3_out_skyscape_mgmt",]
-    relation_fv_rs_ctx       = "uni/tn-skyscape_mgmt/ctx-vrf_skyscape_mgmt"
+    relation_fv_rs_bd_to_out = [
+      data.aci_l3_outside.skyscape_mgmt.id
+      ]
+    relation_fv_rs_ctx       = data.aci_vrf.skyscape_mgmt.id
   }
 
     resource "aci_subnet" "tenant" {
@@ -375,13 +407,13 @@
     }
 
   resource "aci_bridge_domain" "mgmt_openstack" {
-    tenant_dn                = "uni/tn-internet"
+    tenant_dn                = data.aci_tenant.internet.id
     name                     = "bd_pod00024_mgmt_tenant"
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
-      "uni/tn-internet/out-l3_out_internet",
+      data.aci_l3_outside.internet.id
       ]
-    relation_fv_rs_ctx       = "uni/tn-internet/ctx-vrf_internet"
+    relation_fv_rs_ctx       = data.aci_vrf.internet.id
   }
 
     resource "aci_subnet" "mgmt_openstack" {
@@ -393,13 +425,13 @@
     }
 
   resource "aci_bridge_domain" "nti0007ei2" {
-    tenant_dn                = "uni/tn-internet"
+    tenant_dn                = data.aci_tenant.internet.id
     name                     = "bd_pod00024_mgmt_tenant"
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
-      "uni/tn-internet/out-l3_out_internet",
+      data.aci_l3_outside.internet.id
       ]
-    relation_fv_rs_ctx       = "uni/tn-internet/ctx-vrf_internet"
+    relation_fv_rs_ctx       = data.aci_vrf.internet.id
   }
 
     resource "aci_subnet" "nti0007ei2" {
@@ -464,7 +496,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_1.id
       name                           = "Port-1"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_1" {
@@ -486,7 +518,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_2.id
       name                           = "Port-2"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_2" {
@@ -508,7 +540,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_3.id
       name                           = "Port-3"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_3" {
@@ -530,7 +562,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_4.id
       name                           = "Port-4"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_4" {
@@ -552,7 +584,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_5.id
       name                           = "Port-5"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_5" {
@@ -574,7 +606,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_6.id
       name                           = "Port-6"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_6" {
@@ -596,7 +628,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_7.id
       name                           = "Port-7"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_7" {
@@ -618,7 +650,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_8.id
       name                           = "Port-8"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_8" {
@@ -640,7 +672,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_9.id
       name                           = "Port-9"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_9" {
@@ -662,7 +694,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_10.id
       name                           = "Port-10"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_10" {
@@ -684,7 +716,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_11.id
       name                           = "Port-11"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_11" {
@@ -706,7 +738,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_12.id
       name                           = "Port-12"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_12" {
@@ -728,7 +760,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_13.id
       name                           = "Port-13"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_13" {
@@ -750,7 +782,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_14.id
       name                           = "Port-14"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_14" {
@@ -772,7 +804,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_15.id
       name                           = "Port-15"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_15" {
@@ -794,7 +826,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_16.id
       name                           = "Port-16"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_16" {
@@ -816,7 +848,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_17.id
       name                           = "Port-17"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_17" {
@@ -838,7 +870,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_18.id
       name                           = "Port-18"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_18" {
@@ -860,7 +892,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_19.id
       name                           = "Port-19"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_19" {
@@ -882,7 +914,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_20.id
       name                           = "Port-20"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_20" {
@@ -904,7 +936,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_21.id
       name                           = "Port-21"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_21" {
@@ -926,7 +958,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_22.id
       name                           = "Port-22"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_22" {
@@ -948,7 +980,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_23.id
       name                           = "Port-23"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_23" {
@@ -970,7 +1002,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_24.id
       name                           = "Port-24"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_24" {
@@ -992,7 +1024,7 @@
       leaf_interface_profile_dn      = aci_leaf_interface_profile.port_25.id
       name                           = "Port-25"
       access_port_selector_type      = "range"
-      relation_infra_rs_acc_base_grp = "uni/infra/funcprof/accportgrp-pol_grp_40G_cdp_lldp_openstack_hosts_pod00024"
+      relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.openstack.id
     }
 
       resource "aci_access_port_block" "port_25" {
@@ -1019,7 +1051,7 @@
   resource "aci_attachable_access_entity_profile" "openstack" {
     name                    = "aep_openstack_pod00024"
     relation_infra_rs_dom_p = [
-      "uni/phys-phys_domain_openstack_pod00024"
+      aci_physical_domain.openstack.id
       ]
     }
 
