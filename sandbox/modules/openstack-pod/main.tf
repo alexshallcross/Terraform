@@ -1,16 +1,16 @@
 ##### Data Sources
 
-  data "aci_tenant" "skyscape_mgmt" {
-    name = "skyscape_mgmt"
+  data "aci_tenant" "ukcloud_mgmt" {
+    name = var.ukcloud_mgmt_tenant
   }
   
     data aci_l3_outside "skyscape_mgmt" {
-      tenant_dn = data.aci_tenant.skyscape_mgmt.id
+      tenant_dn = data.aci_tenant.ukcloud_mgmt.id
       name      = "l3_out_skyscape_mgmt"
     }
 
     data "aci_vrf" "skyscape_mgmt" {
-      tenant_dn = data.aci_tenant.skyscape_mgmt.id
+      tenant_dn = data.aci_tenant.ukcloud_mgmt.id
       name      = "vrf_skyscape_mgmt"
     }
 
@@ -35,7 +35,7 @@
   # openstack
 
     resource "aci_application_profile" "openstack" {
-      tenant_dn = data.aci_tenant.skyscape_mgmt.id
+      tenant_dn = data.aci_tenant.ukcloud_mgmt.id
       name      = join("", [var.pod_id, "_openstack"])
     }
 
@@ -276,7 +276,7 @@
 ### Bridge Domains
 
   resource "aci_bridge_domain" "internal_api" {
-    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
+    tenant_dn                = data.aci_tenant.ukcloud_mgmt.id
     name                     = join("", ["bd_", var.pod_id, "_openstack_internal_api"])
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
@@ -294,7 +294,7 @@
     }
   
   resource "aci_bridge_domain" "ipmi" {
-    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
+    tenant_dn                = data.aci_tenant.ukcloud_mgmt.id
     name                     = join("", ["bd_", var.pod_id, "_openstack_ipmi"])
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
@@ -312,7 +312,7 @@
     }
 
   resource "aci_bridge_domain" "mgmt" {
-    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
+    tenant_dn                = data.aci_tenant.ukcloud_mgmt.id
     name                     = join("", ["bd_", var.pod_id, "_openstack_mgmt"])
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
@@ -330,7 +330,7 @@
     }
 
   resource "aci_bridge_domain" "mgmt_provisioning" {
-    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
+    tenant_dn                = data.aci_tenant.ukcloud_mgmt.id
     name                     = join("", ["bd_", var.pod_id, "_openstack_mgmt_provisioning"])
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
@@ -348,7 +348,7 @@
     }
 
   resource "aci_bridge_domain" "storage" {
-    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
+    tenant_dn                = data.aci_tenant.ukcloud_mgmt.id
     name                     = join("", ["bd_", var.pod_id, "_openstack_storage"])
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
@@ -366,7 +366,7 @@
     }
 
   resource "aci_bridge_domain" "storage_mgmt" {
-    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
+    tenant_dn                = data.aci_tenant.ukcloud_mgmt.id
     name                     = join("", ["bd_", var.pod_id, "_openstack_storage_mgmt"])
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
@@ -384,7 +384,7 @@
     }
 
   resource "aci_bridge_domain" "tenant" {
-    tenant_dn                = data.aci_tenant.skyscape_mgmt.id
+    tenant_dn                = data.aci_tenant.ukcloud_mgmt.id
     name                     = join("", ["bd_", var.pod_id, "_openstack_tenant"])
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [

@@ -9,9 +9,11 @@
 
 ##### Modules
 
-module "pod00024-openstack" {
+module "openstack" {
   source    = "./modules/openstack-pod"
   for_each  = var.openstack_pods
-  pod_id    = each.value.pod_id
-  pod_nodes = each.value.pod_nodes
+
+  pod_id              = each.value.pod_id
+  pod_nodes           = each.value.pod_nodes
+  ukcloud_mgmt_tenant = each.value.ukcloud_mgmt_tenant
 }
