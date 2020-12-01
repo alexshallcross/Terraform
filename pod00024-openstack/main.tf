@@ -11,6 +11,7 @@
 
 module "pod00024-openstack" {
   source    = "./modules/openstack-pod"
-  pod_id    = "pod00024"
-  pod_nodes = [401,402]
+  for_each  = var.openstack_pods
+  pod_id    = each.value.pod_id
+  pod_nodes = each.value.pod_nodes
 }
