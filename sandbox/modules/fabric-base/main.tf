@@ -113,4 +113,75 @@
         relation_infra_rs_cdp_if_pol  = aci_cdp_interface_policy.enabled.id
         relation_infra_rs_lldp_if_pol = aci_lldp_interface_policy.enabled.id
         relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.inband_mgmt.id
-    }  
+    }
+
+    resource "aci_leaf_interface_profile" "inband_mgmt" {
+        name = "apic_controllers"
+    }
+
+        resource "aci_access_port_selector" "port_46" {
+            leaf_interface_profile_dn      = aci_leaf_interface_profile.inband_mgmt.id
+            name                           = "Port-46"
+            access_port_selector_type      = "range"
+            relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.inband_mgmt.id
+        }
+
+            resource "aci_access_port_block" "port_46" {
+                access_port_selector_dn = aci_access_port_selector.port_46.id
+                from_card               = "1"
+                from_port               = "46"
+                to_card                 = "1"
+                to_port                 = "46"
+            }
+
+        resource "aci_access_port_selector" "port_47" {
+            leaf_interface_profile_dn      = aci_leaf_interface_profile.inband_mgmt.id
+            name                           = "Port-47"
+            access_port_selector_type      = "range"
+            relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.inband_mgmt.id
+        }
+
+            resource "aci_access_port_block" "port_47" {
+                access_port_selector_dn = aci_access_port_selector.port_47.id
+                from_card               = "1"
+                from_port               = "47"
+                to_card                 = "1"
+                to_port                 = "47"
+            }
+
+        resource "aci_access_port_selector" "port_48" {
+            leaf_interface_profile_dn      = aci_leaf_interface_profile.inband_mgmt.id
+            name                           = "Port-48"
+            access_port_selector_type      = "range"
+            relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.inband_mgmt.id
+        }
+
+            resource "aci_access_port_block" "port_48" {
+                access_port_selector_dn = aci_access_port_selector.port_48.id
+                from_card               = "1"
+                from_port               = "48"
+                to_card                 = "1"
+                to_port                 = "48"
+            }
+
+    resource "aci_leaf_profile" "inband_mgmt" {
+        name = "inband_mgmt_profile"
+
+        relation_infra_rs_acc_port_p = [
+            aci_leaf_interface_profile.inband_mgmt.id
+        ]
+    }
+
+        resource "aci_leaf_selector" "inband_mgmt" {
+            leaf_profile_dn         = aci_leaf_profile.inband_mgmt.id
+            name                    = "inband_mgmt_switch_selector"
+            switch_association_type = "range"
+        }
+
+            resource "aci_node_block" "openstack" {
+                switch_association_dn = aci_leaf_selector.inband_mgmt.id
+                name                  = "e96125f97531b1d1"
+                from_                 = "901"
+                to_                   = "902"
+            }
+
