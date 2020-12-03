@@ -6,12 +6,12 @@
   
     data aci_l3_outside "skyscape_mgmt" {
       tenant_dn = data.aci_tenant.ukcloud_mgmt.id
-      name      = "l3_out_skyscape_mgmt"
+      name      = var.ukcloud_mgmt_l3_out
     }
 
     data "aci_vrf" "skyscape_mgmt" {
       tenant_dn = data.aci_tenant.ukcloud_mgmt.id
-      name      = "vrf_skyscape_mgmt"
+      name      = var.ukcloud_mgmt_vrf
     }
 
   data "aci_tenant" "internet" {
@@ -224,15 +224,13 @@
           application_profile_dn = aci_application_profile.internet_tenants.id
           name                   = join("", [var.pod_id, "_mgmt_openstack"])
           relation_fv_rs_bd      = aci_bridge_domain.mgmt_openstack.id
-          /***
           relation_fv_rs_prov    = [
-            "uni/tn-internet/brc-ukcloud_openstack_mgmt_internet_in",
+            #"uni/tn-internet/brc-ukcloud_openstack_mgmt_internet_in",
             ]
           relation_fv_rs_cons    = [
-            "uni/tn-internet/brc-ukcloud_openstack_mgmt_internet_out",
-            "uni/tn-internet/brc-ukcloud_object_storage_internet_in",
+            #"uni/tn-internet/brc-ukcloud_openstack_mgmt_internet_out",
+            #"uni/tn-internet/brc-ukcloud_object_storage_internet_in",
             ]
-          ***/
           lifecycle {
             ignore_changes = [
               relation_fv_rs_graph_def,
@@ -247,6 +245,8 @@
 
       # nti0007ei2
 
+        /***
+
         resource "aci_application_epg" "nti0007ei2" {
           application_profile_dn = aci_application_profile.internet_tenants.id
           name                   = join("", [var.pod_id, "_nti0007ei2"])
@@ -256,10 +256,8 @@
             ]
           relation_fv_rs_cons    = [
             "uni/tn-common/brc-default",
-            /***
-            "uni/tn-internet/brc-ukcloud_openstack_mgmt_internet_out",
-            "uni/tn-internet/brc-ukcloud_object_storage_internet_in",
-            ***/
+            #"uni/tn-internet/brc-ukcloud_openstack_mgmt_internet_out",
+            #"uni/tn-internet/brc-ukcloud_object_storage_internet_in",
             ]
           lifecycle {
             ignore_changes = [
@@ -272,6 +270,8 @@
             application_epg_dn = aci_application_epg.nti0007ei2.id
             tdn                = aci_physical_domain.openstack.id
           }
+
+        ***/
 
 ### Bridge Domains
 
@@ -287,9 +287,9 @@
 
     resource "aci_subnet" "internal_api" {
       parent_dn = aci_bridge_domain.internal_api.id
-      ip        = "10.41.190.1/23"
+      ip        = var.internal_api_bd_subnet
       scope     = [
-        "shared",
+        "public"
         ]
     }
   
@@ -305,9 +305,9 @@
 
     resource "aci_subnet" "ipmi" {
       parent_dn = aci_bridge_domain.ipmi.id
-      ip        = "10.41.184.1/23"
+      ip        = var.ipmi_bd_subnet
       scope     = [
-        "shared",
+        "public"
         ]
     }
 
@@ -323,9 +323,9 @@
 
     resource "aci_subnet" "mgmt" {
       parent_dn = aci_bridge_domain.mgmt.id
-      ip        = "10.41.186.1/23"
+      ip        = var.mgmt_bd_subnet
       scope     = [
-        "shared",
+        "public"
         ]
     }
 
@@ -341,9 +341,9 @@
 
     resource "aci_subnet" "mgmt_provisioning" {
       parent_dn = aci_bridge_domain.mgmt_provisioning.id
-      ip        = "10.41.188.1/23"
+      ip        = var.mgmt_provisioning_bd_subnet
       scope     = [
-        "shared",
+        "public"
         ]
     }
 
@@ -359,9 +359,9 @@
 
     resource "aci_subnet" "storage" {
       parent_dn = aci_bridge_domain.storage.id
-      ip        = "10.41.194.1/23"
+      ip        = var.storage_bd_subnet
       scope     = [
-        "shared",
+        "public"
         ]
     }
 
@@ -377,9 +377,9 @@
 
     resource "aci_subnet" "storage_mgmt" {
       parent_dn = aci_bridge_domain.storage_mgmt.id
-      ip        = "10.41.196.1/23"
+      ip        = var.storage_mgmt_bd_subnet
       scope     = [
-        "shared",
+        "public"
         ]
     }
 
@@ -395,9 +395,9 @@
 
     resource "aci_subnet" "tenant" {
       parent_dn = aci_bridge_domain.tenant.id
-      ip        = "10.41.192.1/23"
+      ip        = var.tenant_bd_subnet
       scope     = [
-        "shared",
+        "public"
         ]
     }
 
@@ -413,12 +413,14 @@
 
     resource "aci_subnet" "mgmt_openstack" {
       parent_dn = aci_bridge_domain.mgmt_openstack.id
-      ip        = "51.179.217.33/28"
+      ip        = var.mgmt_openstack_bd_subnet
       scope     = [
-        "shared",
+        "public"
         ]
     }
 
+
+  /***
   resource "aci_bridge_domain" "nti0007ei2" {
     tenant_dn                = data.aci_tenant.internet.id
     name                     = join("", ["bd_", var.pod_id, "_mgmt_tenant"])
@@ -436,6 +438,7 @@
         "shared",
         ]
     }
+  ***/
 
 ### Switch Profiles
 
