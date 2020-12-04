@@ -178,10 +178,150 @@
             switch_association_type = "range"
         }
 
-            resource "aci_node_block" "openstack" {
+            resource "aci_node_block" "inband_mgmt" {
                 switch_association_dn = aci_leaf_selector.inband_mgmt.id
                 name                  = "e96125f97531b1d1"
                 from_                 = "901"
                 to_                   = "902"
             }
 
+    resource "aci_vlan_pool" "elevated_mgmt" {
+        name = "vlan_static_l3_out_elevated_mgmt"
+        alloc_mode = "static"
+    }
+
+        resource "aci_ranges" "elevated_mgmt" {
+            vlan_pool_dn = aci_vlan_pool.elevated_mgmt.id
+            _from        = "vlan-3900"
+            to           = "vlan-3900"
+            alloc_mode   = "static"
+            role         = "external"
+        }
+
+    resource "aci_l3_domain_profile" "elevated_mgmt" {
+        name = "l3_out_elevated_mgmt"
+        relation_infra_rs_vlan_ns = aci_vlan_pool.elevated_mgmt.id
+    }
+
+    resource "aci_attachable_access_entity_profile" "elevated_mgmt" {
+        name = "elevated_private_peering"
+        relation_infra_rs_dom_p = aci_l3_domain_profile.elevated_mgmt.id
+    }
+
+    resource "aci_leaf_access_port_policy_group" "elevated_mgmt" {
+        name = "elevated_private_peering"
+
+        relation_infra_rs_cdp_if_pol  = aci_cdp_interface_policy.enabled.id
+        relation_infra_rs_lldp_if_pol = aci_lldp_interface_policy.enabled.id
+        relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.elevated_private_peering.id
+    }
+
+    resource "aci_leaf_interface_profile" "elevated_mgmt" {
+        name = "elevated_private_peering"
+    }
+
+        resource "aci_access_port_selector" "port_33" {
+            leaf_interface_profile_dn      = aci_leaf_interface_profile.elevated_mgmt.id
+            name                           = "Port-33"
+            access_port_selector_type      = "range"
+            relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.elevated_mgmt.id
+        }
+
+            resource "aci_access_port_block" "port_33" {
+                access_port_selector_dn = aci_access_port_selector.port_33.id
+                from_card               = "1"
+                from_port               = "46"
+                to_card                 = "1"
+                to_port                 = "46"
+            }
+
+        resource "aci_access_port_selector" "port_34" {
+            leaf_interface_profile_dn      = aci_leaf_interface_profile.elevated_mgmt.id
+            name                           = "Port-34"
+            access_port_selector_type      = "range"
+            relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.elevated_mgmt.id
+        }
+
+            resource "aci_access_port_block" "port_34" {
+                access_port_selector_dn = aci_access_port_selector.port_34.id
+                from_card               = "1"
+                from_port               = "34"
+                to_card                 = "1"
+                to_port                 = "34"
+            }
+
+    resource "aci_leaf_profile" "elevated_mgmt" {
+        name = "elevated_private_peering"
+
+        relation_infra_rs_acc_port_p = [
+            aci_leaf_interface_profile.elevated_mgmt.id
+        ]
+    }
+
+        resource "aci_leaf_selector" "elevated_mgmt" {
+            leaf_profile_dn         = aci_leaf_profile.elevated_mgmt.id
+            name                    = "elevated_private_peering_switch_selector"
+            switch_association_type = "range"
+        }
+
+            resource "aci_node_block" "elevated_mgmt" {
+                switch_association_dn = aci_leaf_selector.elevated_mgmt.id
+                name                  = "a1f2705d1ge02z7j"
+                from_                 = "901"
+                to_                   = "904"
+            }
+
+    resource "aci_ospf_interface_policy" "elevated_mgmt" {
+        tenant_dn    = "uni/tn-mgmt"
+        name         = "ospf_int_p2p_protocol_policy_elevated_mgmt"
+    }
+
+    resource "aci_l3_outside" "elevated_mgmt" {
+        name = "l3_out_elevated_mgmt"
+    }
+
+        resource "aci_logical_node_profile" "elevated_mgmt" {
+            l3_outside_dn = aci_l3_outside.elevated_mgmt.id
+            name = "ospf_node_profile_mgmt"
+        }
+
+            resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_901" {
+                logical_node_profile_dn  = aci_logical_node_profile.elevated_mgmt.id
+                tDn  = "topology/pod-1/node-901"
+                rtr_id  = "10.41.37.2"
+                }
+            
+            resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_902" {
+                logical_node_profile_dn  = aci_logical_node_profile.elevated_mgmt.id
+                tDn  = "topology/pod-1/node-902"
+                rtr_id  = "10.41.37.10"
+                }
+
+            resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_903" {
+                logical_node_profile_dn  = aci_logical_node_profile.elevated_mgmt.id
+                tDn  = "topology/pod-1/node-903"
+                rtr_id  = "10.41.37.18"
+                }
+
+            resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_904" {
+                logical_node_profile_dn  = aci_logical_node_profile.elevated_mgmt.id
+                tDn  = "topology/pod-1/node-904"
+                rtr_id  = "10.41.37.26"
+                }
+
+            resource "aci_logical_interface_profile" "elevated_mgmt" {
+                logical_node_profile_dn = "${aci_logical_node_profile.example.id}"
+                description             = aci_logical_node_profile.elevated_mgmt.id
+                name                    = "ospf_int_profile_mgmt"
+                tag                     = "yellow-green"
+            }
+
+        resource "aci_external_network_instance_profile" "elevated_mgmt" {
+            l3_outside_dn  = aci_l3_outside.elevated_mgmt.id
+            name           = "all"
+        }
+
+            resource "aci_l3_ext_subnet" "all" {
+                external_network_instance_profile_dn  = aci_external_network_instance_profile.elevated_mgmt.id
+                ip                                    = "0.0.0.0/0"
+            }
