@@ -53,6 +53,7 @@
           relation_fv_rs_cons    = [
             "uni/tn-common/brc-default",
             ]
+          
           lifecycle {
             ignore_changes = [
               relation_fv_rs_graph_def,
@@ -77,6 +78,7 @@
           relation_fv_rs_cons    = [
             "uni/tn-common/brc-default",
             ]
+          
           lifecycle {
             ignore_changes = [
               relation_fv_rs_graph_def,
@@ -101,6 +103,7 @@
           relation_fv_rs_cons    = [
             "uni/tn-common/brc-default",
             ]
+
           lifecycle {
             ignore_changes = [
               relation_fv_rs_graph_def,
@@ -123,8 +126,10 @@
             "uni/tn-common/brc-default",
             ]
           relation_fv_rs_cons    = [
-            "uni/tn-common/brc-default",
+            "uni/tn-common/br
+            c-default",
             ]
+
           lifecycle {
             ignore_changes = [
               relation_fv_rs_graph_def,
@@ -149,6 +154,7 @@
           relation_fv_rs_cons    = [
             "uni/tn-common/brc-default",
             ]
+          
           lifecycle {
             ignore_changes = [
               relation_fv_rs_graph_def,
@@ -173,6 +179,7 @@
           relation_fv_rs_cons    = [
             "uni/tn-common/brc-default",
             ]
+          
           lifecycle {
             ignore_changes = [
               relation_fv_rs_graph_def,
@@ -197,6 +204,7 @@
           relation_fv_rs_cons    = [
             "uni/tn-common/brc-default",
             ]
+          
           lifecycle {
             ignore_changes = [
               relation_fv_rs_graph_def,
@@ -231,6 +239,7 @@
             #"uni/tn-internet/brc-ukcloud_openstack_mgmt_internet_out",
             #"uni/tn-internet/brc-ukcloud_object_storage_internet_in",
             ]
+          
           lifecycle {
             ignore_changes = [
               relation_fv_rs_graph_def,
@@ -259,6 +268,7 @@
             #"uni/tn-internet/brc-ukcloud_openstack_mgmt_internet_out",
             #"uni/tn-internet/brc-ukcloud_object_storage_internet_in",
             ]
+            
           lifecycle {
             ignore_changes = [
               relation_fv_rs_graph_def,
