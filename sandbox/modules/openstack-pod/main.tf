@@ -4,7 +4,7 @@
     name = var.ukcloud_mgmt_tenant
   }
   
-    data aci_l3_outside "skyscape_mgmt" {
+    data "aci_l3_outside" "skyscape_mgmt" {
       tenant_dn = data.aci_tenant.ukcloud_mgmt.id
       name      = var.ukcloud_mgmt_l3_out
     }
@@ -18,14 +18,14 @@
     name = "internet"
   }
 
-    data aci_l3_outside "internet" {
+    data "aci_l3_outside" "internet" {
       tenant_dn = data.aci_tenant.internet.id
-      name      = "l3_out_internet"
+      name      = "internet"
     }
 
     data "aci_vrf" "internet" {
       tenant_dn = data.aci_tenant.internet.id
-      name      = "vrf_internet"
+      name      = "internet"
     }
 
 ##### Resources
@@ -126,8 +126,7 @@
             "uni/tn-common/brc-default",
             ]
           relation_fv_rs_cons    = [
-            "uni/tn-common/br
-            c-default",
+            "uni/tn-common/brc-default",
             ]
 
           lifecycle {
@@ -1142,7 +1141,7 @@
 
     resource "aci_ranges" "openstack_range1" {
       vlan_pool_dn = aci_vlan_pool.openstack.id
-      _from        = "vlan-100"
+      from        = "vlan-100"
       to           = "vlan-199"
       alloc_mode   = "static"
       role         = "external"
@@ -1150,7 +1149,7 @@
 
     resource "aci_ranges" "openstack_range2" {
       vlan_pool_dn = aci_vlan_pool.openstack.id
-      _from        = "vlan-201"
+      from        = "vlan-201"
       to           = "vlan-202"
       alloc_mode   = "static"
       role         = "external"
@@ -1158,7 +1157,7 @@
 
     resource "aci_ranges" "openstack_range3" {
       vlan_pool_dn = aci_vlan_pool.openstack.id
-      _from        = "vlan-1000"
+      from        = "vlan-1000"
       to           = "vlan-1999"
       alloc_mode   = "static"
       role         = "external"

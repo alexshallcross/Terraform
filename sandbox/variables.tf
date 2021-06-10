@@ -1,5 +1,6 @@
 variable "username" {
     type = string
+    sensitive = true
 }
 
 variable "password" {
