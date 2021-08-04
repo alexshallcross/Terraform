@@ -1,7 +1,10 @@
+a_username = "admin"
+b_password = "!v3G@!4@Y"
+
 openstack_pods = {
   pod00001 = {
     pod_id    = "pod00001"
-    pod_nodes = [201,202]
+    pod_nodes = [201, 202]
 
     ukcloud_mgmt_tenant = "burgers"
     ukcloud_mgmt_l3_out = "burgers"

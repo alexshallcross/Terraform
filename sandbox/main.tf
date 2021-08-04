@@ -1,17 +1,32 @@
 ##### APIC Login
 
 provider "aci" {
-  username = var.username
-  password = var.password
-  url      = "https://sandboxapicdc.cisco.com"
+  username = var.a_username
+  password = var.b_password
+  url      = "https://devasc-aci-1.cisco.com"
   insecure = false
 }
 
 ##### Modules
 
+module "pod00069" {
+  source = "./modules/vmware-pod"
+  pod_id = "pod00069"
+  
+  interface_map = {
+    leafs_101_102 = {
+      node_ids   = [101, 102]
+    },
+    leafs_103_104 = {
+      node_ids   = [103, 104]
+    }
+  }
+}
+
+/***
 module "openstack" {
-  source    = "./modules/openstack-pod"
-  for_each  = var.openstack_pods
+  source   = "./modules/openstack-pod"
+  for_each = var.openstack_pods
 
   pod_id    = each.value.pod_id
   pod_nodes = each.value.pod_nodes
@@ -29,3 +44,4 @@ module "openstack" {
   tenant_bd_subnet            = each.value.tenant_bd_subnet
   mgmt_openstack_bd_subnet    = each.value.mgmt_openstack_bd_subnet
 }
+***/
