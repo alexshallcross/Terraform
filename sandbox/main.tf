@@ -18,11 +18,13 @@ module "pod00069" {
       node_ids   = [301, 302]
       clnt_ports = [1, 2, 3, 4]
       mgmt_ports = [23, 24]
+      cimc_ports = [30]
     },
     leafs_303_304 = {
       node_ids   = [303, 304]
       clnt_ports = [1, 2]
       mgmt_ports = []
+      cimc_ports = []
     }
   }
 }

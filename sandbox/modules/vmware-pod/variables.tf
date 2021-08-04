@@ -8,5 +8,6 @@ variable "interface_map" {
     node_ids   = list(string)
     clnt_ports = list(string)
     mgmt_ports = list(string)
+    cimc_ports = list(string)
   }))
 }

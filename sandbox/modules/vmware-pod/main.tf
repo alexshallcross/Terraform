@@ -19,6 +19,14 @@ locals {
       }
     ]
   ])
+  flattened_cimc_interface_map = flatten([
+    for pair_key, pair in var.interface_map : [
+      for cimc_port in pair.cimc_ports : {
+        pair_key  = pair_key
+        cimc_port = cimc_port
+      }
+    ]
+  ])
 }
 
 ########################
@@ -31,7 +39,9 @@ resource "aci_leaf_profile" "vmware" {
   name = join("", [var.pod_id, "_vmware_", each.key])
 
   relation_infra_rs_acc_port_p = [
-    aci_leaf_interface_profile.client_esx[each.key].id
+    aci_leaf_interface_profile.client_esx[each.key].id,
+    aci_leaf_interface_profile.mgmt_esx[each.key].id,
+    aci_leaf_interface_profile.cimc[each.key].id
   ]
 }
 
@@ -69,7 +79,7 @@ resource "aci_access_port_selector" "client_esx" {
   leaf_interface_profile_dn      = aci_leaf_interface_profile.client_esx[each.key].id
   name                           = join("", [var.pod_id, "_", each.key, "_client_esx"])
   access_port_selector_type      = "range"
-  #relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.client_esx.id
+  relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.client_esx.id
 }
 
 resource "aci_access_port_block" "client_esx" {
@@ -99,7 +109,7 @@ resource "aci_access_port_selector" "mgmt_esx" {
   leaf_interface_profile_dn      = aci_leaf_interface_profile.mgmt_esx[each.key].id
   name                           = join("", [var.pod_id, "_", each.key, "_mgmt_esx"])
   access_port_selector_type      = "range"
-  #relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.mgmt_esx.id
+  relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.mgmt_esx.id
 }
 
 resource "aci_access_port_block" "mgmt_esx" {
@@ -111,4 +121,74 @@ resource "aci_access_port_block" "mgmt_esx" {
   name                    = join("", [var.pod_id, "_", each.value.pair_key, "_port_", each.value.mgmt_port])
   from_port               = each.value.mgmt_port
   to_port                 = each.value.mgmt_port
+}
+
+################################
+#### CIMC Interface Profile ####
+################################
+
+resource "aci_leaf_interface_profile" "cimc" {
+  for_each = var.interface_map
+
+  name = join("", [var.pod_id, "_", each.key, "_cimc"])
+}
+
+resource "aci_access_port_selector" "cimc" {
+  for_each = var.interface_map
+
+  leaf_interface_profile_dn      = aci_leaf_interface_profile.cimc[each.key].id
+  name                           = join("", [var.pod_id, "_", each.key, "_cimc"])
+  access_port_selector_type      = "range"
+  relation_infra_rs_acc_base_grp = aci_leaf_access_bundle_policy_group.cimc.id
+}
+
+resource "aci_access_port_block" "cimc" {
+  for_each = {
+    for interface in local.flattened_cimc_interface_map : "${interface.pair_key}.${interface.cimc_port}" => interface
+  }
+
+  access_port_selector_dn = aci_access_port_selector.cimc[each.value.pair_key].id
+  name                    = join("", [var.pod_id, "_", each.value.pair_key, "_port_", each.value.cimc_port])
+  from_port               = each.value.cimc_port
+  to_port                 = each.value.cimc_port
+}
+
+###########################################
+#### Client ESX Interface Policy Group ####
+###########################################
+
+resource "aci_leaf_access_port_policy_group" "client_esx" {
+  name = join("", [var.pod_id, "_client_esx"])
+  
+  #relation_infra_rs_h_if_pol    = "uni/infra/hintfpol-40G"
+  #relation_infra_rs_cdp_if_pol  = "uni/infra/cdpIfP-cdp_enabled"
+  #relation_infra_rs_lldp_if_pol = "uni/infra/lldpIfP-lldp_enabled"  
+  #relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.client_esx.id
+}
+
+###############################################
+#### Management ESX Interface Policy Group ####
+###############################################
+
+resource "aci_leaf_access_port_policy_group" "mgmt_esx" {
+  name = join("", [var.pod_id, "_mgmt_esx"])
+  
+  #relation_infra_rs_h_if_pol    = "uni/infra/hintfpol-40G"
+  #relation_infra_rs_cdp_if_pol  = "uni/infra/cdpIfP-cdp_enabled"
+  #relation_infra_rs_lldp_if_pol = "uni/infra/lldpIfP-lldp_enabled"  
+  #relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.mgmt_esx.id
+}
+
+###############################################
+#### CIMC VPC Policy Group ####
+###############################################
+
+resource "aci_leaf_access_bundle_policy_group" "cimc" {
+  name  = join("", [var.pod_id, "_cimc"])
+  lag_t = "node"
+  
+  #relation_infra_rs_h_if_pol    = "uni/infra/hintfpol-40G"
+  #relation_infra_rs_cdp_if_pol  = "uni/infra/cdpIfP-cdp_enabled"
+  #relation_infra_rs_lldp_if_pol = "uni/infra/lldpIfP-lldp_enabled"  
+  #relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.cimc.id
 }
