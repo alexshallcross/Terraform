@@ -6,5 +6,7 @@ variable "pod_id" {
 variable "interface_map" {
   type = map(object({
     node_ids   = list(string)
+    clnt_ports = list(string)
+    mgmt_ports = list(string)
   }))
 }

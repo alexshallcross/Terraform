@@ -1,3 +1,18 @@
+#### Local Variables ####
+
+locals {
+  flattened_client_interface_map = flatten([
+    for pair_key, pair in var.interface_map : [
+      for port in pair.clnt_ports : {
+        pair_key = pair_key
+        port     = port
+      }
+    ]
+  ])
+}
+
+#### Switch Profile ####
+
 resource "aci_leaf_profile" "vmware" {
   for_each = var.interface_map
 
@@ -26,6 +41,8 @@ resource "aci_node_block" "vmware" {
   to_   = each.value.node_ids[1]
 }
 
+#### Client Interface Profile ####
+
 resource "aci_leaf_interface_profile" "client_esx" {
   for_each = var.interface_map
 
@@ -39,4 +56,15 @@ resource "aci_access_port_selector" "client_esx" {
   name                           = join("", [var.pod_id, "_", each.key, "_client_esx"])
   access_port_selector_type      = "range"
   #relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.client_esx.id
+}
+
+resource "aci_access_port_block" "client_esx" {
+  for_each = {
+    for interface in local.flattened_client_interface_map : "${interface.pair_key}.${interface.port}" => interface
+  }
+
+  access_port_selector_dn = aci_access_port_selector.client_esx[each.value.pair_key].id
+  name                    = join("", [var.pod_id, "_", each.value.pair_key, "_port_", each.value.port])
+  from_port               = each.value.port
+  to_port                 = each.value.port
 }

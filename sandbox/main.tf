@@ -14,11 +14,13 @@ module "pod00069" {
   pod_id = "pod00069"
   
   interface_map = {
-    leafs_101_102 = {
-      node_ids   = [101, 102]
+    leafs_301_302 = {
+      node_ids   = [301, 302]
+      clnt_ports = [1, 2, 3, 4]
     },
-    leafs_103_104 = {
-      node_ids   = [103, 104]
+    leafs_303_304 = {
+      node_ids   = [303, 304]
+      clnt_ports = [1, 2]
     }
   }
 }
