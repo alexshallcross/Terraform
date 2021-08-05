@@ -44,3 +44,48 @@ variable "ukcloud_mgmt_vrf" {
   type        = string
   description = "The name of the ukcloud_mgmt vrf; e.g. vrf_assured_ukcloud_mgmt"
 }
+
+variable "cimc_subnets" {
+  type = list(string)
+  description = "List of subnets in the podxxxxx_cimc bridge domain"
+}
+
+variable "storage_mgmt_subnets" {
+  type = list(string)
+  description = "List of subnets in the podxxxxx_storage_mgmt bridge domain"
+}
+
+variable "mgmt_cluster_vmware_subnets" {
+  type = list(string)
+  description = "List of subnets in the podxxxxx_mgmt_cluster_vmware bridge domain"
+}
+
+variable "mgmt_cluster_tools_subnets" {
+  type = list(string)
+  description = "List of subnets in the podxxxxx_mgmt_cluster_tools bridge domain"
+}
+
+variable "mgmt_cluster_vmotion_subnets" {
+  type = list(string)
+  description = "List of subnets in the podxxxxx_mgmt_cluster_vmotion bridge domain"
+}
+
+variable "mgmt_cluster_avamar_subnets" {
+  type = list(string)
+  description = "List of subnets in the podxxxxx_mgmt_cluster_avamar bridge domain"
+}
+
+variable "client_cluster_1_vmware_subnets" {
+  type = list(string)
+  description = "List of subnets in the podxxxxx_client_cluster_1_vmware bridge domain"
+}
+
+variable "client_cluster_1_vmotion_subnets" {
+  type = list(string)
+  description = "List of subnets in the podxxxxx_client_cluster_1_vmotion bridge domain"
+}
+
+variable "client_cluster_1_vxlan_subnets" {
+  type = list(string)
+  description = "List of subnets in the podxxxxx_client_cluster_1_vxlan bridge domain"
+}

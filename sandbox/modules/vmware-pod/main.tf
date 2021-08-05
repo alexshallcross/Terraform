@@ -27,6 +27,8 @@ data "aci_vrf" "ukcloud_mgmt" {
   name      = var.ukcloud_mgmt_vrf
 }
 
+
+
 #########################
 #### Local Variables ####
 #########################
@@ -57,6 +59,8 @@ locals {
     ]
   ])
 }
+
+
 
 ########################
 #### Switch Profile ####
@@ -92,6 +96,8 @@ resource "aci_node_block" "vmware" {
   to_   = each.value.node_ids[1]
 }
 
+
+
 ######################################
 #### Client ESX Interface Profile ####
 ######################################
@@ -121,6 +127,8 @@ resource "aci_access_port_block" "client_esx" {
   from_port               = each.value.clnt_port
   to_port                 = each.value.clnt_port
 }
+
+
 
 ##########################################
 #### Management ESX Interface Profile ####
@@ -152,6 +160,8 @@ resource "aci_access_port_block" "mgmt_esx" {
   to_port                 = each.value.mgmt_port
 }
 
+
+
 ################################
 #### CIMC Interface Profile ####
 ################################
@@ -182,6 +192,8 @@ resource "aci_access_port_block" "cimc" {
   to_port                 = each.value.cimc_port
 }
 
+
+
 ###########################################
 #### Client ESX Interface Policy Group ####
 ###########################################
@@ -195,6 +207,8 @@ resource "aci_leaf_access_port_policy_group" "client_esx" {
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.client_esx.id
 }
 
+
+
 ###############################################
 #### Management ESX Interface Policy Group ####
 ###############################################
@@ -207,6 +221,8 @@ resource "aci_leaf_access_port_policy_group" "mgmt_esx" {
   relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.mgmt_esx.id
 }
+
+
 
 ###############################
 #### CIMC VPC Policy Group ####
@@ -222,6 +238,8 @@ resource "aci_leaf_access_bundle_policy_group" "cimc" {
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.cimc.id
 }
 
+
+
 ###############################
 #### VPC Protection Policy ####
 ###############################
@@ -235,6 +253,8 @@ resource "aci_vpc_explicit_protection_group" "vpc_protection" {
 
   vpc_explicit_protection_group_id = each.value.node_ids[0]
 }
+
+
 
 ###########################################
 #### Attachable Access Entity Profiles ####
@@ -279,6 +299,8 @@ resource "aci_access_generic" "cimc" {
   attachable_access_entity_profile_dn = aci_attachable_access_entity_profile.cimc.id
 }
 
+
+
 ##########################
 #### Physical Domains ####
 ##########################
@@ -288,6 +310,8 @@ resource "aci_physical_domain" "vmware" {
 
   relation_infra_rs_vlan_ns = aci_vlan_pool.vmware_static.id
 }
+
+
 
 ####################
 #### VLAN Pools ####
@@ -319,6 +343,8 @@ resource "aci_ranges" "vmware_dynamic_range1" {
   role         = "external"
 }
 
+
+
 #############################
 #### Application Profile ####
 #############################
@@ -327,6 +353,9 @@ resource "aci_application_profile" "vmware" {
   tenant_dn = data.aci_tenant.ukcloud_mgmt.id
   name      = join("", [var.pod_id, "_vmware"])
 }
+
+
+
 ##############
 #### EPGs ####
 ##############
@@ -340,7 +369,7 @@ to a different value, resulting in a change showing each time a run is planned.
 resource "aci_application_epg" "cimc" {
   application_profile_dn = aci_application_profile.vmware.id
   name                   = join("", [var.pod_id, "_cimc"])
-  #relation_fv_rs_bd      = aci_bridge_domain.cimc.id
+  relation_fv_rs_bd      = aci_bridge_domain.cimc.id
 
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
@@ -375,7 +404,7 @@ resource "aci_epgs_using_function" "cimc" {
 resource "aci_application_epg" "storage_mgmt" {
   application_profile_dn = aci_application_profile.vmware.id
   name                   = join("", [var.pod_id, "_storage_mgmt"])
-  #relation_fv_rs_bd      = aci_bridge_domain.storage_mgmt.id
+  relation_fv_rs_bd      = aci_bridge_domain.storage_mgmt.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -409,7 +438,7 @@ resource "aci_epgs_using_function" "storage_mgmt" {
 resource "aci_application_epg" "mgmt_cluster_vmware" {
   application_profile_dn = aci_application_profile.vmware.id
   name                   = join("", [var.pod_id, "_mgmt"])
-  #relation_fv_rs_bd      = aci_bridge_domain.mgmt_cluster_vmware.id
+  relation_fv_rs_bd      = aci_bridge_domain.mgmt_cluster_vmware.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -443,7 +472,7 @@ resource "aci_epgs_using_function" "mgmt_cluster_vmware" {
 resource "aci_application_epg" "mgmt_cluster_tools" {
   application_profile_dn = aci_application_profile.vmware.id
   name                   = join("", [var.pod_id, "_mgmt_cluster_tools"])
-  #relation_fv_rs_bd      = aci_bridge_domain.mgmt_cluster_tools.id
+  relation_fv_rs_bd      = aci_bridge_domain.mgmt_cluster_tools.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -477,7 +506,7 @@ resource "aci_epgs_using_function" "mgmt_cluster_tools" {
 resource "aci_application_epg" "mgmt_cluster_vmotion" {
   application_profile_dn = aci_application_profile.vmware.id
   name                   = join("", [var.pod_id, "_mgmt_cluster_vmotion"])
-  #relation_fv_rs_bd      = aci_bridge_domain.mgmt_cluster_vmotion.id
+  relation_fv_rs_bd      = aci_bridge_domain.mgmt_cluster_vmotion.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -511,7 +540,7 @@ resource "aci_epgs_using_function" "mgmt_cluster_vmotion" {
 resource "aci_application_epg" "client_cluster_1_vmware" {
   application_profile_dn = aci_application_profile.vmware.id
   name                   = join("", [var.pod_id, "_client_cluster_1_vmware"])
-  #relation_fv_rs_bd      = aci_bridge_domain.client_cluster_1_vmware.id
+  relation_fv_rs_bd      = aci_bridge_domain.client_cluster_1_vmware.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -545,7 +574,7 @@ resource "aci_epgs_using_function" "client_cluster_1_vmware" {
 resource "aci_application_epg" "client_cluster_1_vmotion" {
   application_profile_dn = aci_application_profile.vmware.id
   name                   = join("", [var.pod_id, "_client_cluster_1_vmotion"])
-  #relation_fv_rs_bd      = aci_bridge_domain.client_cluster_1_vmotion.id
+  relation_fv_rs_bd      = aci_bridge_domain.client_cluster_1_vmotion.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -579,7 +608,7 @@ resource "aci_epgs_using_function" "client_cluster_1_vmotion" {
 resource "aci_application_epg" "client_cluster_1_vxlan" {
   application_profile_dn = aci_application_profile.vmware.id
   name                   = join("", [var.pod_id, "_client_cluster_1_vxlan"])
-  #relation_fv_rs_bd      = aci_bridge_domain.client_cluster_1_vxlan.id
+  relation_fv_rs_bd      = aci_bridge_domain.client_cluster_1_vxlan.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -613,7 +642,7 @@ resource "aci_epgs_using_function" "client_cluster_1_vxlan" {
 resource "aci_application_epg" "mgmt_cluster_avamar" {
   application_profile_dn = aci_application_profile.vmware.id
   name                   = join("", [var.pod_id, "_mgmt_cluster_avamar"])
-  #relation_fv_rs_bd      = aci_bridge_domain.mgmt_cluster_avamar.id
+  relation_fv_rs_bd      = aci_bridge_domain.mgmt_cluster_avamar.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -641,4 +670,208 @@ resource "aci_epgs_using_function" "mgmt_cluster_avamar" {
   encap             = "vlan-156"
   instr_imedcy      = "immediate"
   mode              = "regular"
+}
+
+
+
+########################
+#### Bridge Domains ####
+########################
+
+# Creates the "podxxxxx_cimc" bridge domain
+resource "aci_bridge_domain" "cimc" {
+  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  name                = join("", [var.pod_id, "_cimc"])
+  ep_move_detect_mode = "garp"
+  relation_fv_rs_bd_to_out = [
+    data.aci_l3_outside.ukcloud_mgmt.id
+  ]
+  relation_fv_rs_ctx = data.aci_vrf.ukcloud_mgmt.id
+}
+
+# Creates a subnet for the "podxxxxx_cimc" bridge domain
+resource "aci_subnet" "cimc" {
+  for_each = toset(var.cimc_subnets)
+
+  parent_dn = aci_bridge_domain.cimc.id
+  ip        = each.value
+  scope = [
+    "public"
+  ]
+}
+
+# Creates the "podxxxxx_storage_mgmt" bridge domain
+resource "aci_bridge_domain" "storage_mgmt" {
+  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  name                = join("", [var.pod_id, "_storage_mgmt"])
+  ep_move_detect_mode = "garp"
+  relation_fv_rs_bd_to_out = [
+    data.aci_l3_outside.ukcloud_mgmt.id
+  ]
+  relation_fv_rs_ctx = data.aci_vrf.ukcloud_mgmt.id
+}
+
+# Creates a subnet for the "podxxxxx_storage_mgmt" bridge domain
+resource "aci_subnet" "storage_mgmt" {
+  for_each = toset(var.storage_mgmt_subnets)
+
+  parent_dn = aci_bridge_domain.storage_mgmt.id
+  ip        = each.value
+  scope = [
+    "public"
+  ]
+}
+
+# Creates the "podxxxxx_mgmt_cluster_vmware" bridge domain
+resource "aci_bridge_domain" "mgmt_cluster_vmware" {
+  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  name                = join("", [var.pod_id, "_mgmt_cluster_vmware"])
+  ep_move_detect_mode = "garp"
+  relation_fv_rs_bd_to_out = [
+    data.aci_l3_outside.ukcloud_mgmt.id
+  ]
+  relation_fv_rs_ctx = data.aci_vrf.ukcloud_mgmt.id
+}
+
+# Creates a subnet for the "podxxxxx_mgmt_cluster_vmware" bridge domain
+resource "aci_subnet" "mgmt" {
+  for_each = toset(var.mgmt_cluster_vmware_subnets)
+
+  parent_dn = aci_bridge_domain.mgmt_cluster_vmware.id
+  ip        = each.value
+  scope = [
+    "public"
+  ]
+}
+
+# Creates the "podxxxxx_mgmt_cluster_tools" bridge domain
+resource "aci_bridge_domain" "mgmt_cluster_tools" {
+  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  name                = join("", [var.pod_id, "_mgmt_cluster_tools"])
+  ep_move_detect_mode = "garp"
+  relation_fv_rs_bd_to_out = [
+    data.aci_l3_outside.ukcloud_mgmt.id
+  ]
+  relation_fv_rs_ctx = data.aci_vrf.ukcloud_mgmt.id
+}
+
+# Creates a subnet for the "podxxxxx_mgmt_cluster_tools" bridge domain
+resource "aci_subnet" "mgmt_cluster_tools" {
+  for_each = toset(var.mgmt_cluster_tools_subnets)
+
+  parent_dn = aci_bridge_domain.mgmt_cluster_tools.id
+  ip        = each.value
+  scope = [
+    "public"
+  ]
+}
+
+# Creates the "podxxxxx_mgmt_cluster_vmotion" bridge domain
+resource "aci_bridge_domain" "mgmt_cluster_vmotion" {
+  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  name                = join("", [var.pod_id, "_mgmt_cluster_vmotion"])
+  ep_move_detect_mode = "garp"
+  relation_fv_rs_bd_to_out = [
+    data.aci_l3_outside.ukcloud_mgmt.id
+  ]
+  relation_fv_rs_ctx = data.aci_vrf.ukcloud_mgmt.id
+}
+
+# Creates a subnet for the "podxxxxx_mgmt_cluster_vmotion" bridge domain
+resource "aci_subnet" "mgmt_cluster_vmotion" {
+  for_each = toset(var.mgmt_cluster_vmotion_subnets)
+
+  parent_dn = aci_bridge_domain.mgmt_cluster_vmotion.id
+  ip        = each.value
+  scope = [
+    "public"
+  ]
+}
+
+# Creates the "podxxxxx_mgmt_cluster_avamar" bridge domain
+resource "aci_bridge_domain" "mgmt_cluster_avamar" {
+  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  name                = join("", [var.pod_id, "_mgmt_cluster_avamar"])
+  ep_move_detect_mode = "garp"
+  relation_fv_rs_bd_to_out = [
+    data.aci_l3_outside.ukcloud_mgmt.id
+  ]
+  relation_fv_rs_ctx = data.aci_vrf.ukcloud_mgmt.id
+}
+
+# Creates a subnet for the "podxxxxx_mgmt_cluster_avamar" bridge domain
+resource "aci_subnet" "mgmt_cluster_avamar" {
+  for_each = toset(var.mgmt_cluster_avamar_subnets)
+
+  parent_dn = aci_bridge_domain.mgmt_cluster_avamar.id
+  ip        = each.value
+  scope = [
+    "public"
+  ]
+}
+
+# Creates the "podxxxxx_client_cluster_1_vmware" bridge domain
+resource "aci_bridge_domain" "client_cluster_1_vmware" {
+  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  name                = join("", [var.pod_id, "_client_cluster_1_vmware"])
+  ep_move_detect_mode = "garp"
+  relation_fv_rs_bd_to_out = [
+    data.aci_l3_outside.ukcloud_mgmt.id
+  ]
+  relation_fv_rs_ctx = data.aci_vrf.ukcloud_mgmt.id
+}
+
+# Creates a subnet for the "podxxxxx_client_cluster_1_vmware" bridge domain
+resource "aci_subnet" "client_cluster_1_vmware" {
+  for_each = toset(var.client_cluster_1_vmware_subnets)
+
+  parent_dn = aci_bridge_domain.client_cluster_1_vmware.id
+  ip        = each.value
+  scope = [
+    "public"
+  ]
+}
+
+# Creates the "podxxxxx_client_cluster_1_vmotion" bridge domain
+resource "aci_bridge_domain" "client_cluster_1_vmotion" {
+  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  name                = join("", [var.pod_id, "_client_cluster_1_vmotion"])
+  ep_move_detect_mode = "garp"
+  relation_fv_rs_bd_to_out = [
+    data.aci_l3_outside.ukcloud_mgmt.id
+  ]
+  relation_fv_rs_ctx = data.aci_vrf.ukcloud_mgmt.id
+}
+
+# Creates a subnet for the "podxxxxx_client_cluster_1_vmotion" bridge domain
+resource "aci_subnet" "client_cluster_1_vmotion" {
+  for_each = toset(var.client_cluster_1_vmotion_subnets)
+
+  parent_dn = aci_bridge_domain.client_cluster_1_vmotion.id
+  ip        = each.value
+  scope = [
+    "public"
+  ]
+}
+
+# Creates the "podxxxxx_client_cluster_1_vxlan" bridge domain
+resource "aci_bridge_domain" "client_cluster_1_vxlan" {
+  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  name                = join("", [var.pod_id, "_client_cluster_1_vxlan"])
+  ep_move_detect_mode = "garp"
+  relation_fv_rs_bd_to_out = [
+    data.aci_l3_outside.ukcloud_mgmt.id
+  ]
+  relation_fv_rs_ctx = data.aci_vrf.ukcloud_mgmt.id
+}
+
+# Creates a subnet for the "podxxxxx_client_cluster_1_vxlan" bridge domain
+resource "aci_subnet" "client_cluster_1_vxlan" {
+  for_each = toset(var.client_cluster_1_vxlan_subnets)
+
+  parent_dn = aci_bridge_domain.client_cluster_1_vxlan.id
+  ip        = each.value
+  scope = [
+    "public"
+  ]
 }
