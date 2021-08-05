@@ -3,14 +3,14 @@
 ######################
 
 data "aci_fabric_if_pol" "link_level" {
-  name  = var.link_level_policy
+  name = var.link_level_policy
 }
 data "aci_cdp_interface_policy" "cdp_enabled" {
-  name  = var.cdp_policy
+  name = var.cdp_policy
 }
 
 data "aci_lldp_interface_policy" "lldp_enabled" {
-  name  = var.lldp_policy
+  name = var.lldp_policy
 }
 
 data "aci_tenant" "ukcloud_mgmt" {
@@ -86,7 +86,7 @@ resource "aci_node_block" "vmware" {
   for_each = var.interface_map
 
   switch_association_dn = aci_leaf_selector.vmware[each.key].id
-  
+
   name  = join("", [var.pod_id, "_", each.key])
   from_ = each.value.node_ids[0]
   to_   = each.value.node_ids[1]
@@ -188,10 +188,10 @@ resource "aci_access_port_block" "cimc" {
 
 resource "aci_leaf_access_port_policy_group" "client_esx" {
   name = join("", [var.pod_id, "_client_esx"])
-  
+
   relation_infra_rs_h_if_pol    = data.aci_fabric_if_pol.link_level.id
   relation_infra_rs_cdp_if_pol  = data.aci_cdp_interface_policy.cdp_enabled.id
-  relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id 
+  relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.client_esx.id
 }
 
@@ -201,7 +201,7 @@ resource "aci_leaf_access_port_policy_group" "client_esx" {
 
 resource "aci_leaf_access_port_policy_group" "mgmt_esx" {
   name = join("", [var.pod_id, "_mgmt_esx"])
-  
+
   relation_infra_rs_h_if_pol    = data.aci_fabric_if_pol.link_level.id
   relation_infra_rs_cdp_if_pol  = data.aci_cdp_interface_policy.cdp_enabled.id
   relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id
@@ -215,7 +215,7 @@ resource "aci_leaf_access_port_policy_group" "mgmt_esx" {
 resource "aci_leaf_access_bundle_policy_group" "cimc" {
   name  = join("", [var.pod_id, "_cimc"])
   lag_t = "node"
-  
+
   relation_infra_rs_h_if_pol    = data.aci_fabric_if_pol.link_level.id
   relation_infra_rs_cdp_if_pol  = data.aci_cdp_interface_policy.cdp_enabled.id
   relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id
@@ -233,7 +233,7 @@ resource "aci_vpc_explicit_protection_group" "vpc_protection" {
   switch1 = each.value.node_ids[0]
   switch2 = each.value.node_ids[1]
 
-  vpc_explicit_protection_group_id  = each.value.node_ids[0]
+  vpc_explicit_protection_group_id = each.value.node_ids[0]
 }
 
 ###########################################
@@ -285,9 +285,9 @@ resource "aci_access_generic" "cimc" {
 
 resource "aci_physical_domain" "vmware" {
   name = join("", [var.pod_id, "_vmware"])
-  
+
   relation_infra_rs_vlan_ns = aci_vlan_pool.vmware_static.id
-  }
+}
 
 ####################
 #### VLAN Pools ####
@@ -296,7 +296,7 @@ resource "aci_physical_domain" "vmware" {
 resource "aci_vlan_pool" "vmware_static" {
   name       = join("", [var.pod_id, "_vmware_static"])
   alloc_mode = "static"
-  }
+}
 
 resource "aci_ranges" "vmware_static_range1" {
   vlan_pool_dn = aci_vlan_pool.vmware_static.id
@@ -326,4 +326,319 @@ resource "aci_ranges" "vmware_dynamic_range1" {
 resource "aci_application_profile" "vmware" {
   tenant_dn = data.aci_tenant.ukcloud_mgmt.id
   name      = join("", [var.pod_id, "_vmware"])
+}
+##############
+#### EPGs ####
+##############
+/***
+For each EPG the 'relation_fv_rs_graph_def' attribute should be ignored as Terraform 
+will write a null value to it, which will then be immediately overwritten by the APIC 
+to a different value, resulting in a change showing each time a run is planned.
+***/
+
+# Creates the "podxxxxx_cimc" EPG
+resource "aci_application_epg" "cimc" {
+  application_profile_dn = aci_application_profile.vmware.id
+  name                   = join("", [var.pod_id, "_cimc"])
+  #relation_fv_rs_bd      = aci_bridge_domain.cimc.id
+
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+# Links the "podxxxxx_cimc" EPG to a physical domain
+resource "aci_epg_to_domain" "cimc_mgmt" {
+  application_epg_dn = aci_application_epg.cimc.id
+  tdn                = aci_physical_domain.vmware.id
+}
+
+# Links the "podxxxxx_cimc" EPG and VLAN tag to the CIMC AEP
+resource "aci_epgs_using_function" "cimc" {
+  access_generic_dn = aci_access_generic.cimc.id
+  tdn               = aci_application_epg.cimc.id
+  encap             = "vlan-100"
+  instr_imedcy      = "immediate"
+  mode              = "regular"
+}
+
+# Creates the "podxxxxx_storage_mgmt" EPG
+resource "aci_application_epg" "storage_mgmt" {
+  application_profile_dn = aci_application_profile.vmware.id
+  name                   = join("", [var.pod_id, "_storage_mgmt"])
+  #relation_fv_rs_bd      = aci_bridge_domain.storage_mgmt.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+# Links the "podxxxxx_storage_mgmt" EPG to a physical domain
+resource "aci_epg_to_domain" "storage_mgmt" {
+  application_epg_dn = aci_application_epg.storage_mgmt.id
+  tdn                = aci_physical_domain.vmware.id
+}
+
+# Links the "podxxxxx_storage_mgmt" EPG and VLAN tag to the CIMC AEP
+resource "aci_epgs_using_function" "storage_mgmt" {
+  access_generic_dn = aci_access_generic.cimc.id
+  tdn               = aci_application_epg.storage_mgmt.id
+  encap             = "vlan-118"
+  instr_imedcy      = "immediate"
+  mode              = "regular"
+}
+
+# Creates the "podxxxxx_mgmt_cluster_vmware" EPG
+resource "aci_application_epg" "mgmt_cluster_vmware" {
+  application_profile_dn = aci_application_profile.vmware.id
+  name                   = join("", [var.pod_id, "_mgmt"])
+  #relation_fv_rs_bd      = aci_bridge_domain.mgmt_cluster_vmware.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+# Links the "podxxxxx_mgmt_cluster_vmware" EPG to a physical domain
+resource "aci_epg_to_domain" "mgmt_cluster_vmware" {
+  application_epg_dn = aci_application_epg.mgmt_cluster_vmware.id
+  tdn                = aci_physical_domain.vmware.id
+}
+
+# Links the "podxxxxx_mgmt_cluster_vmware" EPG and VLAN tag to the MGMT ESX AEP
+resource "aci_epgs_using_function" "mgmt_cluster_vmware" {
+  access_generic_dn = aci_access_generic.mgmt_esx.id
+  tdn               = aci_application_epg.mgmt_cluster_vmware.id
+  encap             = "vlan-101"
+  instr_imedcy      = "immediate"
+  mode              = "regular"
+}
+
+# Creates the "podxxxxx_mgmt_cluster_tools" EPG
+resource "aci_application_epg" "mgmt_cluster_tools" {
+  application_profile_dn = aci_application_profile.vmware.id
+  name                   = join("", [var.pod_id, "_mgmt_cluster_tools"])
+  #relation_fv_rs_bd      = aci_bridge_domain.mgmt_cluster_tools.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+# Links the "podxxxxx_mgmt_cluster_tools" EPG to a physical domain
+resource "aci_epg_to_domain" "mgmt_cluster_tools" {
+  application_epg_dn = aci_application_epg.mgmt_cluster_tools.id
+  tdn                = aci_physical_domain.vmware.id
+}
+
+# Links the "podxxxxx_mgmt_cluster_tools" EPG and VLAN tag to the MGMT ESX AEP
+resource "aci_epgs_using_function" "mgmt_cluster_tools" {
+  access_generic_dn = aci_access_generic.mgmt_esx.id
+  tdn               = aci_application_epg.mgmt_cluster_tools.id
+  encap             = "vlan-102"
+  instr_imedcy      = "immediate"
+  mode              = "regular"
+}
+
+# Creates the "podxxxxx_mgmt_cluster_vmotion" EPG
+resource "aci_application_epg" "mgmt_cluster_vmotion" {
+  application_profile_dn = aci_application_profile.vmware.id
+  name                   = join("", [var.pod_id, "_mgmt_cluster_vmotion"])
+  #relation_fv_rs_bd      = aci_bridge_domain.mgmt_cluster_vmotion.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+# Links the "podxxxxx_mgmt_cluster_vmotion" EPG to a physical domain
+resource "aci_epg_to_domain" "mgmt_cluster_vmotion" {
+  application_epg_dn = aci_application_epg.mgmt_cluster_vmotion.id
+  tdn                = aci_physical_domain.vmware.id
+}
+
+# Links the "podxxxxx_mgmt_cluster_vmotion" EPG and VLAN tag to the MGMT ESX AEP
+resource "aci_epgs_using_function" "mgmt_cluster_vmotion" {
+  access_generic_dn = aci_access_generic.mgmt_esx.id
+  tdn               = aci_application_epg.mgmt_cluster_vmotion.id
+  encap             = "vlan-104"
+  instr_imedcy      = "immediate"
+  mode              = "regular"
+}
+
+# Creates the "podxxxxx_client_cluster_1_vmware" EPG
+resource "aci_application_epg" "client_cluster_1_vmware" {
+  application_profile_dn = aci_application_profile.vmware.id
+  name                   = join("", [var.pod_id, "_client_cluster_1_vmware"])
+  #relation_fv_rs_bd      = aci_bridge_domain.client_cluster_1_vmware.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+# Links the "podxxxxx_client_cluster_1_vmware" EPG to a physical domain
+resource "aci_epg_to_domain" "client_cluster_1_vmware" {
+  application_epg_dn = aci_application_epg.client_cluster_1_vmware.id
+  tdn                = aci_physical_domain.vmware.id
+}
+
+# Links the "podxxxxx_client_cluster_1_vmware" EPG and VLAN tag to the Client ESX AEP
+resource "aci_epgs_using_function" "client_cluster_1_vmware" {
+  access_generic_dn = aci_access_generic.client_esx.id
+  tdn               = aci_application_epg.client_cluster_1_vmware.id
+  encap             = "vlan-110"
+  instr_imedcy      = "immediate"
+  mode              = "regular"
+}
+
+# Creates the "podxxxxx_client_cluster_1_vmotion" EPG
+resource "aci_application_epg" "client_cluster_1_vmotion" {
+  application_profile_dn = aci_application_profile.vmware.id
+  name                   = join("", [var.pod_id, "_client_cluster_1_vmotion"])
+  #relation_fv_rs_bd      = aci_bridge_domain.client_cluster_1_vmotion.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+# Links the "podxxxxx_client_cluster_1_vmotion" EPG to a physical domain
+resource "aci_epg_to_domain" "client_cluster_1_vmotion" {
+  application_epg_dn = aci_application_epg.client_cluster_1_vmotion.id
+  tdn                = aci_physical_domain.vmware.id
+}
+
+# Links the "podxxxxx_client_cluster_1_vmotion" EPG and VLAN tag to the Client ESX AEP
+resource "aci_epgs_using_function" "client_cluster_1_vmotion" {
+  access_generic_dn = aci_access_generic.client_esx.id
+  tdn               = aci_application_epg.client_cluster_1_vmotion.id
+  encap             = "vlan-111"
+  instr_imedcy      = "immediate"
+  mode              = "regular"
+}
+
+# Creates the "podxxxxx_client_cluster_1_vxlan" EPG
+resource "aci_application_epg" "client_cluster_1_vxlan" {
+  application_profile_dn = aci_application_profile.vmware.id
+  name                   = join("", [var.pod_id, "_client_cluster_1_vxlan"])
+  #relation_fv_rs_bd      = aci_bridge_domain.client_cluster_1_vxlan.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+# Links the "podxxxxx_client_cluster_1_vxlan" EPG to a physical domain
+resource "aci_epg_to_domain" "client_cluster_1_vxlan" {
+  application_epg_dn = aci_application_epg.client_cluster_1_vxlan.id
+  tdn                = aci_physical_domain.vmware.id
+}
+
+# Links the "podxxxxx_client_cluster_1_vxlan" EPG and VLAN tag to the Client ESX AEP
+resource "aci_epgs_using_function" "client_cluster_1_vxlan" {
+  access_generic_dn = aci_access_generic.client_esx.id
+  tdn               = aci_application_epg.client_cluster_1_vxlan.id
+  encap             = "vlan-115"
+  instr_imedcy      = "immediate"
+  mode              = "regular"
+}
+
+# Creates the "podxxxxx_mgmt_cluster_avamar" EPG
+resource "aci_application_epg" "mgmt_cluster_avamar" {
+  application_profile_dn = aci_application_profile.vmware.id
+  name                   = join("", [var.pod_id, "_mgmt_cluster_avamar"])
+  #relation_fv_rs_bd      = aci_bridge_domain.mgmt_cluster_avamar.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+# Links the "podxxxxx_mgmt_cluster_avamar" EPG to a physical domain
+resource "aci_epg_to_domain" "mgmt_cluster_avamar" {
+  application_epg_dn = aci_application_epg.mgmt_cluster_avamar.id
+  tdn                = aci_physical_domain.vmware.id
+}
+
+# Links the "podxxxxx_mgmt_cluster_avamar" EPG and VLAN tag to the Client ESX AEP
+resource "aci_epgs_using_function" "mgmt_cluster_avamar" {
+  access_generic_dn = aci_access_generic.client_esx.id
+  tdn               = aci_application_epg.mgmt_cluster_avamar.id
+  encap             = "vlan-156"
+  instr_imedcy      = "immediate"
+  mode              = "regular"
 }

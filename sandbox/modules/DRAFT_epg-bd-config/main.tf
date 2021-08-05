@@ -8,8 +8,8 @@ resource "aci_application_epg" "epg" {
   application_profile_dn = var.app_prof
 
   # Bind to bridge domain 
-  relation_fv_rs_bd      = aci_bridge_domain.bd.id
-  
+  relation_fv_rs_bd = aci_bridge_domain.bd.id
+
   # Provide default contract
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
@@ -42,11 +42,11 @@ resource "aci_epg_to_domain" "epg" {
 
 resource "aci_bridge_domain" "bd" {
   # Name the EPG by combining the pod and EPG name
-  name                = join("", ["bd_", var.pod_id, "_", var.epg_name])
-  
+  name = join("", ["bd_", var.pod_id, "_", var.epg_name])
+
   # The tenant that the BD is created under
-  tenant_dn           = var.tenant
-  
+  tenant_dn = var.tenant
+
   # Set endpoint move detection to GARP
   ep_move_detect_mode = "garp"
 
