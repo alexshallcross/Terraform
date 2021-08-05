@@ -31,6 +31,10 @@ module "pod00420" {
   lldp_policy       = "default"
   cdp_policy        = "default"
   link_level_policy = "default"
+
+  ukcloud_mgmt_tenant = "burgers"
+  ukcloud_mgmt_l3_out = "burgers"
+  ukcloud_mgmt_vrf    = "burgers"
 }
 
 /***

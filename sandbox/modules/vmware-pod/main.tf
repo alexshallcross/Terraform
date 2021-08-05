@@ -13,6 +13,20 @@ data "aci_lldp_interface_policy" "lldp_enabled" {
   name  = var.lldp_policy
 }
 
+data "aci_tenant" "ukcloud_mgmt" {
+  name = var.ukcloud_mgmt_tenant
+}
+
+data "aci_l3_outside" "ukcloud_mgmt" {
+  tenant_dn = data.aci_tenant.ukcloud_mgmt.id
+  name      = var.ukcloud_mgmt_l3_out
+}
+
+data "aci_vrf" "ukcloud_mgmt" {
+  tenant_dn = data.aci_tenant.ukcloud_mgmt.id
+  name      = var.ukcloud_mgmt_vrf
+}
+
 #########################
 #### Local Variables ####
 #########################
@@ -303,4 +317,13 @@ resource "aci_ranges" "vmware_dynamic_range1" {
   to           = "vlan-1999"
   alloc_mode   = "dynamic"
   role         = "external"
+}
+
+#############################
+#### Application Profile ####
+#############################
+
+resource "aci_application_profile" "vmware" {
+  tenant_dn = data.aci_tenant.ukcloud_mgmt.id
+  name      = join("", [var.pod_id, "_vmware"])
 }

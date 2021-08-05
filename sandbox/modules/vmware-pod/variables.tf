@@ -29,3 +29,18 @@ variable "lldp_policy" {
   default = "lldp_enabled"
   description = "The name of the LLDP Interface Policy to use."
 }
+
+variable "ukcloud_mgmt_tenant" {
+  type        = string
+  description = "The name of the ukcloud_mgmt tenant; e.g. assured_ukcloud_mgmt"
+}
+
+variable "ukcloud_mgmt_l3_out" {
+  type        = string
+  description = "The name of the ukcloud_mgmt l3_out; e.g. l3_out_assured_ukcloud_mgmt"
+}
+
+variable "ukcloud_mgmt_vrf" {
+  type        = string
+  description = "The name of the ukcloud_mgmt vrf; e.g. vrf_assured_ukcloud_mgmt"
+}
