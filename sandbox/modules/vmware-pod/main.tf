@@ -179,9 +179,9 @@ resource "aci_leaf_access_port_policy_group" "mgmt_esx" {
   #relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.mgmt_esx.id
 }
 
-###############################################
+###############################
 #### CIMC VPC Policy Group ####
-###############################################
+###############################
 
 resource "aci_leaf_access_bundle_policy_group" "cimc" {
   name  = join("", [var.pod_id, "_cimc"])
@@ -191,4 +191,18 @@ resource "aci_leaf_access_bundle_policy_group" "cimc" {
   #relation_infra_rs_cdp_if_pol  = "uni/infra/cdpIfP-cdp_enabled"
   #relation_infra_rs_lldp_if_pol = "uni/infra/lldpIfP-lldp_enabled"  
   #relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.cimc.id
+}
+
+###############################
+#### VPC Protection Policy ####
+###############################
+
+resource "aci_vpc_explicit_protection_group" "vpc_protection" {
+  for_each = var.interface_map
+
+  name    = join("", [var.pod_id, "_", each.key])
+  switch1 = each.value.node_ids[0]
+  switch2 = each.value.node_ids[1]
+
+  vpc_explicit_protection_group_id  = each.value.node_ids[0]
 }

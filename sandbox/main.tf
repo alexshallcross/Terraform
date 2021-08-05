@@ -9,9 +9,9 @@ provider "aci" {
 
 ##### Modules
 
-module "pod00069" {
+module "pod00420" {
   source = "./modules/vmware-pod"
-  pod_id = "pod00069"
+  pod_id = "pod000429"
   
   interface_map = {
     leafs_301_302 = {
