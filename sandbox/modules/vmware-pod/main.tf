@@ -1,3 +1,18 @@
+######################
+#### Data Sources ####
+######################
+
+data "aci_fabric_if_pol" "link_level" {
+  name  = var.link_level_policy
+}
+data "aci_cdp_interface_policy" "cdp_enabled" {
+  name  = var.cdp_policy
+}
+
+data "aci_lldp_interface_policy" "lldp_enabled" {
+  name  = var.lldp_policy
+}
+
 #########################
 #### Local Variables ####
 #########################
@@ -160,9 +175,9 @@ resource "aci_access_port_block" "cimc" {
 resource "aci_leaf_access_port_policy_group" "client_esx" {
   name = join("", [var.pod_id, "_client_esx"])
   
-  #relation_infra_rs_h_if_pol    = "uni/infra/hintfpol-40G"
-  #relation_infra_rs_cdp_if_pol  = "uni/infra/cdpIfP-cdp_enabled"
-  #relation_infra_rs_lldp_if_pol = "uni/infra/lldpIfP-lldp_enabled"  
+  relation_infra_rs_h_if_pol    = data.aci_fabric_if_pol.link_level.id
+  relation_infra_rs_cdp_if_pol  = data.aci_cdp_interface_policy.cdp_enabled.id
+  relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id 
   #relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.client_esx.id
 }
 
@@ -173,9 +188,9 @@ resource "aci_leaf_access_port_policy_group" "client_esx" {
 resource "aci_leaf_access_port_policy_group" "mgmt_esx" {
   name = join("", [var.pod_id, "_mgmt_esx"])
   
-  #relation_infra_rs_h_if_pol    = "uni/infra/hintfpol-40G"
-  #relation_infra_rs_cdp_if_pol  = "uni/infra/cdpIfP-cdp_enabled"
-  #relation_infra_rs_lldp_if_pol = "uni/infra/lldpIfP-lldp_enabled"  
+  relation_infra_rs_h_if_pol    = data.aci_fabric_if_pol.link_level.id
+  relation_infra_rs_cdp_if_pol  = data.aci_cdp_interface_policy.cdp_enabled.id
+  relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id
   #relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.mgmt_esx.id
 }
 
@@ -187,9 +202,9 @@ resource "aci_leaf_access_bundle_policy_group" "cimc" {
   name  = join("", [var.pod_id, "_cimc"])
   lag_t = "node"
   
-  #relation_infra_rs_h_if_pol    = "uni/infra/hintfpol-40G"
-  #relation_infra_rs_cdp_if_pol  = "uni/infra/cdpIfP-cdp_enabled"
-  #relation_infra_rs_lldp_if_pol = "uni/infra/lldpIfP-lldp_enabled"  
+  relation_infra_rs_h_if_pol    = data.aci_fabric_if_pol.link_level.id
+  relation_infra_rs_cdp_if_pol  = data.aci_cdp_interface_policy.cdp_enabled.id
+  relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id
   #relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.cimc.id
 }
 

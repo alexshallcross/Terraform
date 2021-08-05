@@ -27,6 +27,10 @@ module "pod00420" {
       cimc_ports = []
     }
   }
+
+  lldp_policy       = "default"
+  cdp_policy        = "default"
+  link_level_policy = "default"
 }
 
 /***

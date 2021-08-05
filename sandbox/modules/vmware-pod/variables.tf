@@ -11,3 +11,21 @@ variable "interface_map" {
     cimc_ports = list(string)
   }))
 }
+
+variable "link_level_policy" {
+  type = string
+  default = "40G"
+  description = "The name of the Link Level Policy to use."
+}
+
+variable "cdp_policy" {
+  type = string
+  default = "cdp_enabled"
+  description = "The name of the CDP Interface Policy to use."
+}
+
+variable "lldp_policy" {
+  type = string
+  default = "lldp_enabled"
+  description = "The name of the LLDP Interface Policy to use."
+}
