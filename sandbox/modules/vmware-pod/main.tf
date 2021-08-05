@@ -178,7 +178,7 @@ resource "aci_leaf_access_port_policy_group" "client_esx" {
   relation_infra_rs_h_if_pol    = data.aci_fabric_if_pol.link_level.id
   relation_infra_rs_cdp_if_pol  = data.aci_cdp_interface_policy.cdp_enabled.id
   relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id 
-  #relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.client_esx.id
+  relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.client_esx.id
 }
 
 ###############################################
@@ -191,7 +191,7 @@ resource "aci_leaf_access_port_policy_group" "mgmt_esx" {
   relation_infra_rs_h_if_pol    = data.aci_fabric_if_pol.link_level.id
   relation_infra_rs_cdp_if_pol  = data.aci_cdp_interface_policy.cdp_enabled.id
   relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id
-  #relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.mgmt_esx.id
+  relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.mgmt_esx.id
 }
 
 ###############################
@@ -205,7 +205,7 @@ resource "aci_leaf_access_bundle_policy_group" "cimc" {
   relation_infra_rs_h_if_pol    = data.aci_fabric_if_pol.link_level.id
   relation_infra_rs_cdp_if_pol  = data.aci_cdp_interface_policy.cdp_enabled.id
   relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id
-  #relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.cimc.id
+  relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.cimc.id
 }
 
 ###############################
@@ -220,4 +220,87 @@ resource "aci_vpc_explicit_protection_group" "vpc_protection" {
   switch2 = each.value.node_ids[1]
 
   vpc_explicit_protection_group_id  = each.value.node_ids[0]
+}
+
+###########################################
+#### Attachable Access Entity Profiles ####
+###########################################
+
+resource "aci_attachable_access_entity_profile" "client_esx" {
+  name = join("", [var.pod_id, "_client_esx"])
+  relation_infra_rs_dom_p = [
+    aci_physical_domain.vmware.id
+  ]
+}
+
+resource "aci_access_generic" "client_esx" {
+  name = "default"
+
+  attachable_access_entity_profile_dn = aci_attachable_access_entity_profile.client_esx.id
+}
+
+resource "aci_attachable_access_entity_profile" "mgmt_esx" {
+  name = join("", [var.pod_id, "_mgmt_esx"])
+  relation_infra_rs_dom_p = [
+    aci_physical_domain.vmware.id
+  ]
+}
+
+resource "aci_access_generic" "mgmt_esx" {
+  name = "default"
+
+  attachable_access_entity_profile_dn = aci_attachable_access_entity_profile.mgmt_esx.id
+}
+
+resource "aci_attachable_access_entity_profile" "cimc" {
+  name = join("", [var.pod_id, "_cimc"])
+  relation_infra_rs_dom_p = [
+    aci_physical_domain.vmware.id
+  ]
+}
+
+resource "aci_access_generic" "cimc" {
+  name = "default"
+
+  attachable_access_entity_profile_dn = aci_attachable_access_entity_profile.cimc.id
+}
+
+##########################
+#### Physical Domains ####
+##########################
+
+resource "aci_physical_domain" "vmware" {
+  name = join("", [var.pod_id, "_vmware"])
+  
+  relation_infra_rs_vlan_ns = aci_vlan_pool.vmware_static.id
+  }
+
+####################
+#### VLAN Pools ####
+####################
+
+resource "aci_vlan_pool" "vmware_static" {
+  name       = join("", [var.pod_id, "_vmware_static"])
+  alloc_mode = "static"
+  }
+
+resource "aci_ranges" "vmware_static_range1" {
+  vlan_pool_dn = aci_vlan_pool.vmware_static.id
+  from         = "vlan-1"
+  to           = "vlan-999"
+  alloc_mode   = "static"
+  role         = "external"
+}
+
+resource "aci_vlan_pool" "vmm_dynamic" {
+  name       = join("", [var.pod_id, "_vmm_dynamic"])
+  alloc_mode = "dynamic"
+}
+
+resource "aci_ranges" "vmware_dynamic_range1" {
+  vlan_pool_dn = aci_vlan_pool.vmm_dynamic.id
+  from         = "vlan-1000"
+  to           = "vlan-1999"
+  alloc_mode   = "dynamic"
+  role         = "external"
 }
