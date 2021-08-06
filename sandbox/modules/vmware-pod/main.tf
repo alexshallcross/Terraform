@@ -354,6 +354,11 @@ resource "aci_application_profile" "vmware" {
   name      = join("", [var.pod_id, "_vmware"])
 }
 
+resource "aci_application_profile" "mgmt" {
+  tenant_dn = "uni/tn-mgmt"
+  name      = join("", [var.pod_id, "_management"])
+}
+
 #################
 #### EPG/BDs ####
 #################
@@ -365,70 +370,6 @@ module "cimc" {
   vlan_tag = "vlan-100"
   subnets  = var.cimc_subnets
   access_generic_id = aci_access_generic.cimc.id
-
-  pod_id   = var.pod_id
-  app_prof = aci_application_profile.vmware.id
-  phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
-}
-
-module "storage_mgmt" {
-  source = "./modules/epg-bd-config"
-
-  epg_name          = "storage_mgmt"
-  vlan_tag          = "vlan-118"
-  subnets           = var.storage_mgmt_subnets
-  access_generic_id = aci_access_generic.cimc.id
-
-  pod_id   = var.pod_id
-  app_prof = aci_application_profile.vmware.id
-  phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
-}
-
-module "mgmt_cluster_vmware" {
-  source = "./modules/epg-bd-config"
-  
-  epg_name          = "mgmt_cluster_vmware"
-  vlan_tag          = "vlan-101"
-  subnets           = var.mgmt_cluster_vmware_subnets
-  access_generic_id = aci_access_generic.mgmt_esx.id
-
-  pod_id   = var.pod_id
-  app_prof = aci_application_profile.vmware.id
-  phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
-}
-
-module "mgmt_cluster_tools" {
-  source = "./modules/epg-bd-config"
-  
-  epg_name          = "mgmt_cluster_tools"
-  vlan_tag          = "vlan-102"
-  subnets           = var.mgmt_cluster_tools_subnets
-  access_generic_id = aci_access_generic.mgmt_esx.id
-
-  pod_id   = var.pod_id
-  app_prof = aci_application_profile.vmware.id
-  phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
-}
-
-module "mgmt_cluster_vmotion" {
-  source = "./modules/epg-bd-config"
-  
-  epg_name          = "mgmt_cluster_vmotion"
-  vlan_tag          = "vlan-104"
-  subnets           = var.mgmt_cluster_vmotion_subnets
-  access_generic_id = aci_access_generic.mgmt_esx.id
 
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
@@ -500,4 +441,84 @@ module "mgmt_cluster_avamar" {
   tenant   = data.aci_tenant.ukcloud_mgmt.id
   l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
   vrf      = data.aci_vrf.ukcloud_mgmt.id
+}
+
+module "mgmt_cluster_tools" {
+  source = "./modules/epg-bd-config"
+  
+  epg_name          = "mgmt_cluster_tools"
+  vlan_tag          = "vlan-102"
+  subnets           = var.mgmt_cluster_tools_subnets
+  access_generic_id = aci_access_generic.mgmt_esx.id
+
+  pod_id   = var.pod_id
+  app_prof = aci_application_profile.vmware.id
+  phys_dom = aci_physical_domain.vmware.id
+  tenant   = data.aci_tenant.ukcloud_mgmt.id
+  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  vrf      = data.aci_vrf.ukcloud_mgmt.id
+}
+
+module "mgmt_cluster_vmotion" {
+  source = "./modules/epg-bd-config"
+  
+  epg_name          = "mgmt_cluster_vmotion"
+  vlan_tag          = "vlan-104"
+  subnets           = var.mgmt_cluster_vmotion_subnets
+  access_generic_id = aci_access_generic.mgmt_esx.id
+
+  pod_id   = var.pod_id
+  app_prof = aci_application_profile.vmware.id
+  phys_dom = aci_physical_domain.vmware.id
+  tenant   = data.aci_tenant.ukcloud_mgmt.id
+  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  vrf      = data.aci_vrf.ukcloud_mgmt.id
+}
+
+module "mgmt_cluster_vmware" {
+  source = "./modules/epg-bd-config"
+  
+  epg_name          = "mgmt_cluster_vmware"
+  vlan_tag          = "vlan-101"
+  subnets           = var.mgmt_cluster_vmware_subnets
+  access_generic_id = aci_access_generic.mgmt_esx.id
+
+  pod_id   = var.pod_id
+  app_prof = aci_application_profile.vmware.id
+  phys_dom = aci_physical_domain.vmware.id
+  tenant   = data.aci_tenant.ukcloud_mgmt.id
+  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  vrf      = data.aci_vrf.ukcloud_mgmt.id
+}
+
+module "storage_mgmt" {
+  source = "./modules/epg-bd-config"
+
+  epg_name          = "storage_mgmt"
+  vlan_tag          = "vlan-118"
+  subnets           = var.storage_mgmt_subnets
+  access_generic_id = aci_access_generic.cimc.id
+
+  pod_id   = var.pod_id
+  app_prof = aci_application_profile.vmware.id
+  phys_dom = aci_physical_domain.vmware.id
+  tenant   = data.aci_tenant.ukcloud_mgmt.id
+  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  vrf      = data.aci_vrf.ukcloud_mgmt.id
+}
+
+module "mgmt_vmm" {
+  source = "./modules/epg-bd-config"
+
+  epg_name          = "mgmt_vmm"
+  vlan_tag          = "vlan-102"
+  subnets           = var.mgmt_vmm_subnets
+  access_generic_id = aci_access_generic.mgmt_esx.id
+
+  pod_id   = var.pod_id
+  app_prof = aci_application_profile.mgmt.id
+  phys_dom = aci_physical_domain.vmware.id
+  tenant   ="uni/tn-mgmt"
+  l3_out   = ""
+  vrf      = "uni/tn-mgmt/ctx-inb"
 }

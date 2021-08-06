@@ -42,30 +42,33 @@ module "pod00420" {
 
   cimc_subnets = [ 
     "10.0.0.1/24" 
-    ]
-  storage_mgmt_subnets = [ 
-    "10.0.1.1/24" 
-    ]
-  mgmt_cluster_vmware_subnets = [ 
-    "10.0.2.1/24" 
-    ]
-  mgmt_cluster_tools_subnets = [ 
-    "10.0.3.1/24" 
-    ]
-  mgmt_cluster_vmotion_subnets = [ 
-    "10.0.4.1/24" 
-    ]
-  mgmt_cluster_avamar_subnets = [ 
-    "10.0.5.1/24" 
-    ]
-  client_cluster_1_vmware_subnets = [
-    "10.0.6.1/24"
   ]
   client_cluster_1_vmotion_subnets = [
-    "10.0.7.1/24"
+    "10.0.1.1/24"
+  ]
+  client_cluster_1_vmware_subnets = [
+    "10.0.2.1/24"
   ]
   client_cluster_1_vxlan_subnets = [
-    "10.0.8.1/24"
+    "10.0.3.1/24"
+  ]
+  mgmt_cluster_avamar_subnets = [ 
+    "10.0.4.1/24" 
+  ]
+  mgmt_cluster_tools_subnets = [ 
+    "10.0.5.1/24" 
+  ]
+  mgmt_cluster_vmotion_subnets = [ 
+    "10.0.6.1/24" 
+  ]
+  mgmt_cluster_vmware_subnets = [ 
+    "10.0.7.1/24" 
+  ]
+  storage_mgmt_subnets = [ 
+    "10.0.8.1/24" 
+  ]
+  mgmt_vmm_subnets = [ 
+    "10.0.9.1/24" 
   ]
 }
 

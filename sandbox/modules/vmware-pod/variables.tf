@@ -89,3 +89,8 @@ variable "client_cluster_1_vxlan_subnets" {
   type = list(string)
   description = "List of subnets in the podxxxxx_client_cluster_1_vxlan bridge domain"
 }
+
+variable "mgmt_vmm_subnets" {
+  type = list(string)
+  description = "List of subnets in the podxxxxx_mgmt_vmm bridge domain"
+}
