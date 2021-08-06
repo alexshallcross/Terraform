@@ -20,10 +20,11 @@ resource "aci_application_epg" "epg" {
     "uni/tn-common/brc-default",
   ]
 
-  # The relation_fv_rs_graph_def attribute should be ignored as it will show
-  # as Terraform will write a null value to it, and will be immediately overwritten
-  # by the APIC to a different value, resulting in a change showing each time
-  # a run is planned
+  /***
+  The relation_fv_rs_graph_def attribute should be ignored as Terraform will write 
+  a null value to it, which will be immediately overwritten by the APIC to a different 
+  value, resulting in a change showing each time a run is planned.
+  ***/
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -38,11 +39,22 @@ resource "aci_epg_to_domain" "epg" {
   tdn                = var.phys_dom
 }
 
+### Link the EPG to an AEP
+
+# Links the "podxxxxx_mgmt_cluster_avamar" EPG and VLAN tag to the Client ESX AEP
+resource "aci_epgs_using_function" "epg_to_aep" {
+  access_generic_dn = var.access_generic_id
+  tdn               = aci_application_epg.epg.id
+  encap             = var.vlan_tag
+  instr_imedcy      = "immediate"
+  mode              = "regular"
+}
+
 ### Create the bridge domain
 
 resource "aci_bridge_domain" "bd" {
   # Name the EPG by combining the pod and EPG name
-  name = join("", ["bd_", var.pod_id, "_", var.epg_name])
+  name = join("", [var.pod_id, "_", var.epg_name])
 
   # The tenant that the BD is created under
   tenant_dn = var.tenant
@@ -59,4 +71,14 @@ resource "aci_bridge_domain" "bd" {
   relation_fv_rs_ctx = var.vrf
 }
 
-###
+### Create subnet
+
+resource "aci_subnet" "subnet" {
+  for_each = toset(var.subnets)
+
+  parent_dn = aci_bridge_domain.bd.id
+  ip        = each.value
+  scope = [
+    "public"
+  ]
+}
