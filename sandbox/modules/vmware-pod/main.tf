@@ -27,6 +27,20 @@ data "aci_vrf" "ukcloud_mgmt" {
   name      = var.ukcloud_mgmt_vrf
 }
 
+data "aci_tenant" "protection" {
+  name = var.protection_tenant
+}
+
+data "aci_l3_outside" "protection" {
+  tenant_dn = data.aci_tenant.protection.id
+  name      = var.protection_l3_out
+}
+
+data "aci_vrf" "protection" {
+  tenant_dn = data.aci_tenant.protection.id
+  name      = var.protection_vrf
+}
+
 
 
 #########################
@@ -359,6 +373,11 @@ resource "aci_application_profile" "mgmt" {
   name      = join("", [var.pod_id, "_management"])
 }
 
+resource "aci_application_profile" "avamar" {
+  tenant_dn = data.aci_tenant.protection.id
+  name      = join("", [var.pod_id, "_avamar"])
+}
+
 #################
 #### EPG/BDs ####
 #################
@@ -511,14 +530,30 @@ module "mgmt_vmm" {
   source = "./modules/epg-bd-config"
 
   epg_name          = "mgmt_vmm"
-  vlan_tag          = "vlan-102"
+  vlan_tag          = "vlan-103"
   subnets           = var.mgmt_vmm_subnets
   access_generic_id = aci_access_generic.mgmt_esx.id
 
   pod_id   = var.pod_id
   app_prof = aci_application_profile.mgmt.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   ="uni/tn-mgmt"
+  tenant   = "uni/tn-mgmt"
   l3_out   = ""
   vrf      = "uni/tn-mgmt/ctx-inb"
+}
+
+module "client_avamar" {
+  source = "./modules/epg-bd-config"
+
+  epg_name          = "client_avamar"
+  vlan_tag          = "vlan-155"
+  subnets           = var.client_avamar_subnets
+  access_generic_id = aci_access_generic.client_esx.id
+
+  pod_id   = var.pod_id
+  app_prof = aci_application_profile.mgmt.id
+  phys_dom = aci_physical_domain.vmware.id
+  tenant   = data.aci_tenant.protection.id
+  l3_out   = data.aci_l3_outside.protection.id
+  vrf      = data.aci_vrf.protection.id
 }

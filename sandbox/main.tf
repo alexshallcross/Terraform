@@ -40,6 +40,10 @@ module "pod00420" {
   ukcloud_mgmt_l3_out = "burgers"
   ukcloud_mgmt_vrf    = "burgers"
 
+  protection_tenant = "hotdogs"
+  protection_l3_out = "hotdogs"
+  protection_vrf    = "hotdogs"
+
   cimc_subnets = [ 
     "10.0.0.1/24" 
   ]
@@ -69,6 +73,9 @@ module "pod00420" {
   ]
   mgmt_vmm_subnets = [ 
     "10.0.9.1/24" 
+  ]
+  client_avamar_subnets = [
+    "10.0.10.1/24"
   ]
 }
 

@@ -45,6 +45,21 @@ variable "ukcloud_mgmt_vrf" {
   description = "The name of the ukcloud_mgmt vrf; e.g. vrf_assured_ukcloud_mgmt"
 }
 
+variable "protection_tenant" {
+  type        = string
+  description = "The name of the protection tenant; e.g. assured_protection"
+}
+
+variable "protection_l3_out" {
+  type        = string
+  description = "The name of the protection l3_out; e.g. l3_out_assured_protection"
+}
+
+variable "protection_vrf" {
+  type        = string
+  description = "The name of the protection vrf; e.g. vrf_assured_protection"
+}
+
 variable "cimc_subnets" {
   type = list(string)
   description = "List of subnets in the podxxxxx_cimc bridge domain"
@@ -93,4 +108,9 @@ variable "client_cluster_1_vxlan_subnets" {
 variable "mgmt_vmm_subnets" {
   type = list(string)
   description = "List of subnets in the podxxxxx_mgmt_vmm bridge domain"
+}
+
+variable "client_avamar_subnets" {
+  type = list(string)
+  description = "List of subnets in the podxxxxx_client_avamar bridge domain"
 }
