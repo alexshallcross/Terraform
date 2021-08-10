@@ -394,7 +394,7 @@ module "cimc" {
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
   tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
   vrf      = data.aci_vrf.ukcloud_mgmt.id
 }
 
@@ -410,7 +410,7 @@ module "client_cluster_1_vmotion" {
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
   tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
   vrf      = data.aci_vrf.ukcloud_mgmt.id
 }
 
@@ -426,7 +426,7 @@ module "client_cluster_1_vmware" {
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
   tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
   vrf      = data.aci_vrf.ukcloud_mgmt.id
 }
 
@@ -442,7 +442,7 @@ module "client_cluster_1_vxlan" {
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
   tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
   vrf      = data.aci_vrf.ukcloud_mgmt.id
 }
 
@@ -458,7 +458,7 @@ module "mgmt_cluster_avamar" {
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
   tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
   vrf      = data.aci_vrf.ukcloud_mgmt.id
 }
 
@@ -474,7 +474,7 @@ module "mgmt_cluster_tools" {
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
   tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
   vrf      = data.aci_vrf.ukcloud_mgmt.id
 }
 
@@ -490,7 +490,7 @@ module "mgmt_cluster_vmotion" {
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
   tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
   vrf      = data.aci_vrf.ukcloud_mgmt.id
 }
 
@@ -506,7 +506,7 @@ module "mgmt_cluster_vmware" {
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
   tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
   vrf      = data.aci_vrf.ukcloud_mgmt.id
 }
 
@@ -522,7 +522,7 @@ module "storage_mgmt" {
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
   tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = data.aci_l3_outside.ukcloud_mgmt.id
+  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
   vrf      = data.aci_vrf.ukcloud_mgmt.id
 }
 
@@ -538,7 +538,6 @@ module "mgmt_vmm" {
   app_prof = aci_application_profile.mgmt.id
   phys_dom = aci_physical_domain.vmware.id
   tenant   = "uni/tn-mgmt"
-  l3_out   = ""
   vrf      = "uni/tn-mgmt/ctx-inb"
 }
 
@@ -554,6 +553,6 @@ module "client_avamar" {
   app_prof = aci_application_profile.mgmt.id
   phys_dom = aci_physical_domain.vmware.id
   tenant   = data.aci_tenant.protection.id
-  l3_out   = data.aci_l3_outside.protection.id
+  l3_out   = [data.aci_l3_outside.protection.id]
   vrf      = data.aci_vrf.protection.id
 }

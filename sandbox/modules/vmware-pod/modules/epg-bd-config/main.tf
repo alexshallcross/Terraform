@@ -63,9 +63,7 @@ resource "aci_bridge_domain" "bd" {
   ep_move_detect_mode = "garp"
 
   # Set the BD to L3 out relation
-  relation_fv_rs_bd_to_out = [
-    var.l3_out
-  ]
+  relation_fv_rs_bd_to_out = var.l3_out
 
   # Set the BD to VRF relation
   relation_fv_rs_ctx = var.vrf
