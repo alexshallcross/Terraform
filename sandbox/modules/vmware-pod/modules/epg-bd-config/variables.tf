@@ -24,7 +24,7 @@ variable "tenant" {
 }
 
 variable "l3_out" {
-  type        = string
+  type        = list(string)
   description = "The name of the l3_out that the BD uses, e.g. l3_out_elevated_ukcloud_mgmt"
   default     = null
 }
