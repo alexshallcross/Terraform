@@ -1,4 +1,187 @@
-### CDP Interface Policies
+##########################
+#### Pod Policy Group ####
+##########################
+
+# Step 1: Create a Policy Group called "Pod_Policy_Group"
+
+resource "aci_rest" "rest_pod_policy_group" {
+  path       = "/api/node/mo/uni/fabric/funcprof/podpgrp-Pod_Policy_Group.json"
+  class_name = "fabricPodPGrp"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "descr" : "",
+    "dn" : "uni/fabric/funcprof/podpgrp-Pod_Policy_Group",
+    "name" : "Pod_Policy_Group",
+    "nameAlias" : "",
+    "ownerKey" : "",
+    "ownerTag" : ""
+  }
+}
+
+resource "aci_rest" "rest_pod_policy_group_ntp_policy" {
+  path       = "/api/node/mo/uni/fabric/funcprof/podpgrp-Pod_Policy_Group/rsTimePol.json"
+  class_name = "fabricRsTimePol"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "tnDatetimePolName" : "NTP_Policy"
+  }
+  depends_on = [
+    aci_rest.rest_pod_policy_group
+  ]
+}
+
+# Step 2: Select the Fabric Policy Group "Pod_Policy_Group" as the default Profile
+
+resource "aci_rest" "rest_default_pod_policy_group" {
+  path       = "/api/node/mo/uni/fabric/podprof-default/pods-default-typ-ALL/rspodPGrp.json"
+  class_name = "fabricRsPodPGrp"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "tDn" : "uni/fabric/funcprof/podpgrp-Pod_Policy_Group"
+  }
+}
+
+# Step 3: Within BGP Route Reflector default profile, define nodes and an Autonomous System Number
+
+resource "aci_rest" "rest_bgp_rr_node" {
+  for_each = toset(var.spine_nodes)
+
+  path       = "/api/node/mo/uni/fabric/bgpInstP-default/rr/node-${each.value}.json"
+  class_name = "bgpRRNodePEp"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "id" = "${each.value}"
+  }
+}
+
+resource "aci_rest" "rest_bgp_as_number" {
+  path       = "/api/node/mo/uni/fabric/bgpInstP-default/as.json"
+  class_name = "bgpAsP"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "asn" = var.bgp_as_number
+  }
+}
+
+####################
+#### NTP Policy ####
+####################
+
+resource "aci_rest" "rest_ntp_policy" {
+  path       = "/api/node/mo/uni/fabric/time-NTP_policy.json"
+  class_name = "datetimePol"
+  content = {
+    "StratumValue" : "8",
+    "adminSt" : "enabled",
+    "annotation" : "orchestrator:terraform",
+    "authSt" : "enabled",
+    "masterMode" : "disabled",
+    "serverState" : "disabled"
+  }
+}
+
+resource "aci_rest" "rest_ntp_auth_key" {
+  path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpauth-1.json"
+  class_name = "datetimeNtpAuthKey"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "id" : "1",
+    "key" : var.ntp_auth_key,
+    "keyType" : "md5",
+    "trusted" : "yes"
+  }
+  depends_on = [
+    aci_rest.rest_ntp_policy
+  ]
+}
+
+resource "aci_rest" "rest_ntp_provider_frn" {
+  path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.40.232.11.json"
+  class_name = "datetimeNtpProv"
+  content = {
+    "annotation": "orchestrator:terraform",
+    "keyId": "0",
+    "maxPoll": "6",
+    "minPoll": "4",
+    "name": "10.40.232.11",
+    "preferred": "no",
+    "trueChimer": "disabled"
+  }
+  depends_on = [
+    aci_rest.rest_ntp_policy
+  ]
+}
+
+resource "aci_rest" "rest_ntp_provider_frn_epg" {
+  path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.40.232.11/rsNtpProvToEpg.json"
+  class_name = "datetimeRsNtpProvToEpg"
+  content = {
+    "annotation": "orchestrator:terraform",
+    "tDn": "uni/tn-mgmt/mgmtp-default/inb-In-Band"
+  }
+  depends_on = [
+    aci_rest.rest_ntp_provider_frn
+  ]
+}
+
+resource "aci_rest" "rest_ntp_provider_frn_key" {
+  path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.40.232.11/rsNtpProvToNtpAuthKey.json"
+  class_name = "datetimeRsNtpProvToNtpAuthKey"
+  content = {
+    "annotation": "orchestrator:terraform",
+    "tnDatetimeNtpAuthKeyId": "1"
+  }
+  depends_on = [
+    aci_rest.rest_ntp_provider_frn
+  ]
+}
+
+resource "aci_rest" "rest_ntp_provider_cor" {
+  path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.41.232.11.json"
+  class_name = "datetimeNtpProv"
+  content = {
+    "annotation": "orchestrator:terraform",
+    "keyId": "0",
+    "maxPoll": "6",
+    "minPoll": "4",
+    "name": "10.41.232.11",
+    "preferred": "no",
+    "trueChimer": "disabled"
+  }
+  depends_on = [
+    aci_rest.rest_ntp_policy
+  ]
+}
+
+resource "aci_rest" "rest_ntp_provider_cor_epg" {
+  path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.41.232.11/rsNtpProvToEpg.json"
+  class_name = "datetimeRsNtpProvToEpg"
+  content = {
+    "annotation": "orchestrator:terraform",
+    "tDn": "uni/tn-mgmt/mgmtp-default/inb-In-Band"
+  }
+  depends_on = [
+    aci_rest.rest_ntp_provider_cor
+  ]
+}
+
+resource "aci_rest" "rest_ntp_provider_cor_key" {
+  path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.41.232.11/rsNtpProvToNtpAuthKey.json"
+  class_name = "datetimeRsNtpProvToNtpAuthKey"
+  content = {
+    "annotation": "orchestrator:terraform",
+    "tnDatetimeNtpAuthKeyId": "1"
+  }
+  depends_on = [
+    aci_rest.rest_ntp_provider_cor
+  ]
+}
+
+/***
+
+################################
+#### CDP Interface Policies ####
+################################
 
 resource "aci_cdp_interface_policy" "disabled" {
   name     = "cdp_disabled"
@@ -10,7 +193,9 @@ resource "aci_cdp_interface_policy" "enabled" {
   admin_st = "enabled"
 }
 
-### LLDP Interface Policies
+#################################
+#### LLDP Interface Policies ####
+#################################
 
 resource "aci_lldp_interface_policy" "disabled" {
   name        = "lldp_disabled"
@@ -24,7 +209,9 @@ resource "aci_lldp_interface_policy" "enabled" {
   admin_tx_st = "enabled"
 }
 
-### LACP Policies
+#######################
+#### LACP Policies ####
+#######################
 
 resource "aci_lacp_policy" "enabled" {
   name      = "lacp_active"
@@ -34,7 +221,9 @@ resource "aci_lacp_policy" "enabled" {
   mode      = "active"
 }
 
-### Interface Link Level Policies
+#######################################
+#### Interface Link Level Policies ####
+#######################################
 
 resource "aci_fabric_if_pol" "_1G" {
   name          = "1G"
@@ -78,7 +267,9 @@ resource "aci_fabric_if_pol" "_40G_no_auto_neg" {
   speed         = "40G"
 }
 
-### In-Band Management
+############################
+#### In-Band Management ####
+############################
 
 resource "aci_vlan_pool" "inband_mgmt" {
   name       = "vlan_static_inband_mgmt"
@@ -325,3 +516,5 @@ resource "aci_l3_ext_subnet" "all" {
   external_network_instance_profile_dn = aci_external_network_instance_profile.elevated_mgmt.id
   ip                                   = "0.0.0.0/0"
 }
+
+***/

@@ -385,9 +385,9 @@ resource "aci_application_profile" "avamar" {
 module "cimc" {
   source = "./modules/epg-bd-config"
 
-  epg_name = "cimc"
-  vlan_tag = "vlan-100"
-  subnets  = var.cimc_subnets
+  epg_name          = "cimc"
+  vlan_tag          = "vlan-100"
+  subnets           = var.cimc_subnets
   access_generic_id = aci_access_generic.cimc.id
 
   pod_id   = var.pod_id
@@ -400,7 +400,7 @@ module "cimc" {
 
 module "client_cluster_1_vmotion" {
   source = "./modules/epg-bd-config"
-  
+
   epg_name          = "client_cluster_1_vmotion"
   vlan_tag          = "vlan-104"
   subnets           = var.client_cluster_1_vmotion_subnets
@@ -416,7 +416,7 @@ module "client_cluster_1_vmotion" {
 
 module "client_cluster_1_vmware" {
   source = "./modules/epg-bd-config"
-  
+
   epg_name          = "client_cluster_1_vmware"
   vlan_tag          = "vlan-104"
   subnets           = var.client_cluster_1_vmware_subnets
@@ -432,7 +432,7 @@ module "client_cluster_1_vmware" {
 
 module "client_cluster_1_vxlan" {
   source = "./modules/epg-bd-config"
-  
+
   epg_name          = "client_cluster_1_vxlan"
   vlan_tag          = "vlan-115"
   subnets           = var.client_cluster_1_vxlan_subnets
@@ -448,7 +448,7 @@ module "client_cluster_1_vxlan" {
 
 module "mgmt_cluster_avamar" {
   source = "./modules/epg-bd-config"
-  
+
   epg_name          = "mgmt_cluster_avamar"
   vlan_tag          = "vlan-156"
   subnets           = var.mgmt_cluster_avamar_subnets
@@ -464,7 +464,7 @@ module "mgmt_cluster_avamar" {
 
 module "mgmt_cluster_tools" {
   source = "./modules/epg-bd-config"
-  
+
   epg_name          = "mgmt_cluster_tools"
   vlan_tag          = "vlan-102"
   subnets           = var.mgmt_cluster_tools_subnets
@@ -480,7 +480,7 @@ module "mgmt_cluster_tools" {
 
 module "mgmt_cluster_vmotion" {
   source = "./modules/epg-bd-config"
-  
+
   epg_name          = "mgmt_cluster_vmotion"
   vlan_tag          = "vlan-104"
   subnets           = var.mgmt_cluster_vmotion_subnets
@@ -496,7 +496,7 @@ module "mgmt_cluster_vmotion" {
 
 module "mgmt_cluster_vmware" {
   source = "./modules/epg-bd-config"
-  
+
   epg_name          = "mgmt_cluster_vmware"
   vlan_tag          = "vlan-101"
   subnets           = var.mgmt_cluster_vmware_subnets

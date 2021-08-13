@@ -13,6 +13,16 @@ provider "aci" {
 #### Modules ####
 #################
 
+module "fabric_base" {
+  source = "./modules/fabric-base"
+
+  spine_nodes   = [1001, 1002]
+  bgp_as_number = 65515
+  ntp_auth_key  = "asdasdasd"
+}
+
+/***
+
 module "pod00420" {
   source = "./modules/vmware-pod"
   pod_id = "pod00420"
@@ -44,8 +54,8 @@ module "pod00420" {
   protection_l3_out = "hotdogs"
   protection_vrf    = "hotdogs"
 
-  cimc_subnets = [ 
-    "10.0.0.1/24" 
+  cimc_subnets = [
+    "10.0.0.1/24"
   ]
   client_cluster_1_vmotion_subnets = [
     "10.0.1.1/24"
@@ -56,23 +66,23 @@ module "pod00420" {
   client_cluster_1_vxlan_subnets = [
     "10.0.3.1/24"
   ]
-  mgmt_cluster_avamar_subnets = [ 
-    "10.0.4.1/24" 
+  mgmt_cluster_avamar_subnets = [
+    "10.0.4.1/24"
   ]
-  mgmt_cluster_tools_subnets = [ 
-    "10.0.5.1/24" 
+  mgmt_cluster_tools_subnets = [
+    "10.0.5.1/24"
   ]
-  mgmt_cluster_vmotion_subnets = [ 
-    "10.0.6.1/24" 
+  mgmt_cluster_vmotion_subnets = [
+    "10.0.6.1/24"
   ]
-  mgmt_cluster_vmware_subnets = [ 
-    "10.0.7.1/24" 
+  mgmt_cluster_vmware_subnets = [
+    "10.0.7.1/24"
   ]
-  storage_mgmt_subnets = [ 
-    "10.0.8.1/24" 
+  storage_mgmt_subnets = [
+    "10.0.8.1/24"
   ]
-  mgmt_vmm_subnets = [ 
-    "10.0.9.1/24" 
+  mgmt_vmm_subnets = [
+    "10.0.9.1/24"
   ]
   client_avamar_subnets = [
     "10.0.10.1/24"
