@@ -735,8 +735,21 @@ resource "aci_l3out_ospf_external_policy" "example" {
 
 # Step 3 - Create the Bridge Domain for In-Band Management Network
 
-resource "aci_subnet" "foosubnet" {
-  parent_dn = "uni/tn-mgmt/BD-inb"
+resource "aci_subnet" "inb_subnet" {
+  parent_dn = aci_bridge_domain.inb.id
   ip        = "10.41.1.1/25"
-  scope     = "public"
-} 
+  scope     = [
+    "public"
+  ]
+}
+
+# Step 4 - Associate the L3 Out with the inb Bridge Domain
+
+resource "aci_bridge_domain" "inb" {
+  tenant_dn           = "uni/tn-mgmt/"
+  name                = "inb"
+  relation_fv_rs_bd_to_out = [
+    aci_l3_outside.elevated_mgmt.id
+  ]
+  relation_fv_rs_ctx = "uni/tn-mgmt/ctx-inb"
+}
