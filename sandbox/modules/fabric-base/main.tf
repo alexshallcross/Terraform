@@ -4,7 +4,7 @@
 
 # Step 1: Create a Policy Group called "Pod_Policy_Group"
 
-resource "aci_rest" "rest_pod_policy_group" {
+resource "aci_rest" "pod_policy_group" {
   path       = "/api/node/mo/uni/fabric/funcprof/podpgrp-Pod_Policy_Group.json"
   class_name = "fabricPodPGrp"
   content = {
@@ -18,7 +18,7 @@ resource "aci_rest" "rest_pod_policy_group" {
   }
 }
 
-resource "aci_rest" "rest_pod_policy_group_ntp_policy" {
+resource "aci_rest" "pod_policy_group_ntp_policy" {
   path       = "/api/node/mo/uni/fabric/funcprof/podpgrp-Pod_Policy_Group/rsTimePol.json"
   class_name = "fabricRsTimePol"
   content = {
@@ -26,13 +26,13 @@ resource "aci_rest" "rest_pod_policy_group_ntp_policy" {
     "tnDatetimePolName" : "NTP_Policy"
   }
   depends_on = [
-    aci_rest.rest_pod_policy_group
+    aci_rest.pod_policy_group
   ]
 }
 
 # Step 2: Select the Fabric Policy Group "Pod_Policy_Group" as the default Profile
 
-resource "aci_rest" "rest_default_pod_policy_group" {
+resource "aci_rest" "default_pod_policy_group" {
   path       = "/api/node/mo/uni/fabric/podprof-default/pods-default-typ-ALL/rspodPGrp.json"
   class_name = "fabricRsPodPGrp"
   content = {
@@ -43,7 +43,7 @@ resource "aci_rest" "rest_default_pod_policy_group" {
 
 # Step 3: Within BGP Route Reflector default profile, define nodes and an Autonomous System Number
 
-resource "aci_rest" "rest_bgp_rr_node" {
+resource "aci_rest" "bgp_rr_node" {
   for_each = toset(var.spine_nodes)
 
   path       = "/api/node/mo/uni/fabric/bgpInstP-default/rr/node-${each.value}.json"
@@ -54,7 +54,7 @@ resource "aci_rest" "rest_bgp_rr_node" {
   }
 }
 
-resource "aci_rest" "rest_bgp_as_number" {
+resource "aci_rest" "bgp_as_number" {
   path       = "/api/node/mo/uni/fabric/bgpInstP-default/as.json"
   class_name = "bgpAsP"
   content = {
@@ -67,7 +67,7 @@ resource "aci_rest" "rest_bgp_as_number" {
 #### NTP Policy ####
 ####################
 
-resource "aci_rest" "rest_ntp_policy" {
+resource "aci_rest" "ntp_policy" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy.json"
   class_name = "datetimePol"
   content = {
@@ -80,7 +80,7 @@ resource "aci_rest" "rest_ntp_policy" {
   }
 }
 
-resource "aci_rest" "rest_ntp_auth_key" {
+resource "aci_rest" "ntp_auth_key" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpauth-1.json"
   class_name = "datetimeNtpAuthKey"
   content = {
@@ -91,11 +91,11 @@ resource "aci_rest" "rest_ntp_auth_key" {
     "trusted" : "yes"
   }
   depends_on = [
-    aci_rest.rest_ntp_policy
+    aci_rest.ntp_policy
   ]
 }
 
-resource "aci_rest" "rest_ntp_provider_frn" {
+resource "aci_rest" "ntp_provider_frn" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.40.232.11.json"
   class_name = "datetimeNtpProv"
   content = {
@@ -108,11 +108,11 @@ resource "aci_rest" "rest_ntp_provider_frn" {
     "trueChimer": "disabled"
   }
   depends_on = [
-    aci_rest.rest_ntp_policy
+    aci_rest.ntp_policy
   ]
 }
 
-resource "aci_rest" "rest_ntp_provider_frn_epg" {
+resource "aci_rest" "ntp_provider_frn_epg" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.40.232.11/rsNtpProvToEpg.json"
   class_name = "datetimeRsNtpProvToEpg"
   content = {
@@ -120,11 +120,11 @@ resource "aci_rest" "rest_ntp_provider_frn_epg" {
     "tDn": "uni/tn-mgmt/mgmtp-default/inb-In-Band"
   }
   depends_on = [
-    aci_rest.rest_ntp_provider_frn
+    aci_rest.ntp_provider_frn
   ]
 }
 
-resource "aci_rest" "rest_ntp_provider_frn_key" {
+resource "aci_rest" "ntp_provider_frn_key" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.40.232.11/rsNtpProvToNtpAuthKey.json"
   class_name = "datetimeRsNtpProvToNtpAuthKey"
   content = {
@@ -132,11 +132,11 @@ resource "aci_rest" "rest_ntp_provider_frn_key" {
     "tnDatetimeNtpAuthKeyId": "1"
   }
   depends_on = [
-    aci_rest.rest_ntp_provider_frn
+    aci_rest.ntp_provider_frn
   ]
 }
 
-resource "aci_rest" "rest_ntp_provider_cor" {
+resource "aci_rest" "ntp_provider_cor" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.41.232.11.json"
   class_name = "datetimeNtpProv"
   content = {
@@ -149,11 +149,11 @@ resource "aci_rest" "rest_ntp_provider_cor" {
     "trueChimer": "disabled"
   }
   depends_on = [
-    aci_rest.rest_ntp_policy
+    aci_rest.ntp_policy
   ]
 }
 
-resource "aci_rest" "rest_ntp_provider_cor_epg" {
+resource "aci_rest" "ntp_provider_cor_epg" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.41.232.11/rsNtpProvToEpg.json"
   class_name = "datetimeRsNtpProvToEpg"
   content = {
@@ -161,11 +161,11 @@ resource "aci_rest" "rest_ntp_provider_cor_epg" {
     "tDn": "uni/tn-mgmt/mgmtp-default/inb-In-Band"
   }
   depends_on = [
-    aci_rest.rest_ntp_provider_cor
+    aci_rest.ntp_provider_cor
   ]
 }
 
-resource "aci_rest" "rest_ntp_provider_cor_key" {
+resource "aci_rest" "ntp_provider_cor_key" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.41.232.11/rsNtpProvToNtpAuthKey.json"
   class_name = "datetimeRsNtpProvToNtpAuthKey"
   content = {
@@ -173,7 +173,86 @@ resource "aci_rest" "rest_ntp_provider_cor_key" {
     "tnDatetimeNtpAuthKeyId": "1"
   }
   depends_on = [
-    aci_rest.rest_ntp_provider_cor
+    aci_rest.ntp_provider_cor
+  ]
+}
+
+##################
+#### Timezone ####
+##################
+
+resource "aci_rest" "timezone" {
+  path       = "/api/node/mo/uni/fabric/format-default.json"
+  class_name = "datetimeFormat"
+  content = {
+    "annotation": "orchestrator:terraform",
+    "showOffset": "enabled",
+    "tz" : "p60_Europe-London"
+  }
+}
+
+#####################
+#### DNS Profile ####
+#####################
+
+resource "aci_rest" "dns_profile" {
+  path       = "/api/node/mo/uni/fabric/dnsp-default.json"
+  class_name = "dnsProfile"
+  content = {
+    "annotation": "orchestrator:terraform",
+    "epgDn": "uni/tn-mgmt/mgmtp-default/inb-In-Band"
+  }
+}
+
+resource "aci_rest" "dns_domain_il3management" {
+  path       = "/api/node/mo/uni/fabric/dnsp-default/dom-il3management.json"
+  class_name = "dnsDomain"
+  content = {
+    "annotation": "orchestrator:terraform",
+    "isDefault": "no",
+    "name": "il3management"
+  }
+  depends_on = [
+    aci_rest.dns_profile
+  ]
+}
+
+resource "aci_rest" "dns_domain_il3management_local" {
+  path       = "/api/node/mo/uni/fabric/dnsp-default/dom-il3management.local.json"
+  class_name = "dnsDomain"
+  content = {
+    "annotation": "orchestrator:terraform",
+    "isDefault": "yes",
+    "name": "il3management.local"
+  }
+  depends_on = [
+    aci_rest.dns_profile
+  ]
+}
+
+resource "aci_rest" "dns_domain_provider_frn" {
+  path       = "/api/node/mo/uni/fabric/dnsp-default/prov-[10.40.235.13].json"
+  class_name = "dnsProv"
+  content = {
+    "annotation": "orchestrator:terraform",
+    "preferred": "yes",
+    "addr": "10.40.235.13"
+  }
+  depends_on = [
+    aci_rest.dns_profile
+  ]
+}
+
+resource "aci_rest" "dns_domain_provider_cor" {
+  path       = "/api/node/mo/uni/fabric/dnsp-default/prov-[10.41.235.4].json"
+  class_name = "dnsProv"
+  content = {
+    "annotation": "orchestrator:terraform",
+    "preferred": "no",
+    "addr": "10.41.235.4"
+  }
+  depends_on = [
+    aci_rest.dns_profile
   ]
 }
 
