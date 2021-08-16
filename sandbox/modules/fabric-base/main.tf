@@ -732,3 +732,11 @@ resource "aci_l3out_ospf_external_policy" "example" {
   area_id  = "0.0.0.5"
   area_type = "regular"
 }
+
+# Step 3 - Create the Bridge Domain for In-Band Management Network
+
+resource "aci_subnet" "foosubnet" {
+  parent_dn = "uni/tn-mgmt/BD-inb"
+  ip        = "10.41.1.1/25"
+  scope     = "public"
+} 
