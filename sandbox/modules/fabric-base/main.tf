@@ -256,8 +256,6 @@ resource "aci_rest" "dns_domain_provider_cor" {
   ]
 }
 
-/***
-
 ################################
 #### CDP Interface Policies ####
 ################################
@@ -350,6 +348,8 @@ resource "aci_fabric_if_pol" "_40G_no_auto_neg" {
 #### In-Band Management ####
 ############################
 
+# Step 1 - Create VLAN Pool
+
 resource "aci_vlan_pool" "inband_mgmt" {
   name       = "vlan_static_inband_mgmt"
   alloc_mode = "static"
@@ -362,11 +362,15 @@ resource "aci_ranges" "inband_mgmt" {
   alloc_mode   = "static"
 }
 
+# Step 2 - Create Physical domain
+
 resource "aci_physical_domain" "inband_mgmt" {
   name = "inband_mgmt"
 
   relation_infra_rs_vlan_ns = aci_vlan_pool.inband_mgmt.id
 }
+
+# Step 3 - Create AEP
 
 resource "aci_attachable_access_entity_profile" "inband_mgmt" {
   name = "inband_mgmt"
@@ -376,6 +380,8 @@ resource "aci_attachable_access_entity_profile" "inband_mgmt" {
   ]
 }
 
+# Step 4 - Create interface policy group
+
 resource "aci_leaf_access_port_policy_group" "inband_mgmt" {
   name = "apic_controllers"
 
@@ -384,6 +390,8 @@ resource "aci_leaf_access_port_policy_group" "inband_mgmt" {
   relation_infra_rs_lldp_if_pol = aci_lldp_interface_policy.enabled.id
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.inband_mgmt.id
 }
+
+# Step 5 Create interface profile
 
 resource "aci_leaf_interface_profile" "inband_mgmt" {
   name = "apic_controllers"
@@ -455,6 +463,12 @@ resource "aci_node_block" "inband_mgmt" {
   to_                   = "902"
 }
 
+########################################
+#### L3 Out External Routed Network ####
+########################################
+
+# Step 1 - Create the VLAN pool
+
 resource "aci_vlan_pool" "elevated_mgmt" {
   name       = "vlan_static_l3_out_elevated_mgmt"
   alloc_mode = "static"
@@ -468,15 +482,21 @@ resource "aci_ranges" "elevated_mgmt" {
   role         = "external"
 }
 
+# Step 2 - Create the external routed domain
+
 resource "aci_l3_domain_profile" "elevated_mgmt" {
   name                      = "l3_out_elevated_mgmt"
   relation_infra_rs_vlan_ns = aci_vlan_pool.elevated_mgmt.id
 }
 
+# Step 3 - Create the AEP
+
 resource "aci_attachable_access_entity_profile" "elevated_mgmt" {
   name                    = "elevated_private_peering"
   relation_infra_rs_dom_p = aci_l3_domain_profile.elevated_mgmt.id
 }
+
+# Step 4 - Create the Interface Policy Group
 
 resource "aci_leaf_access_port_policy_group" "elevated_mgmt" {
   name = "elevated_private_peering"
@@ -485,6 +505,8 @@ resource "aci_leaf_access_port_policy_group" "elevated_mgmt" {
   relation_infra_rs_lldp_if_pol = aci_lldp_interface_policy.enabled.id
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.elevated_private_peering.id
 }
+
+# Step 5 - Create the Interface Profile
 
 resource "aci_leaf_interface_profile" "elevated_mgmt" {
   name = "elevated_private_peering"
@@ -520,6 +542,8 @@ resource "aci_access_port_block" "port_34" {
   to_port                 = "34"
 }
 
+# Step 6 - Create Leaf profile
+
 resource "aci_leaf_profile" "elevated_mgmt" {
   name = "elevated_private_peering"
 
@@ -541,13 +565,23 @@ resource "aci_node_block" "elevated_mgmt" {
   to_                   = "904"
 }
 
+#################
+#### Layer 3 ####
+#################
+
+# Step 1 - Create OSPF profile 
+
 resource "aci_ospf_interface_policy" "elevated_mgmt" {
   tenant_dn = "uni/tn-mgmt"
   name      = "ospf_int_p2p_protocol_policy_elevated_mgmt"
 }
 
+# Step 2 - Create external network peering
+
 resource "aci_l3_outside" "elevated_mgmt" {
   name = "l3_out_elevated_mgmt"
+  relation_l3ext_rs_ectx = "inb"
+  relation_l3ext_rs_l3_dom_att = aci_l3_domain_profile.elevated_mgmt.id
 }
 
 resource "aci_logical_node_profile" "elevated_mgmt" {
@@ -580,10 +614,105 @@ resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_904" {
 }
 
 resource "aci_logical_interface_profile" "elevated_mgmt" {
-  logical_node_profile_dn = aci_logical_node_profile.example.id
-  description             = aci_logical_node_profile.elevated_mgmt.id
+  logical_node_profile_dn = aci_logical_node_profile.elevated_mgmt.id
   name                    = "ospf_int_profile_mgmt"
   tag                     = "yellow-green"
+}
+
+resource "aci_l3out_ospf_interface_profile" "example" {
+  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
+  auth_key                     = "key"
+  auth_key_id                  = "1"
+  auth_type                    = "md5"
+  relation_ospf_rs_if_pol      = aci_ospf_interface_policy.elevated_mgmt.id
+}
+
+resource "aci_l3out_path_attachment" "901_33" {
+  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn  = "topology/pod-1/paths-901/pathep-[eth1/33]"
+  if_inst_t = "sub-interface"
+  addr  = "10.41.36.2/30"
+  encap  = "vlan-3900"
+  encap_scope = "local"
+  mode = "regular"
+  mtu = "9000"
+}
+
+resource "aci_l3out_path_attachment" "901_34" {
+  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn  = "topology/pod-1/paths-901/pathep-[eth1/34]"
+  if_inst_t = "sub-interface"
+  addr  = "10.41.36.6/30"
+  encap  = "vlan-3900"
+  encap_scope = "local"
+  mode = "regular"
+  mtu = "9000"
+}
+
+resource "aci_l3out_path_attachment" "902_33" {
+  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn  = "topology/pod-1/paths-902/pathep-[eth1/33]"
+  if_inst_t = "sub-interface"
+  addr  = "10.41.36.14/30"
+  encap  = "vlan-3900"
+  encap_scope = "local"
+  mode = "regular"
+  mtu = "9000"
+}
+
+resource "aci_l3out_path_attachment" "902_34" {
+  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn  = "topology/pod-1/paths-902/pathep-[eth1/34]"
+  if_inst_t = "sub-interface"
+  addr  = "10.41.36.10/30"
+  encap  = "vlan-3900"
+  encap_scope = "local"
+  mode = "regular"
+  mtu = "9000"
+}
+
+resource "aci_l3out_path_attachment" "903_33" {
+  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn  = "topology/pod-1/paths-903/pathep-[eth1/33]"
+  if_inst_t = "sub-interface"
+  addr  = "10.41.36.18/30"
+  encap  = "vlan-3900"
+  encap_scope = "local"
+  mode = "regular"
+  mtu = "9000"
+}
+
+resource "aci_l3out_path_attachment" "903_34" {
+  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn  = "topology/pod-1/paths-903/pathep-[eth1/34]"
+  if_inst_t = "sub-interface"
+  addr  = "10.41.36.22/30"
+  encap  = "vlan-3900"
+  encap_scope = "local"
+  mode = "regular"
+  mtu = "9000"
+}
+
+resource "aci_l3out_path_attachment" "904_33" {
+  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn  = "topology/pod-1/paths-904/pathep-[eth1/33]"
+  if_inst_t = "sub-interface"
+  addr  = "10.41.36.26/30"
+  encap  = "vlan-3900"
+  encap_scope = "local"
+  mode = "regular"
+  mtu = "9000"
+}
+
+resource "aci_l3out_path_attachment" "904_34" {
+  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn  = "topology/pod-1/paths-904/pathep-[eth1/34]"
+  if_inst_t = "sub-interface"
+  addr  = "10.41.36.30/30"
+  encap  = "vlan-3900"
+  encap_scope = "local"
+  mode = "regular"
+  mtu = "9000"
 }
 
 resource "aci_external_network_instance_profile" "elevated_mgmt" {
@@ -596,4 +725,10 @@ resource "aci_l3_ext_subnet" "all" {
   ip                                   = "0.0.0.0/0"
 }
 
-***/
+resource "aci_l3out_ospf_external_policy" "example" {
+  l3_outside_dn  = aci_l3_outside.elevated_mgmt.id
+  area_cost  = "1"
+  area_ctrl = "redistribute,summary"
+  area_id  = "0.0.0.5"
+  area_type = "regular"
+}
