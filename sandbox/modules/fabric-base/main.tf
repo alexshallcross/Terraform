@@ -99,13 +99,13 @@ resource "aci_rest" "ntp_provider_frn" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.40.232.11.json"
   class_name = "datetimeNtpProv"
   content = {
-    "annotation": "orchestrator:terraform",
-    "keyId": "0",
-    "maxPoll": "6",
-    "minPoll": "4",
-    "name": "10.40.232.11",
-    "preferred": "no",
-    "trueChimer": "disabled"
+    "annotation" : "orchestrator:terraform",
+    "keyId" : "0",
+    "maxPoll" : "6",
+    "minPoll" : "4",
+    "name" : "10.40.232.11",
+    "preferred" : "no",
+    "trueChimer" : "disabled"
   }
   depends_on = [
     aci_rest.ntp_policy
@@ -116,8 +116,8 @@ resource "aci_rest" "ntp_provider_frn_epg" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.40.232.11/rsNtpProvToEpg.json"
   class_name = "datetimeRsNtpProvToEpg"
   content = {
-    "annotation": "orchestrator:terraform",
-    "tDn": "uni/tn-mgmt/mgmtp-default/inb-In-Band"
+    "annotation" : "orchestrator:terraform",
+    "tDn" : "uni/tn-mgmt/mgmtp-default/inb-In-Band"
   }
   depends_on = [
     aci_rest.ntp_provider_frn
@@ -128,8 +128,8 @@ resource "aci_rest" "ntp_provider_frn_key" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.40.232.11/rsNtpProvToNtpAuthKey.json"
   class_name = "datetimeRsNtpProvToNtpAuthKey"
   content = {
-    "annotation": "orchestrator:terraform",
-    "tnDatetimeNtpAuthKeyId": "1"
+    "annotation" : "orchestrator:terraform",
+    "tnDatetimeNtpAuthKeyId" : "1"
   }
   depends_on = [
     aci_rest.ntp_provider_frn
@@ -140,13 +140,13 @@ resource "aci_rest" "ntp_provider_cor" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.41.232.11.json"
   class_name = "datetimeNtpProv"
   content = {
-    "annotation": "orchestrator:terraform",
-    "keyId": "0",
-    "maxPoll": "6",
-    "minPoll": "4",
-    "name": "10.41.232.11",
-    "preferred": "no",
-    "trueChimer": "disabled"
+    "annotation" : "orchestrator:terraform",
+    "keyId" : "0",
+    "maxPoll" : "6",
+    "minPoll" : "4",
+    "name" : "10.41.232.11",
+    "preferred" : "no",
+    "trueChimer" : "disabled"
   }
   depends_on = [
     aci_rest.ntp_policy
@@ -157,8 +157,8 @@ resource "aci_rest" "ntp_provider_cor_epg" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.41.232.11/rsNtpProvToEpg.json"
   class_name = "datetimeRsNtpProvToEpg"
   content = {
-    "annotation": "orchestrator:terraform",
-    "tDn": "uni/tn-mgmt/mgmtp-default/inb-In-Band"
+    "annotation" : "orchestrator:terraform",
+    "tDn" : "uni/tn-mgmt/mgmtp-default/inb-In-Band"
   }
   depends_on = [
     aci_rest.ntp_provider_cor
@@ -169,8 +169,8 @@ resource "aci_rest" "ntp_provider_cor_key" {
   path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.41.232.11/rsNtpProvToNtpAuthKey.json"
   class_name = "datetimeRsNtpProvToNtpAuthKey"
   content = {
-    "annotation": "orchestrator:terraform",
-    "tnDatetimeNtpAuthKeyId": "1"
+    "annotation" : "orchestrator:terraform",
+    "tnDatetimeNtpAuthKeyId" : "1"
   }
   depends_on = [
     aci_rest.ntp_provider_cor
@@ -185,8 +185,8 @@ resource "aci_rest" "timezone" {
   path       = "/api/node/mo/uni/fabric/format-default.json"
   class_name = "datetimeFormat"
   content = {
-    "annotation": "orchestrator:terraform",
-    "showOffset": "enabled",
+    "annotation" : "orchestrator:terraform",
+    "showOffset" : "enabled",
     "tz" : "p60_Europe-London"
   }
 }
@@ -199,8 +199,8 @@ resource "aci_rest" "dns_profile" {
   path       = "/api/node/mo/uni/fabric/dnsp-default.json"
   class_name = "dnsProfile"
   content = {
-    "annotation": "orchestrator:terraform",
-    "epgDn": "uni/tn-mgmt/mgmtp-default/inb-In-Band"
+    "annotation" : "orchestrator:terraform",
+    "epgDn" : "uni/tn-mgmt/mgmtp-default/inb-In-Band"
   }
 }
 
@@ -208,9 +208,9 @@ resource "aci_rest" "dns_domain_il3management" {
   path       = "/api/node/mo/uni/fabric/dnsp-default/dom-il3management.json"
   class_name = "dnsDomain"
   content = {
-    "annotation": "orchestrator:terraform",
-    "isDefault": "no",
-    "name": "il3management"
+    "annotation" : "orchestrator:terraform",
+    "isDefault" : "no",
+    "name" : "il3management"
   }
   depends_on = [
     aci_rest.dns_profile
@@ -221,9 +221,9 @@ resource "aci_rest" "dns_domain_il3management_local" {
   path       = "/api/node/mo/uni/fabric/dnsp-default/dom-il3management.local.json"
   class_name = "dnsDomain"
   content = {
-    "annotation": "orchestrator:terraform",
-    "isDefault": "yes",
-    "name": "il3management.local"
+    "annotation" : "orchestrator:terraform",
+    "isDefault" : "yes",
+    "name" : "il3management.local"
   }
   depends_on = [
     aci_rest.dns_profile
@@ -234,9 +234,9 @@ resource "aci_rest" "dns_domain_provider_frn" {
   path       = "/api/node/mo/uni/fabric/dnsp-default/prov-[10.40.235.13].json"
   class_name = "dnsProv"
   content = {
-    "annotation": "orchestrator:terraform",
-    "preferred": "yes",
-    "addr": "10.40.235.13"
+    "annotation" : "orchestrator:terraform",
+    "preferred" : "yes",
+    "addr" : "10.40.235.13"
   }
   depends_on = [
     aci_rest.dns_profile
@@ -247,9 +247,9 @@ resource "aci_rest" "dns_domain_provider_cor" {
   path       = "/api/node/mo/uni/fabric/dnsp-default/prov-[10.41.235.4].json"
   class_name = "dnsProv"
   content = {
-    "annotation": "orchestrator:terraform",
-    "preferred": "no",
-    "addr": "10.41.235.4"
+    "annotation" : "orchestrator:terraform",
+    "preferred" : "no",
+    "addr" : "10.41.235.4"
   }
   depends_on = [
     aci_rest.dns_profile
@@ -579,8 +579,8 @@ resource "aci_ospf_interface_policy" "elevated_mgmt" {
 # Step 2 - Create external network peering
 
 resource "aci_l3_outside" "elevated_mgmt" {
-  name = "l3_out_elevated_mgmt"
-  relation_l3ext_rs_ectx = "inb"
+  name                         = "l3_out_elevated_mgmt"
+  relation_l3ext_rs_ectx       = "inb"
   relation_l3ext_rs_l3_dom_att = aci_l3_domain_profile.elevated_mgmt.id
 }
 
@@ -628,91 +628,91 @@ resource "aci_l3out_ospf_interface_profile" "example" {
 }
 
 resource "aci_l3out_path_attachment" "901_33" {
-  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn  = "topology/pod-1/paths-901/pathep-[eth1/33]"
-  if_inst_t = "sub-interface"
-  addr  = "10.41.36.2/30"
-  encap  = "vlan-3900"
-  encap_scope = "local"
-  mode = "regular"
-  mtu = "9000"
+  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn                    = "topology/pod-1/paths-901/pathep-[eth1/33]"
+  if_inst_t                    = "sub-interface"
+  addr                         = "10.41.36.2/30"
+  encap                        = "vlan-3900"
+  encap_scope                  = "local"
+  mode                         = "regular"
+  mtu                          = "9000"
 }
 
 resource "aci_l3out_path_attachment" "901_34" {
-  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn  = "topology/pod-1/paths-901/pathep-[eth1/34]"
-  if_inst_t = "sub-interface"
-  addr  = "10.41.36.6/30"
-  encap  = "vlan-3900"
-  encap_scope = "local"
-  mode = "regular"
-  mtu = "9000"
+  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn                    = "topology/pod-1/paths-901/pathep-[eth1/34]"
+  if_inst_t                    = "sub-interface"
+  addr                         = "10.41.36.6/30"
+  encap                        = "vlan-3900"
+  encap_scope                  = "local"
+  mode                         = "regular"
+  mtu                          = "9000"
 }
 
 resource "aci_l3out_path_attachment" "902_33" {
-  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn  = "topology/pod-1/paths-902/pathep-[eth1/33]"
-  if_inst_t = "sub-interface"
-  addr  = "10.41.36.14/30"
-  encap  = "vlan-3900"
-  encap_scope = "local"
-  mode = "regular"
-  mtu = "9000"
+  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn                    = "topology/pod-1/paths-902/pathep-[eth1/33]"
+  if_inst_t                    = "sub-interface"
+  addr                         = "10.41.36.14/30"
+  encap                        = "vlan-3900"
+  encap_scope                  = "local"
+  mode                         = "regular"
+  mtu                          = "9000"
 }
 
 resource "aci_l3out_path_attachment" "902_34" {
-  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn  = "topology/pod-1/paths-902/pathep-[eth1/34]"
-  if_inst_t = "sub-interface"
-  addr  = "10.41.36.10/30"
-  encap  = "vlan-3900"
-  encap_scope = "local"
-  mode = "regular"
-  mtu = "9000"
+  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn                    = "topology/pod-1/paths-902/pathep-[eth1/34]"
+  if_inst_t                    = "sub-interface"
+  addr                         = "10.41.36.10/30"
+  encap                        = "vlan-3900"
+  encap_scope                  = "local"
+  mode                         = "regular"
+  mtu                          = "9000"
 }
 
 resource "aci_l3out_path_attachment" "903_33" {
-  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn  = "topology/pod-1/paths-903/pathep-[eth1/33]"
-  if_inst_t = "sub-interface"
-  addr  = "10.41.36.18/30"
-  encap  = "vlan-3900"
-  encap_scope = "local"
-  mode = "regular"
-  mtu = "9000"
+  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn                    = "topology/pod-1/paths-903/pathep-[eth1/33]"
+  if_inst_t                    = "sub-interface"
+  addr                         = "10.41.36.18/30"
+  encap                        = "vlan-3900"
+  encap_scope                  = "local"
+  mode                         = "regular"
+  mtu                          = "9000"
 }
 
 resource "aci_l3out_path_attachment" "903_34" {
-  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn  = "topology/pod-1/paths-903/pathep-[eth1/34]"
-  if_inst_t = "sub-interface"
-  addr  = "10.41.36.22/30"
-  encap  = "vlan-3900"
-  encap_scope = "local"
-  mode = "regular"
-  mtu = "9000"
+  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn                    = "topology/pod-1/paths-903/pathep-[eth1/34]"
+  if_inst_t                    = "sub-interface"
+  addr                         = "10.41.36.22/30"
+  encap                        = "vlan-3900"
+  encap_scope                  = "local"
+  mode                         = "regular"
+  mtu                          = "9000"
 }
 
 resource "aci_l3out_path_attachment" "904_33" {
-  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn  = "topology/pod-1/paths-904/pathep-[eth1/33]"
-  if_inst_t = "sub-interface"
-  addr  = "10.41.36.26/30"
-  encap  = "vlan-3900"
-  encap_scope = "local"
-  mode = "regular"
-  mtu = "9000"
+  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn                    = "topology/pod-1/paths-904/pathep-[eth1/33]"
+  if_inst_t                    = "sub-interface"
+  addr                         = "10.41.36.26/30"
+  encap                        = "vlan-3900"
+  encap_scope                  = "local"
+  mode                         = "regular"
+  mtu                          = "9000"
 }
 
 resource "aci_l3out_path_attachment" "904_34" {
-  logical_interface_profile_dn  = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn  = "topology/pod-1/paths-904/pathep-[eth1/34]"
-  if_inst_t = "sub-interface"
-  addr  = "10.41.36.30/30"
-  encap  = "vlan-3900"
-  encap_scope = "local"
-  mode = "regular"
-  mtu = "9000"
+  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
+  target_dn                    = "topology/pod-1/paths-904/pathep-[eth1/34]"
+  if_inst_t                    = "sub-interface"
+  addr                         = "10.41.36.30/30"
+  encap                        = "vlan-3900"
+  encap_scope                  = "local"
+  mode                         = "regular"
+  mtu                          = "9000"
 }
 
 resource "aci_external_network_instance_profile" "elevated_mgmt" {
@@ -726,11 +726,11 @@ resource "aci_l3_ext_subnet" "all" {
 }
 
 resource "aci_l3out_ospf_external_policy" "example" {
-  l3_outside_dn  = aci_l3_outside.elevated_mgmt.id
-  area_cost  = "1"
-  area_ctrl = "redistribute,summary"
-  area_id  = "0.0.0.5"
-  area_type = "regular"
+  l3_outside_dn = aci_l3_outside.elevated_mgmt.id
+  area_cost     = "1"
+  area_ctrl     = "redistribute,summary"
+  area_id       = "0.0.0.5"
+  area_type     = "regular"
 }
 
 # Step 3 - Create the Bridge Domain for In-Band Management Network
@@ -738,7 +738,7 @@ resource "aci_l3out_ospf_external_policy" "example" {
 resource "aci_subnet" "inb_subnet" {
   parent_dn = aci_bridge_domain.inb.id
   ip        = "10.41.1.1/25"
-  scope     = [
+  scope = [
     "public"
   ]
 }
@@ -746,8 +746,8 @@ resource "aci_subnet" "inb_subnet" {
 # Step 4 - Associate the L3 Out with the inb Bridge Domain
 
 resource "aci_bridge_domain" "inb" {
-  tenant_dn           = "uni/tn-mgmt/"
-  name                = "inb"
+  tenant_dn = "uni/tn-mgmt/"
+  name      = "inb"
   relation_fv_rs_bd_to_out = [
     aci_l3_outside.elevated_mgmt.id
   ]
@@ -757,10 +757,10 @@ resource "aci_bridge_domain" "inb" {
 # Step 5 - Create Static Node Management Addresses and In-Band Node Management EPG
 
 resource "aci_node_mgmt_epg" "in_band" {
-  type = "in_band"
-  management_profile_dn  = "uni/tn-mgmt/mgmtp-default"
-  name  = "In_Band"
-  encap  = "vlan-10"
+  type                  = "in_band"
+  management_profile_dn = "uni/tn-mgmt/mgmtp-default"
+  name                  = "In_Band"
+  encap                 = "vlan-10"
 }
 
 resource "aci_static_node_mgmt_address" "node_1" {
@@ -886,9 +886,9 @@ resource "aci_static_node_mgmt_address" "node_104" {
 # Step 6 - Create Out of Band Node Management EPG
 
 resource "aci_node_mgmt_epg" "out_of_band_example" {
-  type = "out_of_band"
-  management_profile_dn  = "uni/tn-mgmt/mgmtp-default"
-  name  = "Out-of-Band"
+  type                  = "out_of_band"
+  management_profile_dn = "uni/tn-mgmt/mgmtp-default"
+  name                  = "Out-of-Band"
 }
 
 #################################
@@ -900,8 +900,148 @@ resource "aci_rest" "settings" {
   class_name = "infraSetPol"
   content = {
     "annotation" : "orchestrator:terraform",
-    "dn": "uni/infra/settings",
-    "name": "default",
-    "unicastXrEpLearnDisable": "yes"
+    "unicastXrEpLearnDisable" : "yes"
   }
+}
+
+##########################
+#### Configure Syslog ####
+##########################
+
+# Step 1 - Configure syslog collectors
+
+resource "aci_rest" "syslog_group" {
+  path       = "/api/node/mo/uni/fabric/slgroup-Syslog_Profile.json"
+  class_name = "syslogGroup"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "dn" : "uni/infra/settings",
+    "name" : "default",
+    "unicastXrEpLearnDisable" : "yes"
+  }
+}
+
+resource "aci_rest" "syslog_console" {
+  path       = "/api/node/mo/uni/fabric/slgroup-Syslog_Profile/console.json"
+  class_name = "syslogConsole"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "adminState" : "enabled",
+    "format" : "aci",
+    "severity" : "alerts"
+  }
+  depends_on = [
+    aci_rest.syslog_group
+  ]
+}
+
+resource "aci_rest" "syslog_file" {
+  path       = "/api/node/mo/uni/fabric/slgroup-Syslog_Profile/file.json"
+  class_name = "syslogFile"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "adminState" : "enabled",
+    "format" : "aci",
+    "severity" : "information"
+  }
+  depends_on = [
+    aci_rest.syslog_group
+  ]
+}
+
+resource "aci_rest" "syslog_prof" {
+  path       = "/api/node/mo/uni/fabric/slgroup-Syslog_Profile/prof.json"
+  class_name = "syslogProf"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "adminState" : "enabled",
+    "name" : "syslog"
+  }
+  depends_on = [
+    aci_rest.syslog_group
+  ]
+}
+
+resource "aci_rest" "syslog_remote_dest_frn" {
+  path       = "/api/node/mo/uni/fabric/slgroup-Syslog_Profile/rdst-10.40.236.3.json"
+  class_name = "syslogRemoteDest"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "adminState" : "enabled",
+    "format" : "aci",
+    "forwardingFacility" : "local7",
+    "host" : "10.40.236.3",
+    "name" : "10.40.236.3",
+    "port" : "514",
+    "severity" : "information"
+  }
+  depends_on = [
+    aci_rest.syslog_group
+  ]
+}
+
+resource "aci_rest" "syslog_remote_dest_frn_to_epg" {
+  path       = "/api/node/mo/uni/fabric/slgroup-Syslog_Profile/rdst-10.40.236.3/rsARemoteHostToEpg.json"
+  class_name = "filersARemoteHostToEpg"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "tDn" : "uni/tn-mgmt/mgmtp-default/inb-In-Band"
+  }
+  depends_on = [
+    aci_rest.syslog_remote_dest_frn
+  ]
+}
+
+resource "aci_rest" "syslog_remote_dest_cor" {
+  path       = "/api/node/mo/uni/fabric/slgroup-Syslog_Profile/rdst-10.41.236.9.json"
+  class_name = "syslogRemoteDest"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "adminState" : "enabled",
+    "format" : "aci",
+    "forwardingFacility" : "local7",
+    "host" : "10.41.236.9",
+    "name" : "10.41.236.9",
+    "port" : "514",
+    "severity" : "information"
+  }
+  depends_on = [
+    aci_rest.syslog_group
+  ]
+}
+
+resource "aci_rest" "syslog_remote_dest_cor_to_epg" {
+  path       = "/api/node/mo/uni/fabric/slgroup-Syslog_Profile/rdst-10.41.236.9/rsARemoteHostToEpg.json"
+  class_name = "filersARemoteHostToEpg"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "tDn" : "uni/tn-mgmt/mgmtp-default/inb-In-Band"
+  }
+  depends_on = [
+    aci_rest.syslog_remote_dest_cor
+  ]
+}
+
+# Step 2 - Configure fabric policy
+
+resource "aci_rest" "syslog_src" {
+  path       = "/api/node/mo/uni/fabric/moncommon/slsrc-Syslog_policy.json"
+  class_name = "syslogSrc"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "incl" : "audit,events,faults",
+    "minSev" : "information"
+  }
+}
+
+resource "aci_rest" "syslog_dest_group" {
+  path       = "/api/node/mo/uni/fabric/moncommon/slsrc-Syslog_policy/rsdestGroup.json"
+  class_name = "syslogRsDestGroup"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "tDn": "uni/fabric/slgroup-Syslog_Profile"
+  }
+  depends_on = [
+    aci_rest.syslog_src
+  ]
 }
