@@ -357,7 +357,7 @@ resource "aci_vlan_pool" "inband_mgmt" {
 
 resource "aci_ranges" "inband_mgmt" {
   vlan_pool_dn = aci_vlan_pool.inband_mgmt.id
-  _from        = "vlan-10"
+  from         = "vlan-10"
   to           = "vlan-10"
   alloc_mode   = "static"
 }
@@ -476,7 +476,7 @@ resource "aci_vlan_pool" "elevated_mgmt" {
 
 resource "aci_ranges" "elevated_mgmt" {
   vlan_pool_dn = aci_vlan_pool.elevated_mgmt.id
-  _from        = "vlan-3900"
+  from         = "vlan-3900"
   to           = "vlan-3900"
   alloc_mode   = "static"
   role         = "external"
@@ -493,7 +493,7 @@ resource "aci_l3_domain_profile" "elevated_mgmt" {
 
 resource "aci_attachable_access_entity_profile" "elevated_mgmt" {
   name                    = "elevated_private_peering"
-  relation_infra_rs_dom_p = aci_l3_domain_profile.elevated_mgmt.id
+  relation_infra_rs_dom_p = [aci_l3_domain_profile.elevated_mgmt.id]
 }
 
 # Step 4 - Create the Interface Policy Group
@@ -503,7 +503,7 @@ resource "aci_leaf_access_port_policy_group" "elevated_mgmt" {
 
   relation_infra_rs_cdp_if_pol  = aci_cdp_interface_policy.enabled.id
   relation_infra_rs_lldp_if_pol = aci_lldp_interface_policy.enabled.id
-  relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.elevated_private_peering.id
+  relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.elevated_mgmt.id
 }
 
 # Step 5 - Create the Interface Profile
@@ -580,6 +580,7 @@ resource "aci_ospf_interface_policy" "elevated_mgmt" {
 
 resource "aci_l3_outside" "elevated_mgmt" {
   name                         = "l3_out_elevated_mgmt"
+  tenant_dn                    = "uni/tn-mgmt"
   relation_l3ext_rs_ectx       = "inb"
   relation_l3ext_rs_l3_dom_att = aci_l3_domain_profile.elevated_mgmt.id
 }
@@ -591,25 +592,25 @@ resource "aci_logical_node_profile" "elevated_mgmt" {
 
 resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_901" {
   logical_node_profile_dn = aci_logical_node_profile.elevated_mgmt.id
-  tDn                     = "topology/pod-1/node-901"
+  tdn                     = "topology/pod-1/node-901"
   rtr_id                  = "10.41.37.2"
 }
 
 resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_902" {
   logical_node_profile_dn = aci_logical_node_profile.elevated_mgmt.id
-  tDn                     = "topology/pod-1/node-902"
+  tdn                     = "topology/pod-1/node-902"
   rtr_id                  = "10.41.37.10"
 }
 
 resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_903" {
   logical_node_profile_dn = aci_logical_node_profile.elevated_mgmt.id
-  tDn                     = "topology/pod-1/node-903"
+  tdn                     = "topology/pod-1/node-903"
   rtr_id                  = "10.41.37.18"
 }
 
 resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_904" {
   logical_node_profile_dn = aci_logical_node_profile.elevated_mgmt.id
-  tDn                     = "topology/pod-1/node-904"
+  tdn                     = "topology/pod-1/node-904"
   rtr_id                  = "10.41.37.26"
 }
 
@@ -627,7 +628,7 @@ resource "aci_l3out_ospf_interface_profile" "example" {
   relation_ospf_rs_if_pol      = aci_ospf_interface_policy.elevated_mgmt.id
 }
 
-resource "aci_l3out_path_attachment" "901_33" {
+resource "aci_l3out_path_attachment" "path_901_33" {
   logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
   target_dn                    = "topology/pod-1/paths-901/pathep-[eth1/33]"
   if_inst_t                    = "sub-interface"
@@ -638,7 +639,7 @@ resource "aci_l3out_path_attachment" "901_33" {
   mtu                          = "9000"
 }
 
-resource "aci_l3out_path_attachment" "901_34" {
+resource "aci_l3out_path_attachment" "path_901_34" {
   logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
   target_dn                    = "topology/pod-1/paths-901/pathep-[eth1/34]"
   if_inst_t                    = "sub-interface"
@@ -649,7 +650,7 @@ resource "aci_l3out_path_attachment" "901_34" {
   mtu                          = "9000"
 }
 
-resource "aci_l3out_path_attachment" "902_33" {
+resource "aci_l3out_path_attachment" "path_902_33" {
   logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
   target_dn                    = "topology/pod-1/paths-902/pathep-[eth1/33]"
   if_inst_t                    = "sub-interface"
@@ -660,7 +661,7 @@ resource "aci_l3out_path_attachment" "902_33" {
   mtu                          = "9000"
 }
 
-resource "aci_l3out_path_attachment" "902_34" {
+resource "aci_l3out_path_attachment" "path_902_34" {
   logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
   target_dn                    = "topology/pod-1/paths-902/pathep-[eth1/34]"
   if_inst_t                    = "sub-interface"
@@ -671,7 +672,7 @@ resource "aci_l3out_path_attachment" "902_34" {
   mtu                          = "9000"
 }
 
-resource "aci_l3out_path_attachment" "903_33" {
+resource "aci_l3out_path_attachment" "path_903_33" {
   logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
   target_dn                    = "topology/pod-1/paths-903/pathep-[eth1/33]"
   if_inst_t                    = "sub-interface"
@@ -682,7 +683,7 @@ resource "aci_l3out_path_attachment" "903_33" {
   mtu                          = "9000"
 }
 
-resource "aci_l3out_path_attachment" "903_34" {
+resource "aci_l3out_path_attachment" "path_903_34" {
   logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
   target_dn                    = "topology/pod-1/paths-903/pathep-[eth1/34]"
   if_inst_t                    = "sub-interface"
@@ -693,7 +694,7 @@ resource "aci_l3out_path_attachment" "903_34" {
   mtu                          = "9000"
 }
 
-resource "aci_l3out_path_attachment" "904_33" {
+resource "aci_l3out_path_attachment" "path_904_33" {
   logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
   target_dn                    = "topology/pod-1/paths-904/pathep-[eth1/33]"
   if_inst_t                    = "sub-interface"
@@ -704,7 +705,7 @@ resource "aci_l3out_path_attachment" "904_33" {
   mtu                          = "9000"
 }
 
-resource "aci_l3out_path_attachment" "904_34" {
+resource "aci_l3out_path_attachment" "path_904_34" {
   logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
   target_dn                    = "topology/pod-1/paths-904/pathep-[eth1/34]"
   if_inst_t                    = "sub-interface"
@@ -1039,7 +1040,7 @@ resource "aci_rest" "syslog_dest_group" {
   class_name = "syslogRsDestGroup"
   content = {
     "annotation" : "orchestrator:terraform",
-    "tDn": "uni/fabric/slgroup-Syslog_Profile"
+    "tDn" : "uni/fabric/slgroup-Syslog_Profile"
   }
   depends_on = [
     aci_rest.syslog_src
