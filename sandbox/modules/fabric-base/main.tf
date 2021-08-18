@@ -344,9 +344,9 @@ resource "aci_fabric_if_pol" "_40G_no_auto_neg" {
   speed         = "40G"
 }
 
-############################
-#### In-Band Management ####
-############################
+##############################################
+#### In-Band Management - Fabric Policies ####
+##############################################
 
 # Step 1 - Create VLAN Pool
 
@@ -463,9 +463,9 @@ resource "aci_node_block" "inband_mgmt" {
   to_                   = "902"
 }
 
-########################################
-#### L3 Out External Routed Network ####
-########################################
+##############################################################
+#### In-Band Management -  L3 Out External Routed Network ####
+##############################################################
 
 # Step 1 - Create the VLAN pool
 
@@ -565,9 +565,9 @@ resource "aci_node_block" "elevated_mgmt" {
   to_                   = "904"
 }
 
-#################
-#### Layer 3 ####
-#################
+#######################################
+#### In-Band Management -  Layer 3 ####
+#######################################
 
 # Step 1 - Create OSPF profile 
 
@@ -889,4 +889,19 @@ resource "aci_node_mgmt_epg" "out_of_band_example" {
   type = "out_of_band"
   management_profile_dn  = "uni/tn-mgmt/mgmtp-default"
   name  = "Out-of-Band"
+}
+
+#################################
+#### Disable Remote EP Learn ####
+#################################
+
+resource "aci_rest" "settings" {
+  path       = "/api/node/mo/uni/infra/settings.json"
+  class_name = "infraSetPol"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "dn": "uni/infra/settings",
+    "name": "default",
+    "unicastXrEpLearnDisable": "yes"
+  }
 }
