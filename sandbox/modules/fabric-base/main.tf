@@ -120,7 +120,7 @@ resource "aci_rest" "ntp_provider_frn_epg" {
 }
 
 resource "aci_rest" "ntp_provider_frn_key" {
-  path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.40.232.11/rsNtpProvToNtpAuthKey.json"
+  path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.40.232.11/rsntpProvToNtpAuthKey-1.json"
   class_name = "datetimeRsNtpProvToNtpAuthKey"
   content = {
     "annotation" : "orchestrator:terraform",
@@ -161,7 +161,7 @@ resource "aci_rest" "ntp_provider_cor_epg" {
 }
 
 resource "aci_rest" "ntp_provider_cor_key" {
-  path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.41.232.11/rsNtpProvToNtpAuthKey.json"
+  path       = "/api/node/mo/uni/fabric/time-NTP_policy/ntpprov-10.41.232.11/rsntpProvToNtpAuthKey-1.json"
   class_name = "datetimeRsNtpProvToNtpAuthKey"
   content = {
     "annotation" : "orchestrator:terraform",
@@ -194,8 +194,7 @@ resource "aci_rest" "dns_profile" {
   path       = "/api/node/mo/uni/fabric/dnsp-default.json"
   class_name = "dnsProfile"
   content = {
-    "annotation" : "orchestrator:terraform",
-    "epgDn" : "uni/tn-mgmt/mgmtp-default/inb-In-Band"
+    "annotation" : "orchestrator:terraform"
   }
 }
 
@@ -305,7 +304,7 @@ resource "aci_fabric_if_pol" "_1G" {
 }
 
 resource "aci_fabric_if_pol" "_1G_no_auto_neg" {
-  name          = "1G"
+  name          = "1G_no_auto_neg"
   auto_neg      = "off"
   link_debounce = "100"
   speed         = "1G"
@@ -319,7 +318,7 @@ resource "aci_fabric_if_pol" "_10G" {
 }
 
 resource "aci_fabric_if_pol" "_10G_no_auto_neg" {
-  name          = "10G"
+  name          = "10G_no_auto_neg"
   auto_neg      = "off"
   link_debounce = "100"
   speed         = "10G"
@@ -333,7 +332,7 @@ resource "aci_fabric_if_pol" "_40G" {
 }
 
 resource "aci_fabric_if_pol" "_40G_no_auto_neg" {
-  name          = "40G"
+  name          = "40G_no_auto_neg"
   auto_neg      = "off"
   link_debounce = "100"
   speed         = "40G"
@@ -517,9 +516,9 @@ resource "aci_access_port_selector" "port_33" {
 resource "aci_access_port_block" "port_33" {
   access_port_selector_dn = aci_access_port_selector.port_33.id
   from_card               = "1"
-  from_port               = "46"
+  from_port               = "33"
   to_card                 = "1"
-  to_port                 = "46"
+  to_port                 = "33"
 }
 
 resource "aci_access_port_selector" "port_34" {
@@ -576,7 +575,7 @@ resource "aci_ospf_interface_policy" "elevated_mgmt" {
 resource "aci_l3_outside" "elevated_mgmt" {
   name                         = "l3_out_elevated_mgmt"
   tenant_dn                    = "uni/tn-mgmt"
-  relation_l3ext_rs_ectx       = "inb"
+  relation_l3ext_rs_ectx       = "uni/tn-mgmt/ctx-inb"
   relation_l3ext_rs_l3_dom_att = aci_l3_domain_profile.elevated_mgmt.id
 }
 
@@ -742,7 +741,7 @@ resource "aci_subnet" "inb_subnet" {
 # Step 4 - Associate the L3 Out with the inb Bridge Domain
 
 resource "aci_bridge_domain" "inb" {
-  tenant_dn = "uni/tn-mgmt/"
+  tenant_dn = "uni/tn-mgmt"
   name      = "inb"
   relation_fv_rs_bd_to_out = [
     aci_l3_outside.elevated_mgmt.id
@@ -910,10 +909,7 @@ resource "aci_rest" "syslog_group" {
   path       = "/api/node/mo/uni/fabric/slgroup-Syslog_Profile.json"
   class_name = "syslogGroup"
   content = {
-    "annotation" : "orchestrator:terraform",
-    "dn" : "uni/infra/settings",
-    "name" : "default",
-    "unicastXrEpLearnDisable" : "yes"
+    "annotation" : "orchestrator:terraform"
   }
 }
 
@@ -978,7 +974,7 @@ resource "aci_rest" "syslog_remote_dest_frn" {
 
 resource "aci_rest" "syslog_remote_dest_frn_to_epg" {
   path       = "/api/node/mo/uni/fabric/slgroup-Syslog_Profile/rdst-10.40.236.3/rsARemoteHostToEpg.json"
-  class_name = "filersARemoteHostToEpg"
+  class_name = "fileRsARemoteHostToEpg"
   content = {
     "annotation" : "orchestrator:terraform",
     "tDn" : "uni/tn-mgmt/mgmtp-default/inb-In-Band"
@@ -1008,7 +1004,7 @@ resource "aci_rest" "syslog_remote_dest_cor" {
 
 resource "aci_rest" "syslog_remote_dest_cor_to_epg" {
   path       = "/api/node/mo/uni/fabric/slgroup-Syslog_Profile/rdst-10.41.236.9/rsARemoteHostToEpg.json"
-  class_name = "filersARemoteHostToEpg"
+  class_name = "fileRsARemoteHostToEpg"
   content = {
     "annotation" : "orchestrator:terraform",
     "tDn" : "uni/tn-mgmt/mgmtp-default/inb-In-Band"
