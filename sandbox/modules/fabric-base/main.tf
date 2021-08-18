@@ -9,12 +9,7 @@ resource "aci_rest" "pod_policy_group" {
   class_name = "fabricPodPGrp"
   content = {
     "annotation" : "orchestrator:terraform",
-    "descr" : "",
-    "dn" : "uni/fabric/funcprof/podpgrp-Pod_Policy_Group",
-    "name" : "Pod_Policy_Group",
-    "nameAlias" : "",
-    "ownerKey" : "",
-    "ownerTag" : ""
+    "name" : "Pod_Policy_Group"
   }
 }
 
