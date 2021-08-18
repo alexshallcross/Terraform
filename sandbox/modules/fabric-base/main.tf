@@ -1037,3 +1037,46 @@ resource "aci_rest" "syslog_dest_group" {
     aci_rest.syslog_src
   ]
 }
+
+#####################
+#### Assured CDS ####
+#####################
+
+resource "aci_tenant" "assured_cds" {
+  name = "assured_cds"
+}
+
+####################################
+#### Assured UKCloud Management ####
+####################################
+
+resource "aci_vlan_pool" "assured_ukcloud_mgmt" {
+  name       = "vlan_static_l3_out_assured_ukcloud_mgmt"
+  alloc_mode = "static"
+}
+
+resource "aci_ranges" "assured_ukcloud_mgmt" {
+  vlan_pool_dn = aci_vlan_pool.assured_ukcloud_mgmt.id
+  from         = "3964"
+  to           = "3964"
+  alloc_mode   = "static"
+}
+
+resource "aci_l3_domain_profile" "assured_ukcloud_mgmt" {
+  name                      = "l3_out_assured_ukcloud_mgmt"
+  relation_infra_rs_vlan_ns = aci_vlan_pool.assured_ukcloud_mgmt.id
+}
+
+resource "aci_tenant" "assured_ukcloud_mgmt" {
+  name = "assured_ukcloud_mgmt"
+}
+
+resource "aci_vrf" "assured_ukcloud_mgmt" {
+  tenant_dn = aci_tenant.assured_ukcloud_mgmt.id
+  name      = "assured_ukcloud_mgmt"
+}
+
+resource "aci_ospf_interface_policy" "fooospf_interface_policy" {
+  tenant_dn = aci_tenant.assured_ukcloud_mgmt.id
+  name      = "ospf_int_p2p_protocol_policy_assured_ukcloud_mgmt"
+}
