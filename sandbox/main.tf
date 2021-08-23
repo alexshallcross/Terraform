@@ -72,6 +72,8 @@ module "fabric_base" {
     }
   }
 
+  inb_mgmt_subnet = "10.41.1.1/25"
+
 }
 
 /***

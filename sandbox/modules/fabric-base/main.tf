@@ -639,7 +639,7 @@ resource "aci_l3out_ospf_external_policy" "example" {
 
 resource "aci_subnet" "inb_subnet" {
   parent_dn = aci_bridge_domain.inb.id
-  ip        = "10.41.1.1/25"
+  ip        = "${var.inb_mgmt_subnet}"
   scope = [
     "public"
   ]

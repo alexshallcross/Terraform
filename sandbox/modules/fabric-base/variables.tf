@@ -34,3 +34,8 @@ variable "inband_mgmt_ospf_interface_list" {
     addr         = string
   }))
 }
+
+variable "inb_mgmt_subnet" {
+  type = string
+  description = "Subnet for the inbound mgmt bridge domain"
+}
