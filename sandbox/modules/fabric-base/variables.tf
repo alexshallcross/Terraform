@@ -35,7 +35,11 @@ variable "inband_mgmt_ospf_interface_list" {
   }))
 }
 
-variable "inb_mgmt_subnet" {
+variable "inband_mgmt_subnet_gateway" {
   type = string
-  description = "Subnet for the inbound mgmt bridge domain"
+  description = "Gateway address/subnet mask for the inbound mgmt bridge domain"
+}
+
+variable "inband_mgmt_node_address" {
+  type = map(any)
 }

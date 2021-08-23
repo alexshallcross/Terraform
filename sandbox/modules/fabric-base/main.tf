@@ -639,7 +639,7 @@ resource "aci_l3out_ospf_external_policy" "example" {
 
 resource "aci_subnet" "inb_subnet" {
   parent_dn = aci_bridge_domain.inb.id
-  ip        = "${var.inb_mgmt_subnet}"
+  ip        = var.inband_mgmt_subnet_gateway
   scope = [
     "public"
   ]
@@ -665,124 +665,13 @@ resource "aci_node_mgmt_epg" "in_band" {
   encap                 = "vlan-10"
 }
 
-resource "aci_static_node_mgmt_address" "node_1" {
+resource "aci_static_node_mgmt_address" "node_address" {
+  for_each = var.inband_mgmt_node_address
   management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-1"
+  t_dn              = "topology/pod-1/node-${each.key}"
   type              = "in_band"
-  addr              = "10.41.1.11/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_2" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-2"
-  type              = "in_band"
-  addr              = "10.41.1.12/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_3" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-3"
-  type              = "in_band"
-  addr              = "10.41.1.13/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_1001" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-1001"
-  type              = "in_band"
-  addr              = "10.41.1.21/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_1002" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-1002"
-  type              = "in_band"
-  addr              = "10.41.1.22/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_1003" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-1003"
-  type              = "in_band"
-  addr              = "10.41.1.23/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_1004" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-1004"
-  type              = "in_band"
-  addr              = "10.41.1.24/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_901" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-901"
-  type              = "in_band"
-  addr              = "10.41.1.31/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_902" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-902"
-  type              = "in_band"
-  addr              = "10.41.1.32/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_903" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-903"
-  type              = "in_band"
-  addr              = "10.41.1.33/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_904" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-904"
-  type              = "in_band"
-  addr              = "10.41.1.34/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_101" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-101"
-  type              = "in_band"
-  addr              = "10.41.1.51/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_102" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-102"
-  type              = "in_band"
-  addr              = "10.41.1.52/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_103" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-103"
-  type              = "in_band"
-  addr              = "10.41.1.53/25"
-  gw                = "10.41.1.1"
-}
-
-resource "aci_static_node_mgmt_address" "node_104" {
-  management_epg_dn = aci_node_mgmt_epg.in_band.id
-  t_dn              = "topology/pod-1/node-104"
-  type              = "in_band"
-  addr              = "10.41.1.54/25"
-  gw                = "10.41.1.1"
+  addr              = each.value
+  gw                = var.inband_mgmt_subnet
 }
 
 # Step 6 - Create Out of Band Node Management EPG
