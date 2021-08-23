@@ -5,11 +5,32 @@ variable "spine_nodes" {
 
 variable "bgp_as_number" {
   type        = string
-  description = "655xx where the last two digits should match the system number; e.g. system 6 would be 65506"
+  description = "655xx where the last two digits should match the system number; e.g. 65506 (system 6)"
 }
 
 variable "ntp_auth_key" {
   type        = string
   description = "Key used for authenticating against NTP servers"
   sensitive   = true
+}
+
+variable "inband_mgmt_vlan" {
+  type        = number
+  description = "VLAN tag for inband mgmt network e.g 10"
+}
+
+variable "inband_mgmt_rtr_ids" {
+  type = map(any)
+}
+
+variable "inband_mgmt_ospf_interface_vlan" {
+  type = string
+}
+
+variable "inband_mgmt_ospf_interface_list" {
+  type = map(object({
+    node_id      = number
+    interface_id = string
+    addr         = string
+  }))
 }

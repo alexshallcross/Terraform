@@ -16,9 +16,62 @@ provider "aci" {
 module "fabric_base" {
   source = "./modules/fabric-base"
 
-  spine_nodes   = [1001, 1002]
-  bgp_as_number = 65515
-  ntp_auth_key  = "asdasdasd"
+  spine_nodes      = [1001, 1002]
+  bgp_as_number    = 65515
+  ntp_auth_key     = "asdasdasd"
+  inband_mgmt_vlan = 10
+
+  inband_mgmt_rtr_ids = {
+    901 = "10.41.37.2"
+    902 = "10.41.37.10"
+    903 = "10.41.37.18"
+    904 = "10.41.37.26"
+  }
+  inband_mgmt_ospf_interface_vlan = 3900
+
+  inband_mgmt_ospf_interface_list = {
+    node_901_33 = {
+      node_id      = 901
+      interface_id = "eth1/33"
+      addr         = "10.41.36.2/30"
+    },
+    node_901_34 = {
+      node_id      = 901
+      interface_id = "eth1/34"
+      addr         = "10.41.36.6/30"
+    },
+    node_902_33 = {
+      node_id      = 902
+      interface_id = "eth1/33"
+      addr         = "10.41.36.10/30"
+    },
+    node_902_34 = {
+      node_id      = 902
+      interface_id = "eth1/34"
+      addr         = "10.41.36.14/30"
+    },
+    node_903_33 = {
+      node_id      = 903
+      interface_id = "eth1/33"
+      addr         = "10.41.36.18/30"
+    },
+    node_903_34 = {
+      node_id      = 903
+      interface_id = "eth1/34"
+      addr         = "10.41.36.22/30"
+    },
+    node_904_33 = {
+      node_id      = 904
+      interface_id = "eth1/33"
+      addr         = "10.41.36.26/30"
+    },
+    node_904_34 = {
+      node_id      = 904
+      interface_id = "eth1/34"
+      addr         = "10.41.36.30/30"
+    }
+  }
+
 }
 
 /***

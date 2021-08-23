@@ -452,7 +452,7 @@ resource "aci_leaf_selector" "inband_mgmt" {
 
 resource "aci_node_block" "inband_mgmt" {
   switch_association_dn = aci_leaf_selector.inband_mgmt.id
-  name                  = "e96125f97531b1d1"
+  name                  = "inband_mgmt"
   from_                 = "901"
   to_                   = "902"
 }
@@ -470,8 +470,8 @@ resource "aci_vlan_pool" "elevated_mgmt" {
 
 resource "aci_ranges" "elevated_mgmt" {
   vlan_pool_dn = aci_vlan_pool.elevated_mgmt.id
-  from         = "vlan-3900"
-  to           = "vlan-3900"
+  from         = "vlan-${var.inband_mgmt_vlan}"
+  to           = "vlan-${var.inband_mgmt_vlan}"
   alloc_mode   = "static"
   role         = "external"
 }
@@ -554,7 +554,7 @@ resource "aci_leaf_selector" "elevated_mgmt" {
 
 resource "aci_node_block" "elevated_mgmt" {
   switch_association_dn = aci_leaf_selector.elevated_mgmt.id
-  name                  = "a1f2705d1ge02z7j"
+  name                  = "elevated_mgmt"
   from_                 = "901"
   to_                   = "904"
 }
@@ -584,37 +584,19 @@ resource "aci_logical_node_profile" "elevated_mgmt" {
   name          = "ospf_node_profile_mgmt"
 }
 
-resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_901" {
+resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node" {
   logical_node_profile_dn = aci_logical_node_profile.elevated_mgmt.id
-  tdn                     = "topology/pod-1/node-901"
-  rtr_id                  = "10.41.37.2"
-}
-
-resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_902" {
-  logical_node_profile_dn = aci_logical_node_profile.elevated_mgmt.id
-  tdn                     = "topology/pod-1/node-902"
-  rtr_id                  = "10.41.37.10"
-}
-
-resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_903" {
-  logical_node_profile_dn = aci_logical_node_profile.elevated_mgmt.id
-  tdn                     = "topology/pod-1/node-903"
-  rtr_id                  = "10.41.37.18"
-}
-
-resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node_904" {
-  logical_node_profile_dn = aci_logical_node_profile.elevated_mgmt.id
-  tdn                     = "topology/pod-1/node-904"
-  rtr_id                  = "10.41.37.26"
+  for_each                = var.inband_mgmt_rtr_ids
+  tdn                     = "topology/pod-1/node-${each.key}"
+  rtr_id                  = each.value
 }
 
 resource "aci_logical_interface_profile" "elevated_mgmt" {
   logical_node_profile_dn = aci_logical_node_profile.elevated_mgmt.id
   name                    = "ospf_int_profile_mgmt"
-  tag                     = "yellow-green"
 }
 
-resource "aci_l3out_ospf_interface_profile" "example" {
+resource "aci_l3out_ospf_interface_profile" "elevated_mgmt" {
   logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
   auth_key                     = "key"
   auth_key_id                  = "1"
@@ -622,89 +604,14 @@ resource "aci_l3out_ospf_interface_profile" "example" {
   relation_ospf_rs_if_pol      = aci_ospf_interface_policy.elevated_mgmt.id
 }
 
-resource "aci_l3out_path_attachment" "path_901_33" {
-  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn                    = "topology/pod-1/paths-901/pathep-[eth1/33]"
-  if_inst_t                    = "sub-interface"
-  addr                         = "10.41.36.2/30"
-  encap                        = "vlan-3900"
-  encap_scope                  = "local"
-  mode                         = "regular"
-  mtu                          = "9000"
-}
+resource "aci_l3out_path_attachment" "elevated_mgmt" {
+  for_each = var.inband_mgmt_ospf_interface_list
 
-resource "aci_l3out_path_attachment" "path_901_34" {
   logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn                    = "topology/pod-1/paths-901/pathep-[eth1/34]"
+  target_dn                    = "topology/pod-1/paths-${each.value.node_id}/pathep-[${each.value.interface_id}]"
   if_inst_t                    = "sub-interface"
-  addr                         = "10.41.36.6/30"
-  encap                        = "vlan-3900"
-  encap_scope                  = "local"
-  mode                         = "regular"
-  mtu                          = "9000"
-}
-
-resource "aci_l3out_path_attachment" "path_902_33" {
-  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn                    = "topology/pod-1/paths-902/pathep-[eth1/33]"
-  if_inst_t                    = "sub-interface"
-  addr                         = "10.41.36.14/30"
-  encap                        = "vlan-3900"
-  encap_scope                  = "local"
-  mode                         = "regular"
-  mtu                          = "9000"
-}
-
-resource "aci_l3out_path_attachment" "path_902_34" {
-  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn                    = "topology/pod-1/paths-902/pathep-[eth1/34]"
-  if_inst_t                    = "sub-interface"
-  addr                         = "10.41.36.10/30"
-  encap                        = "vlan-3900"
-  encap_scope                  = "local"
-  mode                         = "regular"
-  mtu                          = "9000"
-}
-
-resource "aci_l3out_path_attachment" "path_903_33" {
-  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn                    = "topology/pod-1/paths-903/pathep-[eth1/33]"
-  if_inst_t                    = "sub-interface"
-  addr                         = "10.41.36.18/30"
-  encap                        = "vlan-3900"
-  encap_scope                  = "local"
-  mode                         = "regular"
-  mtu                          = "9000"
-}
-
-resource "aci_l3out_path_attachment" "path_903_34" {
-  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn                    = "topology/pod-1/paths-903/pathep-[eth1/34]"
-  if_inst_t                    = "sub-interface"
-  addr                         = "10.41.36.22/30"
-  encap                        = "vlan-3900"
-  encap_scope                  = "local"
-  mode                         = "regular"
-  mtu                          = "9000"
-}
-
-resource "aci_l3out_path_attachment" "path_904_33" {
-  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn                    = "topology/pod-1/paths-904/pathep-[eth1/33]"
-  if_inst_t                    = "sub-interface"
-  addr                         = "10.41.36.26/30"
-  encap                        = "vlan-3900"
-  encap_scope                  = "local"
-  mode                         = "regular"
-  mtu                          = "9000"
-}
-
-resource "aci_l3out_path_attachment" "path_904_34" {
-  logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn                    = "topology/pod-1/paths-904/pathep-[eth1/34]"
-  if_inst_t                    = "sub-interface"
-  addr                         = "10.41.36.30/30"
-  encap                        = "vlan-3900"
+  addr                         = each.value.addr
+  encap                        = "vlan-${var.inband_mgmt_ospf_interface_vlan}"
   encap_scope                  = "local"
   mode                         = "regular"
   mtu                          = "9000"
@@ -1057,8 +964,8 @@ resource "aci_vlan_pool" "assured_ukcloud_mgmt" {
 
 resource "aci_ranges" "assured_ukcloud_mgmt" {
   vlan_pool_dn = aci_vlan_pool.assured_ukcloud_mgmt.id
-  from         = "3964"
-  to           = "3964"
+  from         = "vlan-3964"
+  to           = "vlan-3964"
   alloc_mode   = "static"
 }
 
@@ -1076,7 +983,28 @@ resource "aci_vrf" "assured_ukcloud_mgmt" {
   name      = "assured_ukcloud_mgmt"
 }
 
-resource "aci_ospf_interface_policy" "fooospf_interface_policy" {
+resource "aci_ospf_interface_policy" "assured_ukcloud_mgmt" {
   tenant_dn = aci_tenant.assured_ukcloud_mgmt.id
   name      = "ospf_int_p2p_protocol_policy_assured_ukcloud_mgmt"
 }
+
+resource "aci_l3_outside" "assured_ukcloud_mgmt" {
+  tenant_dn = aci_tenant.assured_ukcloud_mgmt.id
+  name      = "assured_ukcloud_mgmt"
+}
+
+resource "aci_logical_node_profile" "assured_ukcloud_mgmt" {
+  l3_outside_dn = aci_l3_outside.assured_ukcloud_mgmt.id
+  name          = "assured_ukcloud_mgmt"
+}
+
+/***
+resource "aci_logical_node_to_fabric_node" "assured_ukcloud_mgmt" {
+  logical_node_profile_dn = aci_logical_node_profile.assured_ukcloud_mgmt.id
+  tdn                     = "example"
+  annotation              = "example"
+  config_issues           = "example"
+  rtr_id                  = "example"
+  rtr_id_loop_back        = "example"
+}
+***/
