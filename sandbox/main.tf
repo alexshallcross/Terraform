@@ -92,6 +92,59 @@ module "fabric_base" {
     104 = "10.41.1.54/25"
   }
 
+  assured_ukcloud_mgmt_rtr_ids = {
+    901 = "10.41.3.66"
+    902 = "10.41.3.74"
+    903 = "10.41.3.82"
+    904 = "10.41.3.90"
+  }
+  assured_ukcloud_mgmt_ospf_interface_vlan = 3964
+
+  assured_ukcloud_mgmt_ospf_interface_list = {
+    node_901_17 = {
+      node_id      = 901
+      interface_id = "eth1/17"
+      addr         = "10.41.0.66/30"
+    },
+    node_901_18 = {
+      node_id      = 901
+      interface_id = "eth1/18"
+      addr         = "10.41.0.70/30"
+    },
+    node_902_17 = {
+      node_id      = 902
+      interface_id = "eth1/17"
+      addr         = "10.41.0.78/30"
+    },
+    node_902_18 = {
+      node_id      = 902
+      interface_id = "eth1/18"
+      addr         = "10.41.0.74/30"
+    },
+    node_903_17 = {
+      node_id      = 903
+      interface_id = "eth1/17"
+      addr         = "10.41.0.82/30"
+    },
+    node_903_18 = {
+      node_id      = 903
+      interface_id = "eth1/18"
+      addr         = "10.41.0.86/30"
+    },
+    node_904_17 = {
+      node_id      = 904
+      interface_id = "eth1/17"
+      addr         = "10.41.0.90/30"
+    },
+    node_904_18 = {
+      node_id      = 904
+      interface_id = "eth1/18"
+      addr         = "10.41.0.94/30"
+    }
+  }
+
+  assured_ukcloud_mgmt_ospf_area_id = "0.0.0.5"
+
 }
 
 /***
