@@ -941,3 +941,86 @@ resource "aci_l3out_ospf_external_policy" "assured_ukcloud_mgmt" {
   area_id       = "${var.assured_ukcloud_mgmt_ospf_area_id}"
   area_type     = "regular"
 }
+
+#############
+#### DOM ####
+#############
+
+resource "aci_rest" "fabric_node_control_dom" {
+  path       = "/api/node/mo/uni/fabric/nodecontrol-fabric_node_control_dom.json"
+  class_name = "fabricNodeControl"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "name" : "fabric_node_control_dom",
+    "featureSel": "telemetry",
+    "control": "Dom"
+  }
+}
+
+resource "aci_rest" "leaf_switch_policy_dom" {
+  path       = "/api/node/mo/uni/fabric/funcprof/lenodepgrp-leaf_switch_policy_dom.json"
+  class_name = "fabricLeNodePGrp"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "name" : "leaf_switch_policy_dom"
+  }
+}
+
+resource "aci_rest" "leaf_switch_policy_dom_node_control" {
+  path       = "/api/node/mo/uni/fabric/funcprof/lenodepgrp-leaf_switch_policy_dom/rsnodeCtrl.json"
+  class_name = "fabricRsNodeCtrl"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "tnFabricNodeControlName": "fabric_node_control_dom"
+  }
+  depends_on = [
+    aci_rest.leaf_switch_policy_dom
+  ]
+}
+
+resource "aci_rest" "leaf_switch_profile_dom" {
+  path       = "/api/node/mo/uni/fabric/leprof-leaf_switch_profile_dom.json"
+  class_name = "fabricLeafP"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "name" : "leaf_switch_profile_dom"
+  }
+}
+
+resource "aci_rest" "leaf_switch_profile_dom_leaf" {
+  path       = "/api/node/mo/uni/fabric/leprof-leaf_switch_profile_dom/leaves-border_leaf-typ-range.json"
+  class_name = "fabricLeafS"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "type" : "range"
+  }
+  depends_on = [
+    aci_rest.leaf_switch_profile_dom
+  ]
+}
+
+resource "aci_rest" "leaf_switch_profile_dom_leaf_selector" {
+  path       = "/api/node/mo/uni/fabric/leprof-leaf_switch_profile_dom/leaves-border_leaf-typ-range/nodeblk-border_leaf_selector.json"
+  class_name = "fabricNodeBlk"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "name" : "border_leaf_selector"
+    "from_" : min(keys(var.inband_mgmt_rtr_ids)...)
+    "to_" : max(keys(var.inband_mgmt_rtr_ids)...)
+  }
+  depends_on = [
+    aci_rest.leaf_switch_profile_dom_leaf
+  ]
+}
+
+resource "aci_rest" "leaf_switch_profile_dom_policy_selector" {
+  path       = "/api/node/mo/uni/fabric/leprof-leaf_switch_profile_dom/leaves-border_leaf-typ-range/rsleNodePGrp.json"
+  class_name = "fabricRsLeNodePGrp"
+  content = {
+    "annotation" : "orchestrator:terraform",
+    "tDn" : "uni/fabric/funcprof/lenodepgrp-leaf_switch_policy_dom"
+  }
+  depends_on = [
+    aci_rest.leaf_switch_profile_dom_leaf
+  ]
+}
