@@ -194,6 +194,97 @@ module "fabric_base" {
   elevated_ukcloud_mgmt_ospf_interface_vlan = 3964
   elevated_ukcloud_mgmt_ospf_area_id = "0.0.0.5"
 
+  assured_underlay_transport_rtr_ids = {
+    901 = "10.40.42.2"
+    902 = "10.40.42.26"
+    903 = "10.40.42.18"
+    904 = "10.40.42.10"
+  }
+  assured_underlay_transport_ospf_interface_list = {
+    node_901_17 = {
+      node_id      = 901
+      interface_id = "eth1/17"
+      addr         = "100.64.6.2/30"
+    },
+    node_901_18 = {
+      node_id      = 901
+      interface_id = "eth1/18"
+      addr         = "100.64.6.6/30"
+    },
+    node_901_21 = {
+      node_id      = 901
+      interface_id = "eth1/21"
+      addr         = "100.64.6.33/30"
+    },
+    node_901_22 = {
+      node_id      = 901
+      interface_id = "eth1/22"
+      addr         = "100.64.6.49/30"
+    },
+    node_902_17 = {
+      node_id      = 902
+      interface_id = "eth1/17"
+      addr         = "100.64.6.14/30"
+    },
+    node_902_18 = {
+      node_id      = 902
+      interface_id = "eth1/18"
+      addr         = "100.64.6.10/30"
+    },
+    node_902_21 = {
+      node_id      = 902
+      interface_id = "eth1/21"
+      addr         = "100.64.6.37/30"
+    },
+    node_902_22 = {
+      node_id      = 902
+      interface_id = "eth1/22"
+      addr         = "100.64.6.53/30"
+    },
+    node_903_17 = {
+      node_id      = 903
+      interface_id = "eth1/17"
+      addr         = "100.64.6.18/30"
+    },
+    node_903_18 = {
+      node_id      = 903
+      interface_id = "eth1/18"
+      addr         = "100.64.6.22/30"
+    },
+    node_903_21 = {
+      node_id      = 903
+      interface_id = "eth1/21"
+      addr         = "100.64.6.41/30"
+    },
+    node_903_22 = {
+      node_id      = 903
+      interface_id = "eth1/22"
+      addr         = "100.64.6.57/30"
+    },
+    node_904_17 = {
+      node_id      = 904
+      interface_id = "eth1/17"
+      addr         = "100.64.6.26/30"
+    },
+    node_904_18 = {
+      node_id      = 904
+      interface_id = "eth1/18"
+      addr         = "100.64.6.30/30"
+    },
+    node_904_21 = {
+      node_id      = 904
+      interface_id = "eth1/21"
+      addr         = "100.64.6.45/30"
+    }
+    node_904_22 = {
+      node_id      = 904
+      interface_id = "eth1/22"
+      addr         = "100.64.6.61/30"
+    }
+  }
+  assured_underlay_transport_ospf_interface_vlan = 3963
+  assured_underlay_transport_ospf_area_id = "0.0.0.6"
+
 }
 
 /***

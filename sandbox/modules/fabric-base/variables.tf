@@ -83,3 +83,23 @@ variable "elevated_ukcloud_mgmt_ospf_interface_list" {
 variable "elevated_ukcloud_mgmt_ospf_area_id" {
   type = string
 }
+
+variable "assured_underlay_transport_rtr_ids" {
+  type = map(any)
+}
+
+variable "assured_underlay_transport_ospf_interface_vlan" {
+  type = string
+}
+
+variable "assured_underlay_transport_ospf_interface_list" {
+  type = map(object({
+    node_id      = number
+    interface_id = string
+    addr         = string
+  }))
+}
+
+variable "assured_underlay_transport_ospf_area_id" {
+  type = string
+}
