@@ -84,6 +84,7 @@ variable "elevated_ukcloud_mgmt_ospf_area_id" {
   type = string
 }
 
+/***
 variable "assured_underlay_transport_rtr_ids" {
   type = map(any)
 }
@@ -103,3 +104,4 @@ variable "assured_underlay_transport_ospf_interface_list" {
 variable "assured_underlay_transport_ospf_area_id" {
   type = string
 }
+***/

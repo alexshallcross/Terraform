@@ -194,6 +194,12 @@ module "fabric_base" {
   elevated_ukcloud_mgmt_ospf_interface_vlan = 3964
   elevated_ukcloud_mgmt_ospf_area_id = "0.0.0.5"
 
+
+}
+
+module "assured_underlay_transport" {
+  source = "./modules/assured-underlay-transport"
+
   assured_underlay_transport_rtr_ids = {
     901 = "10.40.42.2"
     902 = "10.40.42.26"
@@ -285,7 +291,11 @@ module "fabric_base" {
   assured_underlay_transport_ospf_interface_vlan = 3963
   assured_underlay_transport_ospf_area_id = "0.0.0.6"
 
+  interface_speed_policy = module.fabric_base.aci_fabric_if_pol_10G
+  interface_cdp_policy = module.fabric_base.aci_cdp_interface_policy_disabled
+  interface_lldp_policy = module.fabric_base.aci_lldp_interface_policy_enabled
 }
+  
 
 /***
 
