@@ -1,17 +1,5 @@
-variable "assured_underlay_transport_rtr_ids" {
-  type = map(any)
-}
-
 variable "assured_underlay_transport_ospf_interface_vlan" {
   type = string
-}
-
-variable "assured_underlay_transport_ospf_interface_list" {
-  type = map(object({
-    node_id      = number
-    interface_id = string
-    addr         = string
-  }))
 }
 
 variable "assured_underlay_transport_ospf_area_id" {
@@ -28,4 +16,14 @@ variable "interface_cdp_policy" {
 
 variable "interface_lldp_policy" {
   type = string
+}
+
+variable "assured_underlay_transport_ospf" {
+  type = map(object({
+    router_id  = string
+    interfaces = list(object({
+      interface_id = string
+      address      = string
+    }))
+  }))
 }
