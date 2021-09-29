@@ -38,8 +38,8 @@ resource "aci_attachable_access_entity_profile" "assured_cds_l2" {
 }
 
 resource "aci_leaf_access_bundle_policy_group" "assured_cds_l2" {
-  name        = "vpc_pol_grp_10G_lldp_lacp_assured_underlay_transport"
-  lag_t       = "node"
+  name  = "vpc_pol_grp_10G_lldp_lacp_assured_underlay_transport"
+  lag_t = "node"
 
   relation_infra_rs_h_if_pol    = var.interface_speed_policy
   relation_infra_rs_cdp_if_pol  = var.interface_cdp_policy
@@ -60,7 +60,7 @@ resource "aci_access_port_selector" "assured_cds_l2" {
 
 resource "aci_access_port_block" "port_23" {
   access_port_selector_dn = aci_access_port_selector.assured_cds_l2.id
-  
+
   name      = "port_23"
   from_card = "1"
   from_port = "23"
@@ -164,7 +164,7 @@ resource "aci_l3_outside" "assured_underlay_transport" {
   tenant_dn = aci_tenant.assured_underlay_transport.id
   name      = "assured_underlay_transport"
 
-  relation_l3ext_rs_ectx = aci_vrf.assured_underlay_transport.id
+  relation_l3ext_rs_ectx       = aci_vrf.assured_underlay_transport.id
   relation_l3ext_rs_l3_dom_att = aci_l3_domain_profile.assured_underlay_transport.id
 }
 
@@ -222,37 +222,37 @@ resource "aci_l3_ext_subnet" "assured_underlay_transport_all" {
 resource "aci_l3_ext_subnet" "assured_underlay_transport_192_168_0_0" {
   external_network_instance_profile_dn = aci_external_network_instance_profile.assured_underlay_transport.id
   ip                                   = "192.168.0.0/16"
-  
+
   scope = [
     "import-security",
     "shared-security"
-   ] 
+  ]
 }
 
 resource "aci_l3_ext_subnet" "assured_underlay_transport_10_0_0_0" {
   external_network_instance_profile_dn = aci_external_network_instance_profile.assured_underlay_transport.id
   ip                                   = "10.0.0.0/8"
-  
+
   scope = [
     "import-security",
     "shared-security"
-   ] 
+  ]
 }
 
 resource "aci_l3_ext_subnet" "assured_underlay_transport_172_16_0_0" {
   external_network_instance_profile_dn = aci_external_network_instance_profile.assured_underlay_transport.id
   ip                                   = "172.16.0.0/12"
-  
+
   scope = [
     "import-security",
     "shared-security"
-   ] 
+  ]
 }
 
 resource "aci_l3out_ospf_external_policy" "assured_underlay_transport" {
   l3_outside_dn = aci_l3_outside.assured_underlay_transport.id
   area_cost     = "1"
   area_ctrl     = "redistribute,summary"
-  area_id       = "${var.assured_underlay_transport_ospf_area_id}"
+  area_id       = var.assured_underlay_transport_ospf_area_id
   area_type     = "regular"
 }

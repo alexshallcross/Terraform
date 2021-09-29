@@ -602,7 +602,7 @@ resource "aci_logical_node_profile" "elevated_mgmt" {
 
 resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node" {
   for_each = var.inband_mgmt_ospf
-  
+
   logical_node_profile_dn = aci_logical_node_profile.elevated_mgmt.id
   tdn                     = "topology/pod-1/node-${each.key}"
   rtr_id                  = each.value.router_id
@@ -658,7 +658,7 @@ resource "aci_l3out_ospf_external_policy" "example" {
 
 resource "aci_subnet" "inb_subnet" {
   parent_dn = aci_bridge_domain.inb.id
-  ip        = "${var.inband_mgmt_subnet_gateway}"
+  ip        = var.inband_mgmt_subnet_gateway
   scope = [
     "public"
   ]
@@ -685,13 +685,13 @@ resource "aci_node_mgmt_epg" "in_band" {
 }
 
 resource "aci_static_node_mgmt_address" "node_address" {
-  for_each = var.inband_mgmt_node_address
+  for_each          = var.inband_mgmt_node_address
   management_epg_dn = aci_node_mgmt_epg.in_band.id
   t_dn              = "topology/pod-1/node-${each.key}"
   type              = "in_band"
   addr              = each.value
   #Below function trims the subnet mask from the variable used for the BD
-  gw                = trim(var.inband_mgmt_subnet_gateway,substr(var.inband_mgmt_subnet_gateway,-3,-1))
+  gw = trim(var.inband_mgmt_subnet_gateway, substr(var.inband_mgmt_subnet_gateway, -3, -1))
 }
 
 # Step 6 - Create Out of Band Node Management EPG
@@ -872,8 +872,8 @@ resource "aci_rest" "fabric_node_control_dom" {
   content = {
     "annotation" : "orchestrator:terraform",
     "name" : "fabric_node_control_dom",
-    "featureSel": "telemetry",
-    "control": "Dom"
+    "featureSel" : "telemetry",
+    "control" : "Dom"
   }
 }
 
@@ -891,7 +891,7 @@ resource "aci_rest" "leaf_switch_policy_dom_node_control" {
   class_name = "fabricRsNodeCtrl"
   content = {
     "annotation" : "orchestrator:terraform",
-    "tnFabricNodeControlName": "fabric_node_control_dom"
+    "tnFabricNodeControlName" : "fabric_node_control_dom"
   }
   depends_on = [
     aci_rest.leaf_switch_policy_dom

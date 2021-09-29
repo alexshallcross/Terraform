@@ -24,7 +24,7 @@ variable "inband_mgmt_ospf_interface_vlan" {
 }
 
 variable "inband_mgmt_subnet_gateway" {
-  type = string
+  type        = string
   description = "Gateway address for the inbound mgmt bridge domain"
 }
 
@@ -34,7 +34,7 @@ variable "inband_mgmt_node_address" {
 
 variable "inband_mgmt_ospf" {
   type = map(object({
-    router_id  = string
+    router_id = string
     interfaces = list(object({
       interface_id = string
       address      = string

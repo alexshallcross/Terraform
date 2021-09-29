@@ -20,7 +20,7 @@ variable "interface_lldp_policy" {
 
 variable "assured_underlay_transport_ospf" {
   type = map(object({
-    router_id  = string
+    router_id = string
     interfaces = list(object({
       interface_id = string
       address      = string

@@ -59,7 +59,7 @@ resource "aci_l3_outside" "elevated_ukcloud_mgmt" {
   tenant_dn = aci_tenant.elevated_ukcloud_mgmt.id
   name      = "elevated_ukcloud_mgmt"
 
-  relation_l3ext_rs_ectx = aci_vrf.elevated_ukcloud_mgmt.id
+  relation_l3ext_rs_ectx       = aci_vrf.elevated_ukcloud_mgmt.id
   relation_l3ext_rs_l3_dom_att = aci_l3_domain_profile.elevated_ukcloud_mgmt.id
 }
 
@@ -118,6 +118,6 @@ resource "aci_l3out_ospf_external_policy" "elevated_ukcloud_mgmt" {
   l3_outside_dn = aci_l3_outside.elevated_ukcloud_mgmt.id
   area_cost     = "1"
   area_ctrl     = "redistribute,summary"
-  area_id       = "${var.elevated_ukcloud_mgmt_ospf_area_id}"
+  area_id       = var.elevated_ukcloud_mgmt_ospf_area_id
   area_type     = "regular"
 }

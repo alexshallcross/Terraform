@@ -8,7 +8,7 @@ variable "elevated_ukcloud_mgmt_ospf_area_id" {
 
 variable "elevated_ukcloud_mgmt_ospf" {
   type = map(object({
-    router_id  = string
+    router_id = string
     interfaces = list(object({
       interface_id = string
       address      = string
