@@ -21,78 +21,84 @@ module "fabric_base" {
   ntp_auth_key     = "asdasdasd"
   inband_mgmt_vlan = 10
 
-  inband_mgmt_rtr_ids = {
-    901 = "10.41.37.2"
-    902 = "10.41.37.10"
-    903 = "10.41.37.18"
-    904 = "10.41.37.26"
-  }
   inband_mgmt_ospf_interface_vlan = 3900
-
-  inband_mgmt_ospf_interface_list = {
-    node_901_33 = {
-      node_id      = 901
-      interface_id = "eth1/33"
-      addr         = "10.41.36.2/30"
-    },
-    node_901_34 = {
-      node_id      = 901
-      interface_id = "eth1/34"
-      addr         = "10.41.36.6/30"
-    },
-    node_902_33 = {
-      node_id      = 902
-      interface_id = "eth1/33"
-      addr         = "10.41.36.10/30"
-    },
-    node_902_34 = {
-      node_id      = 902
-      interface_id = "eth1/34"
-      addr         = "10.41.36.14/30"
-    },
-    node_903_33 = {
-      node_id      = 903
-      interface_id = "eth1/33"
-      addr         = "10.41.36.18/30"
-    },
-    node_903_34 = {
-      node_id      = 903
-      interface_id = "eth1/34"
-      addr         = "10.41.36.22/30"
-    },
-    node_904_33 = {
-      node_id      = 904
-      interface_id = "eth1/33"
-      addr         = "10.41.36.26/30"
-    },
-    node_904_34 = {
-      node_id      = 904
-      interface_id = "eth1/34"
-      addr         = "10.41.36.30/30"
-    }
-  }
 
   inband_mgmt_subnet_gateway = "10.41.1.1/25"
 
   inband_mgmt_node_address = {
-    1 = "10.41.1.11/25"
-    2 = "10.41.1.12/25"
-    3 = "10.41.1.13/25"
+    1    = "10.41.1.11/25"
+    2    = "10.41.1.12/25"
+    3    = "10.41.1.13/25"
     1001 = "10.41.1.21/25"
     1002 = "10.41.1.22/25"
     1003 = "10.41.1.23/25"
     1004 = "10.41.1.24/25"
-    901 = "10.41.1.31/25"
-    902 = "10.41.1.32/25"
-    903 = "10.41.1.33/25"
-    904 = "10.41.1.34/25"
-    101 = "10.41.1.51/25"
-    102 = "10.41.1.52/25"
-    103 = "10.41.1.53/25"
-    104 = "10.41.1.54/25"
+    901  = "10.41.1.31/25"
+    902  = "10.41.1.32/25"
+    903  = "10.41.1.33/25"
+    904  = "10.41.1.34/25"
+    101  = "10.41.1.51/25"
+    102  = "10.41.1.52/25"
+    103  = "10.41.1.53/25"
+    104  = "10.41.1.54/25"
+  }
+
+  inband_mgmt_ospf = {
+    901 = {
+      router_id = "10.41.37.2"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "10.41.36.2/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "10.41.36.6/30"
+        }
+      ]
+    },
+    902 = {
+      router_id = "10.41.37.10"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "10.41.36.10/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "10.41.36.14/30"
+        }
+      ]
+    },
+    903 = {
+      router_id = "10.41.37.18"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "10.41.36.18/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "10.41.36.22/30"
+        }
+      ]
+    },
+    904 = {
+      router_id = "10.41.37.26"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "10.41.36.26/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "10.41.36.30/30"
+        }
+      ]
+    }
   }
 }
-
+/***
 module "assured_underlay_transport" {
   source = "./modules/assured-underlay-transport"
 

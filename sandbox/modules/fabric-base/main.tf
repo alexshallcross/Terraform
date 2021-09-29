@@ -1,3 +1,19 @@
+#########################
+#### Local Variables ####
+#########################
+
+locals {
+  flattened_inband_mgmt_ospf = flatten([
+    for node_key, node in var.inband_mgmt_ospf : [
+      for interface in node.interfaces : {
+        node_key     = node_key
+        interface_id = interface.interface_id
+        address      = interface.address
+      }
+    ]
+  ])
+}
+
 ##########################
 #### Pod Policy Group ####
 ##########################
@@ -585,10 +601,11 @@ resource "aci_logical_node_profile" "elevated_mgmt" {
 }
 
 resource "aci_logical_node_to_fabric_node" "elevated_mgmt_node" {
+  for_each = var.inband_mgmt_ospf
+  
   logical_node_profile_dn = aci_logical_node_profile.elevated_mgmt.id
-  for_each                = var.inband_mgmt_rtr_ids
   tdn                     = "topology/pod-1/node-${each.key}"
-  rtr_id                  = each.value
+  rtr_id                  = each.value.router_id
 }
 
 resource "aci_logical_interface_profile" "elevated_mgmt" {
@@ -605,12 +622,14 @@ resource "aci_l3out_ospf_interface_profile" "elevated_mgmt" {
 }
 
 resource "aci_l3out_path_attachment" "elevated_mgmt" {
-  for_each = var.inband_mgmt_ospf_interface_list
+  for_each = {
+    for interface in local.flattened_inband_mgmt_ospf : "${interface.node_key}.${interface.interface_id}" => interface
+  }
 
   logical_interface_profile_dn = aci_logical_interface_profile.elevated_mgmt.id
-  target_dn                    = "topology/pod-1/paths-${each.value.node_id}/pathep-[${each.value.interface_id}]"
+  target_dn                    = "topology/pod-1/paths-${each.value.node_key}/pathep-[${each.value.interface_id}]"
   if_inst_t                    = "sub-interface"
-  addr                         = each.value.addr
+  addr                         = each.value.address
   encap                        = "vlan-${var.inband_mgmt_ospf_interface_vlan}"
   encap_scope                  = "local"
   mode                         = "regular"
@@ -906,8 +925,8 @@ resource "aci_rest" "leaf_switch_profile_dom_leaf_selector" {
   content = {
     "annotation" : "orchestrator:terraform",
     "name" : "border_leaf_selector"
-    "from_" : min(keys(var.inband_mgmt_rtr_ids)...)
-    "to_" : max(keys(var.inband_mgmt_rtr_ids)...)
+    "from_" : min(keys(var.inband_mgmt_ospf)...)
+    "to_" : max(keys(var.inband_mgmt_ospf)...)
   }
   depends_on = [
     aci_rest.leaf_switch_profile_dom_leaf

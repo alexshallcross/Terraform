@@ -19,20 +19,8 @@ variable "inband_mgmt_vlan" {
   description = "VLAN tag for inband mgmt network e.g 10"
 }
 
-variable "inband_mgmt_rtr_ids" {
-  type = map(any)
-}
-
 variable "inband_mgmt_ospf_interface_vlan" {
   type = string
-}
-
-variable "inband_mgmt_ospf_interface_list" {
-  type = map(object({
-    node_id      = number
-    interface_id = string
-    addr         = string
-  }))
 }
 
 variable "inband_mgmt_subnet_gateway" {
@@ -42,4 +30,14 @@ variable "inband_mgmt_subnet_gateway" {
 
 variable "inband_mgmt_node_address" {
   type = map(any)
+}
+
+variable "inband_mgmt_ospf" {
+  type = map(object({
+    router_id  = string
+    interfaces = list(object({
+      interface_id = string
+      address      = string
+    }))
+  }))
 }
