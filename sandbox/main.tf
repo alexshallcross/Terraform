@@ -98,7 +98,7 @@ module "fabric_base" {
     }
   }
 }
-
+/***
 module "assured_underlay_transport" {
   source = "./modules/assured-underlay-transport"
 
@@ -196,63 +196,69 @@ module "assured_underlay_transport" {
   interface_cdp_policy   = module.fabric_base.aci_cdp_interface_policy_disabled
   interface_lldp_policy  = module.fabric_base.aci_lldp_interface_policy_enabled
 }
-
-/***
+***/
 module "elevated_ukcloud_mgmt" {
   source = "./modules/elevated-ukcloud-mgmt"
 
-  elevated_ukcloud_mgmt_rtr_ids = {
-    901 = "10.41.38.66"
-    902 = "10.41.38.74"
-    903 = "10.41.38.82"
-    904 = "10.41.38.90"
-  }
-  elevated_ukcloud_mgmt_ospf_interface_list = {
-    node_901_17 = {
-      node_id      = 901
-      interface_id = "eth1/33"
-      addr         = "10.41.36.66/30"
+  elevated_ukcloud_mgmt_ospf_interface_vlan = 3964
+  elevated_ukcloud_mgmt_ospf_area_id        = "0.0.0.5"
+  elevated_ukcloud_mgmt_ospf = {
+    901 = {
+      router_id = "10.41.38.66"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "10.41.36.66/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "10.41.36.70/30"
+        }
+      ]
     },
-    node_901_18 = {
-      node_id      = 901
-      interface_id = "eth1/34"
-      addr         = "10.41.36.70/30"
+    902 = {
+      router_id = "10.41.38.74"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "10.41.36.78/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "10.41.36.74/30"
+        }
+      ]
     },
-    node_902_17 = {
-      node_id      = 902
-      interface_id = "eth1/33"
-      addr         = "10.41.36.78/30"
+    903 = {
+      router_id = "10.41.38.82"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "10.41.36.82/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "10.41.36.86/30"
+        }
+      ]
     },
-    node_902_18 = {
-      node_id      = 902
-      interface_id = "eth1/34"
-      addr         = "10.41.36.74/30"
-    },
-    node_903_17 = {
-      node_id      = 903
-      interface_id = "eth1/33"
-      addr         = "10.41.36.82/30"
-    },
-    node_903_18 = {
-      node_id      = 903
-      interface_id = "eth1/34"
-      addr         = "10.41.36.86/30"
-    },
-    node_904_17 = {
-      node_id      = 904
-      interface_id = "eth1/33"
-      addr         = "10.41.36.90/30"
-    },
-    node_904_18 = {
-      node_id      = 904
-      interface_id = "eth1/34"
-      addr         = "10.41.36.94/30"
+    904 = {
+      router_id = "10.41.38.90"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "10.41.36.90/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "10.41.36.94/30"
+        }
+      ]
     }
   }
-  elevated_ukcloud_mgmt_ospf_interface_vlan = 3964
-  elevated_ukcloud_mgmt_ospf_area_id = "0.0.0.5"
-}
 
+}
+/***
 module "assured_ukcloud_mgmt" {
   source = "./modules/assured-ukcloud-mgmt"
 
