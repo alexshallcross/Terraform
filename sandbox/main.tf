@@ -98,7 +98,7 @@ module "fabric_base" {
     }
   }
 }
-
+/***
 module "assured_underlay_transport" {
   source = "./modules/assured-underlay-transport"
 
@@ -196,7 +196,167 @@ module "assured_underlay_transport" {
   interface_cdp_policy   = module.fabric_base.aci_cdp_interface_policy_disabled
   interface_lldp_policy  = module.fabric_base.aci_lldp_interface_policy_enabled
 }
+***/
+/***
+module "assured_ukcloud_mgmt" {
+  source = "./modules/assured-ukcloud-mgmt"
 
+  assured_ukcloud_mgmt_ospf_interface_vlan = 3964
+  assured_ukcloud_mgmt_ospf_area_id        = "0.0.0.5"
+  assured_ukcloud_mgmt_ospf = {
+    901 = {
+      router_id = "10.41.3.66"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "10.41.0.66/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "10.41.0.70/30"
+        }
+      ]
+    },
+    902 = {
+      router_id = "10.41.3.74"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "10.41.0.78/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "10.41.0.74/30"
+        }
+      ]
+    },
+    903 = {
+      router_id = "10.41.3.82"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "10.41.0.82/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "10.41.0.86/30"
+        }
+      ]
+    },
+    904 = {
+      router_id = "10.41.3.90"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "10.41.0.90/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "10.41.0.94/30"
+        }
+      ]
+    }
+  }
+}
+***/
+module "elevated_underlay_transport" {
+  source = "./modules/elevated-underlay-transport"
+
+  elevated_underlay_transport_ospf_interface_vlan = 3963
+  elevated_underlay_transport_ospf_area_id        = "0.0.0.6"
+
+  elevated_underlay_transport_ospf = {
+    901 = {
+      router_id = "10.40.45.2"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "100.66.0.2/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "100.66.0.6/30"
+        },
+        {
+          interface_id = "eth1/37"
+          address      = "100.66.0.33/30"
+        },
+        {
+          interface_id = "eth1/38"
+          address      = "100.66.0.49/30"
+        }
+      ]
+    },
+    902 = {
+      router_id = "10.40.45.10"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "100.66.0.14/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "100.66.0.10/30"
+        },
+        {
+          interface_id = "eth1/37"
+          address      = "100.66.0.37/30"
+        },
+        {
+          interface_id = "eth1/38"
+          address      = "100.66.0.53/30"
+        }
+      ]
+    },
+    903 = {
+      router_id = "10.40.45.18"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "100.66.0.18/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "100.66.0.22/30"
+        },
+        {
+          interface_id = "eth1/37"
+          address      = "100.66.0.41/30"
+        },
+        {
+          interface_id = "eth1/38"
+          address      = "100.66.0.57/30"
+        }
+      ]
+    },
+    904 = {
+      router_id = "10.40.45.26"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "100.66.0.26/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "100.66.0.30/30"
+        },
+        {
+          interface_id = "eth1/37"
+          address      = "100.66.0.45/30"
+        },
+        {
+          interface_id = "eth1/38"
+          address      = "100.66.0.61/30"
+        }
+      ]
+    }
+  }
+
+  interface_speed_policy = module.fabric_base.aci_fabric_if_pol_10G
+  interface_cdp_policy   = module.fabric_base.aci_cdp_interface_policy_disabled
+  interface_lldp_policy  = module.fabric_base.aci_lldp_interface_policy_enabled
+}
+/***
 module "elevated_ukcloud_mgmt" {
   source = "./modules/elevated-ukcloud-mgmt"
 
@@ -258,70 +418,8 @@ module "elevated_ukcloud_mgmt" {
   }
 
 }
-
-module "assured_ukcloud_mgmt" {
-  source = "./modules/assured-ukcloud-mgmt"
-
-  assured_ukcloud_mgmt_ospf_interface_vlan = 3964
-  assured_ukcloud_mgmt_ospf_area_id        = "0.0.0.5"
-  assured_ukcloud_mgmt_ospf = {
-    901 = {
-      router_id = "10.41.3.66"
-      interfaces = [
-        {
-          interface_id = "eth1/17"
-          address      = "10.41.0.66/30"
-        },
-        {
-          interface_id = "eth1/18"
-          address      = "10.41.0.70/30"
-        }
-      ]
-    },
-    902 = {
-      router_id = "10.41.3.74"
-      interfaces = [
-        {
-          interface_id = "eth1/17"
-          address      = "10.41.0.78/30"
-        },
-        {
-          interface_id = "eth1/18"
-          address      = "10.41.0.74/30"
-        }
-      ]
-    },
-    903 = {
-      router_id = "10.41.3.82"
-      interfaces = [
-        {
-          interface_id = "eth1/17"
-          address      = "10.41.0.82/30"
-        },
-        {
-          interface_id = "eth1/18"
-          address      = "10.41.0.86/30"
-        }
-      ]
-    },
-    904 = {
-      router_id = "10.41.3.90"
-      interfaces = [
-        {
-          interface_id = "eth1/17"
-          address      = "10.41.0.90/30"
-        },
-        {
-          interface_id = "eth1/18"
-          address      = "10.41.0.94/30"
-        }
-      ]
-    }
-  }
-}
-
+***/
 /***
-
 module "pod00420" {
   source = "./modules/vmware-pod"
   pod_id = "pod00420"
@@ -387,7 +485,7 @@ module "pod00420" {
     "10.0.10.1/24"
   ]
 }
-
+***/
 /***
 module "openstack" {
   source   = "./modules/openstack-pod"
