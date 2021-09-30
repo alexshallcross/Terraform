@@ -14,7 +14,7 @@ provider "aci" {
 #################
 
 module "fabric_base" {
-  source = "./modules/fabric-base"
+  source = "./modules/fabric_base"
 
   spine_nodes      = [1001, 1002]
   bgp_as_number    = 65515
@@ -100,7 +100,7 @@ module "fabric_base" {
 }
 /***
 module "assured_underlay_transport" {
-  source = "./modules/assured-underlay-transport"
+  source = "./modules/assured_underlay_transport"
 
   assured_underlay_transport_ospf_interface_vlan = 3963
   assured_underlay_transport_ospf_area_id        = "0.0.0.6"
@@ -199,7 +199,7 @@ module "assured_underlay_transport" {
 ***/
 /***
 module "assured_ukcloud_mgmt" {
-  source = "./modules/assured-ukcloud-mgmt"
+  source = "./modules/assured_ukcloud_mgmt"
 
   assured_ukcloud_mgmt_ospf_interface_vlan = 3964
   assured_ukcloud_mgmt_ospf_area_id        = "0.0.0.5"
@@ -259,8 +259,9 @@ module "assured_ukcloud_mgmt" {
   }
 }
 ***/
+/***
 module "elevated_underlay_transport" {
-  source = "./modules/elevated-underlay-transport"
+  source = "./modules/elevated_underlay_transport"
 
   elevated_underlay_transport_ospf_interface_vlan = 3963
   elevated_underlay_transport_ospf_area_id        = "0.0.0.6"
@@ -356,9 +357,71 @@ module "elevated_underlay_transport" {
   interface_cdp_policy   = module.fabric_base.aci_cdp_interface_policy_disabled
   interface_lldp_policy  = module.fabric_base.aci_lldp_interface_policy_enabled
 }
+***/
+module "assured_protection" {
+  source = "./modules/assured_protection"
+
+  assured_protection_ospf_interface_vlan = 3963
+  assured_protection_ospf_area_id        = "0.0.0.6"
+
+  assured_protection_ospf = {
+    901 = {
+      router_id = "10.41.35.66"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "100.65.0.162/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "100.65.0.166/30"
+        }
+      ]
+    },
+    902 = {
+      router_id = "10.41.35.74"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "100.65.0.174/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "100.65.0.170/30"
+        }
+      ]
+    },
+    903 = {
+      router_id = "10.41.35.82"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "100.65.0.178/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "100.65.0.182/30"
+        }
+      ]
+    },
+    904 = {
+      router_id = "10.41.35.90"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "100.65.0.186/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "100.65.0.190/30"
+        }
+      ]
+    }
+  }
+}
 /***
 module "elevated_ukcloud_mgmt" {
-  source = "./modules/elevated-ukcloud-mgmt"
+  source = "./modules/elevated_ukcloud_mgmt"
 
   elevated_ukcloud_mgmt_ospf_interface_vlan = 3964
   elevated_ukcloud_mgmt_ospf_area_id        = "0.0.0.5"
@@ -421,7 +484,7 @@ module "elevated_ukcloud_mgmt" {
 ***/
 /***
 module "pod00420" {
-  source = "./modules/vmware-pod"
+  source = "./modules/vmware_pod"
   pod_id = "pod00420"
 
   interface_map = {
@@ -488,7 +551,7 @@ module "pod00420" {
 ***/
 /***
 module "openstack" {
-  source   = "./modules/openstack-pod"
+  source   = "./modules/openstack_pod"
   for_each = var.openstack_pods
 
   pod_id    = each.value.pod_id
