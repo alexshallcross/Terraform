@@ -506,6 +506,11 @@ resource "aci_attachable_access_entity_profile" "elevated_mgmt" {
   relation_infra_rs_dom_p = [aci_l3_domain_profile.elevated_mgmt.id]
 }
 
+resource "aci_attachable_access_entity_profile" "assured_mgmt" {
+  name                    = "assured_private_peering"
+  relation_infra_rs_dom_p = var.assured_private_peering_domains
+}
+
 # Step 4 - Create the Interface Policy Group
 
 resource "aci_leaf_access_port_policy_group" "elevated_mgmt" {
@@ -514,6 +519,14 @@ resource "aci_leaf_access_port_policy_group" "elevated_mgmt" {
   relation_infra_rs_cdp_if_pol  = aci_cdp_interface_policy.enabled.id
   relation_infra_rs_lldp_if_pol = aci_lldp_interface_policy.enabled.id
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.elevated_mgmt.id
+}
+
+resource "aci_leaf_access_port_policy_group" "assured_mgmt" {
+  name = "assured_private_peering"
+
+  relation_infra_rs_cdp_if_pol  = aci_cdp_interface_policy.enabled.id
+  relation_infra_rs_lldp_if_pol = aci_lldp_interface_policy.enabled.id
+  relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.assured_mgmt.id
 }
 
 # Step 5 - Create the Interface Profile
@@ -552,6 +565,40 @@ resource "aci_access_port_block" "port_34" {
   to_port                 = "34"
 }
 
+resource "aci_leaf_interface_profile" "assured_mgmt" {
+  name = "assured_private_peering"
+}
+
+resource "aci_access_port_selector" "port_17" {
+  leaf_interface_profile_dn      = aci_leaf_interface_profile.assured_mgmt.id
+  name                           = "Port-17"
+  access_port_selector_type      = "range"
+  relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.assured_mgmt.id
+}
+
+resource "aci_access_port_block" "port_17" {
+  access_port_selector_dn = aci_access_port_selector.port_17.id
+  from_card               = "1"
+  from_port               = "17"
+  to_card                 = "1"
+  to_port                 = "17"
+}
+
+resource "aci_access_port_selector" "port_18" {
+  leaf_interface_profile_dn      = aci_leaf_interface_profile.assured_mgmt.id
+  name                           = "Port-18"
+  access_port_selector_type      = "range"
+  relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.assured_mgmt.id
+}
+
+resource "aci_access_port_block" "port_18" {
+  access_port_selector_dn = aci_access_port_selector.port_18.id
+  from_card               = "1"
+  from_port               = "18"
+  to_card                 = "1"
+  to_port                 = "18"
+}
+
 # Step 6 - Create Leaf profile
 
 resource "aci_leaf_profile" "elevated_mgmt" {
@@ -571,6 +618,27 @@ resource "aci_leaf_selector" "elevated_mgmt" {
 resource "aci_node_block" "elevated_mgmt" {
   switch_association_dn = aci_leaf_selector.elevated_mgmt.id
   name                  = "elevated_mgmt"
+  from_                 = "901"
+  to_                   = "904"
+}
+
+resource "aci_leaf_profile" "assured_mgmt" {
+  name = "assured_private_peering"
+
+  relation_infra_rs_acc_port_p = [
+    aci_leaf_interface_profile.assured_mgmt.id
+  ]
+}
+
+resource "aci_leaf_selector" "assured_mgmt" {
+  leaf_profile_dn         = aci_leaf_profile.assured_mgmt.id
+  name                    = "assured_private_peering_switch_selector"
+  switch_association_type = "range"
+}
+
+resource "aci_node_block" "assured_mgmt" {
+  switch_association_dn = aci_leaf_selector.assured_mgmt.id
+  name                  = "assured_mgmt"
   from_                 = "901"
   to_                   = "904"
 }

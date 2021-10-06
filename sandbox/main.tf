@@ -97,6 +97,10 @@ module "fabric_base" {
       ]
     }
   }
+
+  assured_private_peering_domains = toset([
+    module.assured_psn.aci_assured_psn_aep_domain
+    ])
 }
 /***
 module "assured_underlay_transport" {
@@ -358,6 +362,7 @@ module "elevated_underlay_transport" {
   interface_lldp_policy  = module.fabric_base.aci_lldp_interface_policy_enabled
 }
 ***/
+/***
 module "assured_protection" {
   source = "./modules/assured_protection"
 
@@ -365,6 +370,68 @@ module "assured_protection" {
   assured_protection_ospf_area_id        = "0.0.0.6"
 
   assured_protection_ospf = {
+    901 = {
+      router_id = "10.41.35.66"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "100.65.0.162/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "100.65.0.166/30"
+        }
+      ]
+    },
+    902 = {
+      router_id = "10.41.35.74"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "100.65.0.174/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "100.65.0.170/30"
+        }
+      ]
+    },
+    903 = {
+      router_id = "10.41.35.82"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "100.65.0.178/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "100.65.0.182/30"
+        }
+      ]
+    },
+    904 = {
+      router_id = "10.41.35.90"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "100.65.0.186/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "100.65.0.190/30"
+        }
+      ]
+    }
+  }
+}
+***/
+module "assured_psn" {
+  source = "./modules/assured_psn"
+
+  assured_psn_ospf_interface_vlan = 3961
+  assured_psn_ospf_area_id        = "0.0.0.6"
+
+  assured_psn_ospf = {
     901 = {
       router_id = "10.41.35.66"
       interfaces = [

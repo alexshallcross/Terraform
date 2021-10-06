@@ -41,3 +41,7 @@ variable "inband_mgmt_ospf" {
     }))
   }))
 }
+
+variable "assured_private_peering_domains" {
+  type = set(string)
+}
