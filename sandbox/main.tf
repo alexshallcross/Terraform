@@ -99,8 +99,8 @@ module "fabric_base" {
   }
 
   assured_private_peering_domains = toset([
-    module.assured_psn.aci_assured_psn_aep_domain
-    ])
+    #module.assured_psn.aci_assured_psn_aep_domain
+  ])
 }
 /***
 module "assured_underlay_transport" {
@@ -424,7 +424,8 @@ module "assured_protection" {
     }
   }
 }
-***/
+***/ #
+/***
 module "assured_psn" {
   source = "./modules/assured_psn"
 
@@ -481,6 +482,95 @@ module "assured_psn" {
         {
           interface_id = "eth1/18"
           address      = "100.65.0.190/30"
+        }
+      ]
+    }
+  }
+}
+***/
+module "combined_services" {
+  source = "./modules/combined_services"
+
+  assured_combined_services_bgp_interface_vlan  = 3957
+  elevated_combined_services_bgp_interface_vlan = 3957
+
+  assured_combined_services_bgp = {
+    901 = {
+      router_id = "10.42.0.66"
+      interfaces = [
+        {
+          interface_id  = "eth1/17"
+          address       = "10.42.0.113/30"
+          bgp_peer      = "10.42.0.114"
+          bgp_asn       = 65000
+          bgp_local_asn = 65513
+        },
+        {
+          interface_id  = "eth1/18"
+          address       = "10.42.0.117/30"
+          bgp_peer      = "10.42.0.118"
+          bgp_asn       = 65000
+          bgp_local_asn = 65513
+        }
+      ]
+    },
+    902 = {
+      router_id = "10.42.0.74"
+      interfaces = [
+        {
+          interface_id  = "eth1/17"
+          address       = "10.42.0.105/30"
+          bgp_peer      = "10.42.0.106"
+          bgp_asn       = 65000
+          bgp_local_asn = 65513
+        },
+        {
+          interface_id  = "eth1/18"
+          address       = "10.42.0.109/30"
+          bgp_peer      = "10.42.0.110"
+          bgp_asn       = 65000
+          bgp_local_asn = 65513
+        }
+      ]
+    }
+  }
+
+  elevated_combined_services_bgp = {
+    901 = {
+      router_id = "10.42.0.66"
+      interfaces = [
+        {
+          interface_id  = "eth1/33"
+          address       = "10.42.0.101/30"
+          bgp_peer      = "10.42.0.102"
+          bgp_asn       = 65000
+          bgp_local_asn = 65513
+        },
+        {
+          interface_id  = "eth1/34"
+          address       = "10.42.0.97/30"
+          bgp_peer      = "10.42.0.98"
+          bgp_asn       = 65000
+          bgp_local_asn = 65513
+        }
+      ]
+    },
+    902 = {
+      router_id = "10.42.0.74"
+      interfaces = [
+        {
+          interface_id  = "eth1/33"
+          address       = "10.42.0.93/30"
+          bgp_peer      = "10.42.0.94"
+          bgp_asn       = 65000
+          bgp_local_asn = 65513
+        },
+        {
+          interface_id  = "eth1/34"
+          address       = "10.42.0.89/30"
+          bgp_peer      = "10.42.0.90"
+          bgp_asn       = 65000
+          bgp_local_asn = 65513
         }
       ]
     }
