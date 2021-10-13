@@ -488,6 +488,7 @@ module "assured_psn" {
   }
 }
 ***/
+/***
 module "combined_services" {
   source = "./modules/combined_services"
 
@@ -571,6 +572,68 @@ module "combined_services" {
           bgp_peer      = "10.42.0.90"
           bgp_asn       = 65000
           bgp_local_asn = 65513
+        }
+      ]
+    }
+  }
+}
+***/
+module "elevated_external" {
+  source = "./modules/elevated_external"
+
+  elevated_external_ospf_interface_vlan = 3960
+  elevated_external_ospf_area_id        = "0.0.0.5"
+
+  elevated_external_ospf = {
+    901 = {
+      router_id = "10.41.38.70"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "100.67.2.34/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "100.67.2.38/30"
+        }
+      ]
+    },
+    902 = {
+      router_id = "10.41.38.78"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "100.67.2.46/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "100.67.2.42/30"
+        }
+      ]
+    },
+    903 = {
+      router_id = "10.41.38.86"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "100.67.2.50/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "100.67.2.54/30"
+        }
+      ]
+    },
+    904 = {
+      router_id = "10.41.38.94"
+      interfaces = [
+        {
+          interface_id = "eth1/33"
+          address      = "100.67.2.58/30"
+        },
+        {
+          interface_id = "eth1/34"
+          address      = "100.67.2.62/30"
         }
       ]
     }
