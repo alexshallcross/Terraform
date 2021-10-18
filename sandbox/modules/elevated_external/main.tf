@@ -182,8 +182,8 @@ resource "aci_contract" "elevated_external_in" {
 }
 
 resource "aci_contract_subject" "elevated_external_in" {
-  contract_dn                  = aci_contract.elevated_external_in.id
-  name                         = "elevated_external_in"
+  contract_dn = aci_contract.elevated_external_in.id
+  name        = "elevated_external_in"
   relation_vz_rs_subj_filt_att = [
     aci_filter.elevated_external_in.id
   ]
@@ -200,8 +200,8 @@ resource "aci_contract" "elevated_external_out" {
 }
 
 resource "aci_contract_subject" "elevated_external_out" {
-  contract_dn                  = aci_contract.elevated_external_out.id
-  name                         = "elevated_external_out"
+  contract_dn = aci_contract.elevated_external_out.id
+  name        = "elevated_external_out"
   relation_vz_rs_subj_filt_att = [
     aci_filter.elevated_external_out.id
   ]
