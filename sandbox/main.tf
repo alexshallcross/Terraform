@@ -425,7 +425,7 @@ module "assured_protection" {
   }
 }
 ***/
-/***
+
 module "assured_psn" {
   source = "./modules/assured_psn"
 
@@ -487,7 +487,7 @@ module "assured_psn" {
     }
   }
 }
-***/
+
 /***
 module "combined_services" {
   source = "./modules/combined_services"
@@ -641,7 +641,7 @@ module "elevated_external" {
   }
 }
 ***/
-
+/***
 module "elevated_protection" {
   source = "./modules/elevated_protection"
 
@@ -703,7 +703,7 @@ module "elevated_protection" {
     }
   }
 }
-
+***/
 /***
 module "elevated_ukcloud_mgmt" {
   source = "./modules/elevated_ukcloud_mgmt"
