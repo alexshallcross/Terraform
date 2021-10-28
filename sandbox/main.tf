@@ -425,7 +425,7 @@ module "assured_protection" {
   }
 }
 ***/
-
+/***
 module "assured_psn" {
   source = "./modules/assured_psn"
 
@@ -487,7 +487,7 @@ module "assured_psn" {
     }
   }
 }
-
+***/
 /***
 module "combined_services" {
   source = "./modules/combined_services"
@@ -704,6 +704,69 @@ module "elevated_protection" {
   }
 }
 ***/
+
+module "elevated_psn" {
+  source = "./modules/elevated_psn"
+
+  elevated_psn_ospf_interface_vlan = 3961
+  elevated_psn_ospf_area_id        = "0.0.0.6"
+
+  elevated_psn_ospf = {
+    901 = {
+      router_id = "10.41.35.66"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "100.65.0.162/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "100.65.0.166/30"
+        }
+      ]
+    },
+    902 = {
+      router_id = "10.41.35.74"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "100.65.0.174/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "100.65.0.170/30"
+        }
+      ]
+    },
+    903 = {
+      router_id = "10.41.35.82"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "100.65.0.178/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "100.65.0.182/30"
+        }
+      ]
+    },
+    904 = {
+      router_id = "10.41.35.90"
+      interfaces = [
+        {
+          interface_id = "eth1/17"
+          address      = "100.65.0.186/30"
+        },
+        {
+          interface_id = "eth1/18"
+          address      = "100.65.0.190/30"
+        }
+      ]
+    }
+  }
+}
+
 /***
 module "elevated_ukcloud_mgmt" {
   source = "./modules/elevated_ukcloud_mgmt"
