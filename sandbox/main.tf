@@ -102,7 +102,7 @@ module "fabric_base" {
     #module.assured_psn.aci_assured_psn_aep_domain
   ])
 }
-/***
+
 module "assured_underlay_transport" {
   source = "./modules/assured_underlay_transport"
 
@@ -200,8 +200,7 @@ module "assured_underlay_transport" {
   interface_cdp_policy   = module.fabric_base.aci_cdp_interface_policy_disabled
   interface_lldp_policy  = module.fabric_base.aci_lldp_interface_policy_enabled
 }
-***/
-/***
+
 module "assured_ukcloud_mgmt" {
   source = "./modules/assured_ukcloud_mgmt"
 
@@ -262,8 +261,7 @@ module "assured_ukcloud_mgmt" {
     }
   }
 }
-***/
-/***
+
 module "elevated_underlay_transport" {
   source = "./modules/elevated_underlay_transport"
 
@@ -361,8 +359,7 @@ module "elevated_underlay_transport" {
   interface_cdp_policy   = module.fabric_base.aci_cdp_interface_policy_disabled
   interface_lldp_policy  = module.fabric_base.aci_lldp_interface_policy_enabled
 }
-***/
-/***
+
 module "assured_protection" {
   source = "./modules/assured_protection"
 
@@ -424,8 +421,7 @@ module "assured_protection" {
     }
   }
 }
-***/
-/***
+
 module "assured_psn" {
   source = "./modules/assured_psn"
 
@@ -487,8 +483,7 @@ module "assured_psn" {
     }
   }
 }
-***/
-/***
+
 module "assured_hscn" {
   source = "./modules/assured_hscn"
 
@@ -550,8 +545,7 @@ module "assured_hscn" {
     }
   }
 }
-***/
-/***
+
 module "combined_services" {
   source = "./modules/combined_services"
 
@@ -640,8 +634,7 @@ module "combined_services" {
     }
   }
 }
-***/
-/***
+
 module "elevated_external" {
   source = "./modules/elevated_external"
 
@@ -703,8 +696,7 @@ module "elevated_external" {
     }
   }
 }
-***/
-/***
+
 module "elevated_protection" {
   source = "./modules/elevated_protection"
 
@@ -766,8 +758,7 @@ module "elevated_protection" {
     }
   }
 }
-***/
-/***
+
 module "elevated_psn" {
   source = "./modules/elevated_psn"
 
@@ -829,8 +820,7 @@ module "elevated_psn" {
     }
   }
 }
-***/
-/***
+
 module "elevated_ukcloud_mgmt" {
   source = "./modules/elevated_ukcloud_mgmt"
 
@@ -892,12 +882,11 @@ module "elevated_ukcloud_mgmt" {
   }
 
 }
-***/
 
 module "internet" {
   source = "./modules/internet"
 
-  internet_ospf_interface_vlan = 3961
+  internet_ospf_interface_vlan = 3500
   internet_ospf_area_id        = "0.0.0.6"
 
   internet_ospf = {
@@ -960,7 +949,6 @@ module "internet" {
   interface_lldp_policy  = module.fabric_base.aci_lldp_interface_policy_enabled
 }
 
-/***
 module "pod00420" {
   source = "./modules/vmware_pod"
   pod_id = "pod00420"
@@ -993,41 +981,40 @@ module "pod00420" {
   protection_vrf    = "hotdogs"
 
   cimc_subnets = [
-    "10.0.0.1/24"
+    "10.1.0.1/24"
   ]
   client_cluster_1_vmotion_subnets = [
-    "10.0.1.1/24"
+    "10.1.1.1/24"
   ]
   client_cluster_1_vmware_subnets = [
-    "10.0.2.1/24"
+    "10.1.2.1/24"
   ]
   client_cluster_1_vxlan_subnets = [
-    "10.0.3.1/24"
+    "10.1.3.1/24"
   ]
   mgmt_cluster_avamar_subnets = [
-    "10.0.4.1/24"
+    "10.1.4.1/24"
   ]
   mgmt_cluster_tools_subnets = [
-    "10.0.5.1/24"
+    "10.1.5.1/24"
   ]
   mgmt_cluster_vmotion_subnets = [
-    "10.0.6.1/24"
+    "10.1.6.1/24"
   ]
   mgmt_cluster_vmware_subnets = [
-    "10.0.7.1/24"
+    "10.1.7.1/24"
   ]
   storage_mgmt_subnets = [
-    "10.0.8.1/24"
+    "10.1.8.1/24"
   ]
   mgmt_vmm_subnets = [
-    "10.0.9.1/24"
+    "10.1.9.1/24"
   ]
   client_avamar_subnets = [
-    "10.0.10.1/24"
+    "10.1.10.1/24"
   ]
 }
-***/
-/***
+
 module "openstack" {
   source   = "./modules/openstack_pod"
   for_each = var.openstack_pods
@@ -1048,4 +1035,3 @@ module "openstack" {
   tenant_bd_subnet            = each.value.tenant_bd_subnet
   mgmt_openstack_bd_subnet    = each.value.mgmt_openstack_bd_subnet
 }
-***/
