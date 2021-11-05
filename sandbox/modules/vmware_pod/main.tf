@@ -505,7 +505,7 @@ module "client_avamar" {
   access_generic_id = aci_access_generic.client_esx.id
 
   pod_id   = var.pod_id
-  app_prof = aci_application_profile.mgmt.id
+  app_prof = aci_application_profile.avamar.id
   phys_dom = aci_physical_domain.vmware.id
   tenant   = var.protection_tenant
   l3_out   = [var.protection_l3_out]
