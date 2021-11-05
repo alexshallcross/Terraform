@@ -1,5 +1,5 @@
-a_username = "admin"
-b_password = "!v3G@!4@Y"
+#a_username = "svc_aci_test_automation"
+#b_password = "G[n-pEe~#k&z4U;"
 
 openstack_pods = {
   pod00001 = {

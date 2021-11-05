@@ -74,6 +74,7 @@ resource "aci_access_port_selector" "internet" {
 
 resource "aci_access_port_block" "port_1" {
   access_port_selector_dn = aci_access_port_selector.internet.id
+  name                    = "port_1"
   from_card               = "1"
   from_port               = "1"
   to_card                 = "1"
@@ -82,6 +83,7 @@ resource "aci_access_port_block" "port_1" {
 
 resource "aci_access_port_block" "port_2" {
   access_port_selector_dn = aci_access_port_selector.internet.id
+  name                    = "port_2"
   from_card               = "1"
   from_port               = "2"
   to_card                 = "1"

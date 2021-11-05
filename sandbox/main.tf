@@ -5,8 +5,8 @@
 provider "aci" {
   username = var.a_username
   password = var.b_password
-  url      = "https://devasc-aci-1.cisco.com"
-  insecure = false
+  url      = "https://10.8.99.141"
+  insecure = true
 }
 
 #################
@@ -880,7 +880,6 @@ module "elevated_ukcloud_mgmt" {
       ]
     }
   }
-
 }
 
 module "internet" {
@@ -968,17 +967,17 @@ module "pod00420" {
     }
   }
 
-  lldp_policy       = "default"
-  cdp_policy        = "default"
-  link_level_policy = "default"
+  lldp_policy       = module.fabric_base.aci_fabric_if_pol_10G
+  cdp_policy        = module.fabric_base.aci_cdp_interface_policy_disabled
+  link_level_policy = module.fabric_base.aci_lldp_interface_policy_enabled
 
-  ukcloud_mgmt_tenant = "burgers"
-  ukcloud_mgmt_l3_out = "burgers"
-  ukcloud_mgmt_vrf    = "burgers"
+  ukcloud_mgmt_tenant = module.assured_ukcloud_mgmt.tenant
+  ukcloud_mgmt_l3_out = module.assured_ukcloud_mgmt.l3out
+  ukcloud_mgmt_vrf    = module.assured_ukcloud_mgmt.vrf
 
-  protection_tenant = "hotdogs"
-  protection_l3_out = "hotdogs"
-  protection_vrf    = "hotdogs"
+  protection_tenant = module.assured_protection.tenant
+  protection_l3_out = module.assured_protection.l3out
+  protection_vrf    = module.assured_protection.vrf
 
   cimc_subnets = [
     "10.1.0.1/24"
@@ -1015,6 +1014,7 @@ module "pod00420" {
   ]
 }
 
+/***
 module "openstack" {
   source   = "./modules/openstack_pod"
   for_each = var.openstack_pods
@@ -1035,3 +1035,4 @@ module "openstack" {
   tenant_bd_subnet            = each.value.tenant_bd_subnet
   mgmt_openstack_bd_subnet    = each.value.mgmt_openstack_bd_subnet
 }
+***/

@@ -1,7 +1,11 @@
 # Terraform .exe
 terraform.exe
 
+# Provider files
+/.terraform
+
 # Terraform State file
 terraform.tfstate
 terraform.tfstate.backup
 .terraform.tfstate.lock.info
+.terraform.lock.hcl
