@@ -10,17 +10,32 @@ variable "pod_nodes" {
 
 variable "ukcloud_mgmt_tenant" {
   type        = string
-  description = "The name of the ukcloud_mgmt tenant; e.g. assured_ukcloud_mgmt"
+  description = "The DN of the ukcloud_mgmt tenant"
 }
 
 variable "ukcloud_mgmt_l3_out" {
   type        = string
-  description = "The name of the ukcloud_mgmt l3_out; e.g. l3_out_assured_ukcloud_mgmt"
+  description = "The DN of the ukcloud_mgmt l3_out"
 }
 
 variable "ukcloud_mgmt_vrf" {
   type        = string
-  description = "The name of the ukcloud_mgmt vrf; e.g. vrf_assured_ukcloud_mgmt"
+  description = "The DN of the ukcloud_mgmt vrf"
+}
+
+variable "internet_tenant" {
+  type        = string
+  description = "The DN of the internet tenant"
+}
+
+variable "internet_l3_out" {
+  type        = string
+  description = "The DN of the internet l3_out"
+}
+
+variable "internet_vrf" {
+  type        = string
+  description = "The DN of the internet vrf"
 }
 
 variable "internal_api_bd_subnet" {

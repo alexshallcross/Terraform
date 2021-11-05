@@ -1,33 +1,3 @@
-##### Data Sources
-
-data "aci_tenant" "ukcloud_mgmt" {
-  name = var.ukcloud_mgmt_tenant
-}
-
-data "aci_l3_outside" "skyscape_mgmt" {
-  tenant_dn = data.aci_tenant.ukcloud_mgmt.id
-  name      = var.ukcloud_mgmt_l3_out
-}
-
-data "aci_vrf" "skyscape_mgmt" {
-  tenant_dn = data.aci_tenant.ukcloud_mgmt.id
-  name      = var.ukcloud_mgmt_vrf
-}
-
-data "aci_tenant" "internet" {
-  name = "internet"
-}
-
-data "aci_l3_outside" "internet" {
-  tenant_dn = data.aci_tenant.internet.id
-  name      = "internet"
-}
-
-data "aci_vrf" "internet" {
-  tenant_dn = data.aci_tenant.internet.id
-  name      = "internet"
-}
-
 ##### Resources
 
 ### Application Profiles
@@ -35,7 +5,7 @@ data "aci_vrf" "internet" {
 # openstack
 
 resource "aci_application_profile" "openstack" {
-  tenant_dn = data.aci_tenant.ukcloud_mgmt.id
+  tenant_dn = var.ukcloud_mgmt_tenant
   name      = join("", [var.pod_id, "_openstack"])
 }
 
@@ -219,7 +189,7 @@ resource "aci_epg_to_domain" "tenant" {
 # internet_tenants
 
 resource "aci_application_profile" "internet_tenants" {
-  tenant_dn = data.aci_tenant.internet.id
+  tenant_dn = var.internet_tenant
   name      = join("", [var.pod_id, "_internet_tenants"])
 }
 
@@ -285,13 +255,13 @@ resource "aci_epg_to_domain" "mgmt_openstack" {
 ### Bridge Domains
 
 resource "aci_bridge_domain" "internal_api" {
-  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  tenant_dn           = var.ukcloud_mgmt_tenant
   name                = join("", ["bd_", var.pod_id, "_openstack_internal_api"])
   ep_move_detect_mode = "garp"
   relation_fv_rs_bd_to_out = [
-    data.aci_l3_outside.skyscape_mgmt.id
+    var.ukcloud_mgmt_l3_out
   ]
-  relation_fv_rs_ctx = data.aci_vrf.skyscape_mgmt.id
+  relation_fv_rs_ctx = var.ukcloud_mgmt_vrf
 }
 
 resource "aci_subnet" "internal_api" {
@@ -303,13 +273,13 @@ resource "aci_subnet" "internal_api" {
 }
 
 resource "aci_bridge_domain" "ipmi" {
-  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  tenant_dn           = var.ukcloud_mgmt_tenant
   name                = join("", ["bd_", var.pod_id, "_openstack_ipmi"])
   ep_move_detect_mode = "garp"
   relation_fv_rs_bd_to_out = [
-    data.aci_l3_outside.skyscape_mgmt.id
+    var.ukcloud_mgmt_l3_out
   ]
-  relation_fv_rs_ctx = data.aci_vrf.skyscape_mgmt.id
+  relation_fv_rs_ctx = var.ukcloud_mgmt_vrf
 }
 
 resource "aci_subnet" "ipmi" {
@@ -321,13 +291,13 @@ resource "aci_subnet" "ipmi" {
 }
 
 resource "aci_bridge_domain" "mgmt" {
-  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  tenant_dn           = var.ukcloud_mgmt_tenant
   name                = join("", ["bd_", var.pod_id, "_openstack_mgmt"])
   ep_move_detect_mode = "garp"
   relation_fv_rs_bd_to_out = [
-    data.aci_l3_outside.skyscape_mgmt.id
+    var.ukcloud_mgmt_l3_out
   ]
-  relation_fv_rs_ctx = data.aci_vrf.skyscape_mgmt.id
+  relation_fv_rs_ctx = var.ukcloud_mgmt_vrf
 }
 
 resource "aci_subnet" "mgmt" {
@@ -339,13 +309,13 @@ resource "aci_subnet" "mgmt" {
 }
 
 resource "aci_bridge_domain" "mgmt_provisioning" {
-  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  tenant_dn           = var.ukcloud_mgmt_tenant
   name                = join("", ["bd_", var.pod_id, "_openstack_mgmt_provisioning"])
   ep_move_detect_mode = "garp"
   relation_fv_rs_bd_to_out = [
-    data.aci_l3_outside.skyscape_mgmt.id
+    var.ukcloud_mgmt_l3_out
   ]
-  relation_fv_rs_ctx = data.aci_vrf.skyscape_mgmt.id
+  relation_fv_rs_ctx = var.ukcloud_mgmt_vrf
 }
 
 resource "aci_subnet" "mgmt_provisioning" {
@@ -357,13 +327,13 @@ resource "aci_subnet" "mgmt_provisioning" {
 }
 
 resource "aci_bridge_domain" "storage" {
-  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  tenant_dn           = var.ukcloud_mgmt_tenant
   name                = join("", ["bd_", var.pod_id, "_openstack_storage"])
   ep_move_detect_mode = "garp"
   relation_fv_rs_bd_to_out = [
-    data.aci_l3_outside.skyscape_mgmt.id
+    var.ukcloud_mgmt_l3_out
   ]
-  relation_fv_rs_ctx = data.aci_vrf.skyscape_mgmt.id
+  relation_fv_rs_ctx = var.ukcloud_mgmt_vrf
 }
 
 resource "aci_subnet" "storage" {
@@ -375,13 +345,13 @@ resource "aci_subnet" "storage" {
 }
 
 resource "aci_bridge_domain" "storage_mgmt" {
-  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  tenant_dn           = var.ukcloud_mgmt_tenant
   name                = join("", ["bd_", var.pod_id, "_openstack_storage_mgmt"])
   ep_move_detect_mode = "garp"
   relation_fv_rs_bd_to_out = [
-    data.aci_l3_outside.skyscape_mgmt.id
+    var.ukcloud_mgmt_l3_out
   ]
-  relation_fv_rs_ctx = data.aci_vrf.skyscape_mgmt.id
+  relation_fv_rs_ctx = var.ukcloud_mgmt_vrf
 }
 
 resource "aci_subnet" "storage_mgmt" {
@@ -393,13 +363,13 @@ resource "aci_subnet" "storage_mgmt" {
 }
 
 resource "aci_bridge_domain" "tenant" {
-  tenant_dn           = data.aci_tenant.ukcloud_mgmt.id
+  tenant_dn           = var.ukcloud_mgmt_tenant
   name                = join("", ["bd_", var.pod_id, "_openstack_tenant"])
   ep_move_detect_mode = "garp"
   relation_fv_rs_bd_to_out = [
-    data.aci_l3_outside.skyscape_mgmt.id
+    var.ukcloud_mgmt_l3_out
   ]
-  relation_fv_rs_ctx = data.aci_vrf.skyscape_mgmt.id
+  relation_fv_rs_ctx = var.ukcloud_mgmt_vrf
 }
 
 resource "aci_subnet" "tenant" {
@@ -411,13 +381,13 @@ resource "aci_subnet" "tenant" {
 }
 
 resource "aci_bridge_domain" "mgmt_openstack" {
-  tenant_dn           = data.aci_tenant.internet.id
+  tenant_dn           = var.internet_tenant
   name                = join("", ["bd_", var.pod_id, "_mgmt_tenant"])
   ep_move_detect_mode = "garp"
   relation_fv_rs_bd_to_out = [
-    data.aci_l3_outside.internet.id
+    var.internet_l3_out
   ]
-  relation_fv_rs_ctx = data.aci_vrf.internet.id
+  relation_fv_rs_ctx = var.internet_vrf
 }
 
 resource "aci_subnet" "mgmt_openstack" {
@@ -431,13 +401,13 @@ resource "aci_subnet" "mgmt_openstack" {
 
 /***
   resource "aci_bridge_domain" "nti0007ei2" {
-    tenant_dn                = data.aci_tenant.internet.id
+    tenant_dn                = var.internet_tenant
     name                     = join("", ["bd_", var.pod_id, "_mgmt_tenant"])
     ep_move_detect_mode      = "garp"
     relation_fv_rs_bd_to_out = [
-      data.aci_l3_outside.internet.id
+      var.internet_l3_out
       ]
-    relation_fv_rs_ctx       = data.aci_vrf.internet.id
+    relation_fv_rs_ctx       = var.internet_vrf
   }
 
     resource "aci_subnet" "nti0007ei2" {
