@@ -1,48 +1,3 @@
-######################
-#### Data Sources ####
-######################
-
-data "aci_fabric_if_pol" "link_level" {
-  name = var.link_level_policy
-}
-data "aci_cdp_interface_policy" "cdp_enabled" {
-  name = var.cdp_policy
-}
-
-data "aci_lldp_interface_policy" "lldp_enabled" {
-  name = var.lldp_policy
-}
-
-data "aci_tenant" "ukcloud_mgmt" {
-  name = var.ukcloud_mgmt_tenant
-}
-
-data "aci_l3_outside" "ukcloud_mgmt" {
-  tenant_dn = data.aci_tenant.ukcloud_mgmt.id
-  name      = var.ukcloud_mgmt_l3_out
-}
-
-data "aci_vrf" "ukcloud_mgmt" {
-  tenant_dn = data.aci_tenant.ukcloud_mgmt.id
-  name      = var.ukcloud_mgmt_vrf
-}
-
-data "aci_tenant" "protection" {
-  name = var.protection_tenant
-}
-
-data "aci_l3_outside" "protection" {
-  tenant_dn = data.aci_tenant.protection.id
-  name      = var.protection_l3_out
-}
-
-data "aci_vrf" "protection" {
-  tenant_dn = data.aci_tenant.protection.id
-  name      = var.protection_vrf
-}
-
-
-
 #########################
 #### Local Variables ####
 #########################
@@ -215,9 +170,9 @@ resource "aci_access_port_block" "cimc" {
 resource "aci_leaf_access_port_policy_group" "client_esx" {
   name = join("", [var.pod_id, "_client_esx"])
 
-  relation_infra_rs_h_if_pol    = data.aci_fabric_if_pol.link_level.id
-  relation_infra_rs_cdp_if_pol  = data.aci_cdp_interface_policy.cdp_enabled.id
-  relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id
+  relation_infra_rs_h_if_pol    = var.link_level_policy
+  relation_infra_rs_cdp_if_pol  = var.cdp_policy
+  relation_infra_rs_lldp_if_pol = var.lldp_policy
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.client_esx.id
 }
 
@@ -230,9 +185,9 @@ resource "aci_leaf_access_port_policy_group" "client_esx" {
 resource "aci_leaf_access_port_policy_group" "mgmt_esx" {
   name = join("", [var.pod_id, "_mgmt_esx"])
 
-  relation_infra_rs_h_if_pol    = data.aci_fabric_if_pol.link_level.id
-  relation_infra_rs_cdp_if_pol  = data.aci_cdp_interface_policy.cdp_enabled.id
-  relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id
+  relation_infra_rs_h_if_pol    = var.link_level_policy
+  relation_infra_rs_cdp_if_pol  = var.cdp_policy
+  relation_infra_rs_lldp_if_pol = var.lldp_policy
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.mgmt_esx.id
 }
 
@@ -246,9 +201,9 @@ resource "aci_leaf_access_bundle_policy_group" "cimc" {
   name  = join("", [var.pod_id, "_cimc"])
   lag_t = "node"
 
-  relation_infra_rs_h_if_pol    = data.aci_fabric_if_pol.link_level.id
-  relation_infra_rs_cdp_if_pol  = data.aci_cdp_interface_policy.cdp_enabled.id
-  relation_infra_rs_lldp_if_pol = data.aci_lldp_interface_policy.lldp_enabled.id
+  relation_infra_rs_h_if_pol    = var.link_level_policy
+  relation_infra_rs_cdp_if_pol  = var.cdp_policy
+  relation_infra_rs_lldp_if_pol = var.lldp_policy
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.cimc.id
 }
 
@@ -364,7 +319,7 @@ resource "aci_ranges" "vmware_dynamic_range1" {
 #############################
 
 resource "aci_application_profile" "vmware" {
-  tenant_dn = data.aci_tenant.ukcloud_mgmt.id
+  tenant_dn = var.ukcloud_mgmt_tenant
   name      = join("", [var.pod_id, "_vmware"])
 }
 
@@ -374,7 +329,7 @@ resource "aci_application_profile" "mgmt" {
 }
 
 resource "aci_application_profile" "avamar" {
-  tenant_dn = data.aci_tenant.protection.id
+  tenant_dn = var.protection_tenant
   name      = join("", [var.pod_id, "_avamar"])
 }
 
@@ -393,9 +348,9 @@ module "cimc" {
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
+  tenant   = var.ukcloud_mgmt_tenant
+  l3_out   = [var.ukcloud_mgmt_l3_out]
+  vrf      = var.ukcloud_mgmt_vrf
 }
 
 module "client_cluster_1_vmotion" {
@@ -409,9 +364,9 @@ module "client_cluster_1_vmotion" {
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
+  tenant   = var.ukcloud_mgmt_tenant
+  l3_out   = [var.ukcloud_mgmt_l3_out]
+  vrf      = var.ukcloud_mgmt_vrf
 }
 
 module "client_cluster_1_vmware" {
@@ -425,9 +380,9 @@ module "client_cluster_1_vmware" {
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
+  tenant   = var.ukcloud_mgmt_tenant
+  l3_out   = [var.ukcloud_mgmt_l3_out]
+  vrf      = var.ukcloud_mgmt_vrf
 }
 
 module "client_cluster_1_vxlan" {
@@ -441,9 +396,9 @@ module "client_cluster_1_vxlan" {
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
+  tenant   = var.ukcloud_mgmt_tenant
+  l3_out   = [var.ukcloud_mgmt_l3_out]
+  vrf      = var.ukcloud_mgmt_vrf
 }
 
 module "mgmt_cluster_avamar" {
@@ -457,9 +412,9 @@ module "mgmt_cluster_avamar" {
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
+  tenant   = var.ukcloud_mgmt_tenant
+  l3_out   = [var.ukcloud_mgmt_l3_out]
+  vrf      = var.ukcloud_mgmt_vrf
 }
 
 module "mgmt_cluster_tools" {
@@ -473,9 +428,9 @@ module "mgmt_cluster_tools" {
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
+  tenant   = var.ukcloud_mgmt_tenant
+  l3_out   = [var.ukcloud_mgmt_l3_out]
+  vrf      = var.ukcloud_mgmt_vrf
 }
 
 module "mgmt_cluster_vmotion" {
@@ -489,9 +444,9 @@ module "mgmt_cluster_vmotion" {
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
+  tenant   = var.ukcloud_mgmt_tenant
+  l3_out   = [var.ukcloud_mgmt_l3_out]
+  vrf      = var.ukcloud_mgmt_vrf
 }
 
 module "mgmt_cluster_vmware" {
@@ -505,9 +460,9 @@ module "mgmt_cluster_vmware" {
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
+  tenant   = var.ukcloud_mgmt_tenant
+  l3_out   = [var.ukcloud_mgmt_l3_out]
+  vrf      = var.ukcloud_mgmt_vrf
 }
 
 module "storage_mgmt" {
@@ -521,9 +476,9 @@ module "storage_mgmt" {
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.ukcloud_mgmt.id
-  l3_out   = [data.aci_l3_outside.ukcloud_mgmt.id]
-  vrf      = data.aci_vrf.ukcloud_mgmt.id
+  tenant   = var.ukcloud_mgmt_tenant
+  l3_out   = [var.ukcloud_mgmt_l3_out]
+  vrf      = var.ukcloud_mgmt_vrf
 }
 
 module "mgmt_vmm" {
@@ -550,9 +505,9 @@ module "client_avamar" {
   access_generic_id = aci_access_generic.client_esx.id
 
   pod_id   = var.pod_id
-  app_prof = aci_application_profile.mgmt.id
+  app_prof = aci_application_profile.avamar.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = data.aci_tenant.protection.id
-  l3_out   = [data.aci_l3_outside.protection.id]
-  vrf      = data.aci_vrf.protection.id
+  tenant   = var.protection_tenant
+  l3_out   = [var.protection_l3_out]
+  vrf      = var.protection_vrf
 }

@@ -5,8 +5,8 @@
 provider "aci" {
   username = var.a_username
   password = var.b_password
-  url      = "https://devasc-aci-1.cisco.com"
-  insecure = false
+  url      = "https://10.8.99.141"
+  insecure = true
 }
 
 #################
@@ -880,7 +880,6 @@ module "elevated_ukcloud_mgmt" {
       ]
     }
   }
-
 }
 
 module "internet" {
@@ -968,17 +967,17 @@ module "pod00420" {
     }
   }
 
-  lldp_policy       = "default"
-  cdp_policy        = "default"
-  link_level_policy = "default"
+  lldp_policy       = module.fabric_base.aci_fabric_if_pol_10G
+  cdp_policy        = module.fabric_base.aci_cdp_interface_policy_disabled
+  link_level_policy = module.fabric_base.aci_lldp_interface_policy_enabled
 
-  ukcloud_mgmt_tenant = "burgers"
-  ukcloud_mgmt_l3_out = "burgers"
-  ukcloud_mgmt_vrf    = "burgers"
+  ukcloud_mgmt_tenant = module.assured_ukcloud_mgmt.tenant
+  ukcloud_mgmt_l3_out = module.assured_ukcloud_mgmt.l3out
+  ukcloud_mgmt_vrf    = module.assured_ukcloud_mgmt.vrf
 
-  protection_tenant = "hotdogs"
-  protection_l3_out = "hotdogs"
-  protection_vrf    = "hotdogs"
+  protection_tenant = module.assured_protection.tenant
+  protection_l3_out = module.assured_protection.l3out
+  protection_vrf    = module.assured_protection.vrf
 
   cimc_subnets = [
     "10.1.0.1/24"
@@ -1017,21 +1016,24 @@ module "pod00420" {
 
 module "openstack" {
   source   = "./modules/openstack_pod"
-  for_each = var.openstack_pods
 
-  pod_id    = each.value.pod_id
-  pod_nodes = each.value.pod_nodes
+  pod_id    = "pod00001"
+  pod_nodes = [201, 202]
 
-  ukcloud_mgmt_tenant = each.value.ukcloud_mgmt_tenant
-  ukcloud_mgmt_l3_out = each.value.ukcloud_mgmt_l3_out
-  ukcloud_mgmt_vrf    = each.value.ukcloud_mgmt_vrf
+  ukcloud_mgmt_tenant = module.assured_ukcloud_mgmt.tenant
+  ukcloud_mgmt_l3_out = module.assured_ukcloud_mgmt.l3out
+  ukcloud_mgmt_vrf    = module.assured_ukcloud_mgmt.vrf
 
-  internal_api_bd_subnet      = each.value.internal_api_bd_subnet
-  ipmi_bd_subnet              = each.value.ipmi_bd_subnet
-  mgmt_bd_subnet              = each.value.mgmt_bd_subnet
-  mgmt_provisioning_bd_subnet = each.value.mgmt_provisioning_bd_subnet
-  storage_bd_subnet           = each.value.storage_bd_subnet
-  storage_mgmt_bd_subnet      = each.value.storage_mgmt_bd_subnet
-  tenant_bd_subnet            = each.value.tenant_bd_subnet
-  mgmt_openstack_bd_subnet    = each.value.mgmt_openstack_bd_subnet
+  internet_tenant = module.internet.tenant
+  internet_l3_out = module.internet.l3out
+  internet_vrf    = module.internet.vrf
+
+  internal_api_bd_subnet      = "10.0.0.1/24"
+  ipmi_bd_subnet              = "10.0.1.1/24"
+  mgmt_bd_subnet              = "10.0.2.1/24"
+  mgmt_provisioning_bd_subnet = "10.0.3.1/24"
+  storage_bd_subnet           = "10.0.4.1/24"
+  storage_mgmt_bd_subnet      = "10.0.5.1/24"
+  tenant_bd_subnet            = "10.0.6.1/24"
+  mgmt_openstack_bd_subnet    = "10.0.7.1/24"
 }

@@ -74,6 +74,7 @@ resource "aci_access_port_selector" "internet" {
 
 resource "aci_access_port_block" "port_1" {
   access_port_selector_dn = aci_access_port_selector.internet.id
+  name                    = "port_1"
   from_card               = "1"
   from_port               = "1"
   to_card                 = "1"
@@ -82,6 +83,7 @@ resource "aci_access_port_block" "port_1" {
 
 resource "aci_access_port_block" "port_2" {
   access_port_selector_dn = aci_access_port_selector.internet.id
+  name                    = "port_2"
   from_card               = "1"
   from_port               = "2"
   to_card                 = "1"
@@ -210,4 +212,16 @@ resource "aci_l3out_ospf_external_policy" "internet" {
 
 output "aci_internet_interface_profile" {
   value = aci_leaf_interface_profile.internet.id
+}
+
+output "tenant" {
+  value = aci_tenant.internet.id
+}
+
+output "vrf" {
+  value = aci_vrf.internet.id
+}
+
+output "l3out" {
+  value = aci_l3_outside.internet.id
 }
