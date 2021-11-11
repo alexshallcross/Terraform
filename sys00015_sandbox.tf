@@ -1,3 +1,13 @@
+############################
+#### Statefile Location ####
+############################
+
+terraform {
+  backend "local" {
+    path = "S:/Networks/Terraform/terraform.tfstate"
+  }
+}
+
 ####################
 #### APIC Login ####
 ####################
