@@ -1,3 +1,13 @@
+############################
+#### Statefile Location ####
+############################
+
+terraform {
+  backend "local" {
+    path = "S:/Networks/Terraform/terraform.tfstate"
+  }
+}
+
 ####################
 #### APIC Login ####
 ####################
@@ -262,6 +272,7 @@ module "assured_ukcloud_mgmt" {
   }
 }
 
+/***
 module "elevated_underlay_transport" {
   source = "./modules/elevated_underlay_transport"
 
@@ -359,7 +370,7 @@ module "elevated_underlay_transport" {
   interface_cdp_policy   = module.fabric_base.aci_cdp_interface_policy_disabled
   interface_lldp_policy  = module.fabric_base.aci_lldp_interface_policy_enabled
 }
-
+***/
 module "assured_protection" {
   source = "./modules/assured_protection"
 
@@ -421,7 +432,7 @@ module "assured_protection" {
     }
   }
 }
-
+/***
 module "assured_psn" {
   source = "./modules/assured_psn"
 
@@ -483,7 +494,8 @@ module "assured_psn" {
     }
   }
 }
-
+***/
+/***
 module "assured_hscn" {
   source = "./modules/assured_hscn"
 
@@ -545,7 +557,8 @@ module "assured_hscn" {
     }
   }
 }
-
+***/
+/***
 module "combined_services" {
   source = "./modules/combined_services"
 
@@ -634,7 +647,8 @@ module "combined_services" {
     }
   }
 }
-
+***/
+/***
 module "elevated_external" {
   source = "./modules/elevated_external"
 
@@ -696,7 +710,8 @@ module "elevated_external" {
     }
   }
 }
-
+***/
+/***
 module "elevated_protection" {
   source = "./modules/elevated_protection"
 
@@ -758,7 +773,8 @@ module "elevated_protection" {
     }
   }
 }
-
+***/
+/***
 module "elevated_psn" {
   source = "./modules/elevated_psn"
 
@@ -820,7 +836,8 @@ module "elevated_psn" {
     }
   }
 }
-
+***/
+/***
 module "elevated_ukcloud_mgmt" {
   source = "./modules/elevated_ukcloud_mgmt"
 
@@ -881,7 +898,8 @@ module "elevated_ukcloud_mgmt" {
     }
   }
 }
-
+***/
+/***
 module "internet" {
   source = "./modules/internet"
 
@@ -947,7 +965,7 @@ module "internet" {
   interface_cdp_policy   = module.fabric_base.aci_cdp_interface_policy_disabled
   interface_lldp_policy  = module.fabric_base.aci_lldp_interface_policy_enabled
 }
-
+***/
 module "pod00420" {
   source = "./modules/vmware_pod"
   pod_id = "pod00420"
@@ -1013,7 +1031,7 @@ module "pod00420" {
     "10.1.10.1/24"
   ]
 }
-
+/***
 module "openstack" {
   source   = "./modules/openstack_pod"
 
@@ -1037,3 +1055,4 @@ module "openstack" {
   tenant_bd_subnet            = "10.0.6.1/24"
   mgmt_openstack_bd_subnet    = "10.0.7.1/24"
 }
+***/
