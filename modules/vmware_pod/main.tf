@@ -38,12 +38,10 @@ locals {
 resource "aci_leaf_profile" "vmware" {
   for_each = var.interface_map
 
-  name = join("", [var.pod_id, "_vmware_", each.key])
+  name = join("", [var.pod_id, "_", each.key])
 
   relation_infra_rs_acc_port_p = [
-    aci_leaf_interface_profile.client_esx[each.key].id,
-    aci_leaf_interface_profile.mgmt_esx[each.key].id,
-    aci_leaf_interface_profile.cimc[each.key].id
+    aci_leaf_interface_profile.vmware[each.key].id
   ]
 }
 
@@ -51,7 +49,7 @@ resource "aci_leaf_selector" "vmware" {
   for_each = var.interface_map
 
   leaf_profile_dn         = aci_leaf_profile.vmware[each.key].id
-  name                    = join("", [var.pod_id, "_vmware_", each.key])
+  name                    = join("", [var.pod_id, "_", each.key])
   switch_association_type = "range"
 }
 
@@ -67,21 +65,21 @@ resource "aci_node_block" "vmware" {
 
 
 
-######################################
-#### Client ESX Interface Profile ####
-######################################
+###########################
+#### Interface Profile ####
+###########################
 
-resource "aci_leaf_interface_profile" "client_esx" {
+resource "aci_leaf_interface_profile" "vmware" {
   for_each = var.interface_map
 
-  name = join("", [var.pod_id, "_", each.key, "_client_esx"])
+  name = join("", [var.pod_id, "_", each.key])
 }
 
 resource "aci_access_port_selector" "client_esx" {
   for_each = var.interface_map
 
-  leaf_interface_profile_dn      = aci_leaf_interface_profile.client_esx[each.key].id
-  name                           = join("", [var.pod_id, "_", each.key, "_client_esx"])
+  leaf_interface_profile_dn      = aci_leaf_interface_profile.vmware[each.key].id
+  name                           = join("", [var.pod_id, "_client_esx_40G_lldp_cdp"])
   access_port_selector_type      = "range"
   relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.client_esx.id
 }
@@ -92,28 +90,16 @@ resource "aci_access_port_block" "client_esx" {
   }
 
   access_port_selector_dn = aci_access_port_selector.client_esx[each.value.pair_key].id
-  name                    = join("", [var.pod_id, "_", each.value.pair_key, "_port_", each.value.clnt_port])
+  name                    = join("", ["port_", each.value.clnt_port])
   from_port               = each.value.clnt_port
   to_port                 = each.value.clnt_port
-}
-
-
-
-##########################################
-#### Management ESX Interface Profile ####
-##########################################
-
-resource "aci_leaf_interface_profile" "mgmt_esx" {
-  for_each = var.interface_map
-
-  name = join("", [var.pod_id, "_", each.key, "_mgmt_esx"])
 }
 
 resource "aci_access_port_selector" "mgmt_esx" {
   for_each = var.interface_map
 
-  leaf_interface_profile_dn      = aci_leaf_interface_profile.mgmt_esx[each.key].id
-  name                           = join("", [var.pod_id, "_", each.key, "_mgmt_esx"])
+  leaf_interface_profile_dn      = aci_leaf_interface_profile.vmware[each.key].id
+  name                           = join("", [var.pod_id, "_mgmt_esx_40G_lldp_cdp"])
   access_port_selector_type      = "range"
   relation_infra_rs_acc_base_grp = aci_leaf_access_port_policy_group.mgmt_esx.id
 }
@@ -124,28 +110,16 @@ resource "aci_access_port_block" "mgmt_esx" {
   }
 
   access_port_selector_dn = aci_access_port_selector.mgmt_esx[each.value.pair_key].id
-  name                    = join("", [var.pod_id, "_", each.value.pair_key, "_port_", each.value.mgmt_port])
+  name                    = join("", ["port_", each.value.mgmt_port])
   from_port               = each.value.mgmt_port
   to_port                 = each.value.mgmt_port
-}
-
-
-
-################################
-#### CIMC Interface Profile ####
-################################
-
-resource "aci_leaf_interface_profile" "cimc" {
-  for_each = var.interface_map
-
-  name = join("", [var.pod_id, "_", each.key, "_cimc"])
 }
 
 resource "aci_access_port_selector" "cimc" {
   for_each = var.interface_map
 
-  leaf_interface_profile_dn      = aci_leaf_interface_profile.cimc[each.key].id
-  name                           = join("", [var.pod_id, "_", each.key, "_cimc"])
+  leaf_interface_profile_dn      = aci_leaf_interface_profile.vmware[each.key].id
+  name                           = join("", [var.pod_id, "_cimc_vpc"])
   access_port_selector_type      = "range"
   relation_infra_rs_acc_base_grp = aci_leaf_access_bundle_policy_group.cimc.id
 }
@@ -156,7 +130,7 @@ resource "aci_access_port_block" "cimc" {
   }
 
   access_port_selector_dn = aci_access_port_selector.cimc[each.value.pair_key].id
-  name                    = join("", [var.pod_id, "_", each.value.pair_key, "_port_", each.value.cimc_port])
+  name                    = join("", ["port_", each.value.cimc_port])
   from_port               = each.value.cimc_port
   to_port                 = each.value.cimc_port
 }
