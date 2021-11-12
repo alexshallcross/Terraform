@@ -206,7 +206,8 @@ resource "aci_vpc_explicit_protection_group" "vpc_protection" {
 resource "aci_attachable_access_entity_profile" "client_esx" {
   name = join("", [var.pod_id, "_client_esx"])
   relation_infra_rs_dom_p = [
-    aci_physical_domain.vmware.id
+    aci_physical_domain.vmware.id,
+    aci_vmm_domain.vmware.id
   ]
 }
 
