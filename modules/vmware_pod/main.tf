@@ -503,5 +503,5 @@ resource "aci_vmm_controller" "vmware" {
   host_or_ip                = var.vmm_host
   root_cont_name            = var.pod_id
   stats_mode                = "enabled"
-  relation_vmm_rs_mgmt_e_pg = module.mgmt_vmm.aci_application_epg.epg.id
+  relation_vmm_rs_mgmt_e_pg = module.mgmt_vmm.epg
 }

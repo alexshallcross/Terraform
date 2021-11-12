@@ -1030,6 +1030,9 @@ module "pod00420" {
   client_avamar_subnets = [
     "10.1.10.1/24"
   ]
+
+  vmm_ci = "vcv00069i2"
+  vmm_host = "10.1.9.2"
 }
 /***
 module "openstack" {
