@@ -504,4 +504,17 @@ resource "aci_vmm_controller" "vmware" {
   root_cont_name            = var.pod_id
   stats_mode                = "enabled"
   relation_vmm_rs_mgmt_e_pg = module.mgmt_vmm.epg
+  relation_vmm_rs_acc       = aci_vmm_credential.vmware.id
+}
+
+resource "aci_vmm_credential" "vmware" {
+  vmm_domain_dn = aci_vmm_domain.vmware.id
+  name          = var.vmm_ci
+  usr           = var.vmm_svc_acc
+}
+
+resource "aci_vswitch_policy" "vmware" {
+  vmm_domain_dn  = aci_vmm_domain.vmware.id
+  relation_vmm_rs_vswitch_override_cdp_if_pol = var.cdp_policy
+  relation_vmm_rs_vswitch_override_lldp_if_pol = var.lldp_policy
 }

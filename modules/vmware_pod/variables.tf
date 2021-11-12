@@ -124,3 +124,8 @@ variable "vmm_host" {
   type        = string
   description = "The IP address or hostname for the VMM controller; e.g 10.40.16.151"
 }
+
+variable "vmm_svc_acc" {
+  type        = string
+  description = "The service account username and domain for VMM integration; e.g svc_pod00008-vmm@il2management"
+}

@@ -985,9 +985,9 @@ module "pod00420" {
     }
   }
 
-  lldp_policy       = module.fabric_base.aci_fabric_if_pol_10G
+  lldp_policy       = module.fabric_base.aci_lldp_interface_policy_enabled
   cdp_policy        = module.fabric_base.aci_cdp_interface_policy_disabled
-  link_level_policy = module.fabric_base.aci_lldp_interface_policy_enabled
+  link_level_policy = module.fabric_base.aci_fabric_if_pol_10G
 
   ukcloud_mgmt_tenant = module.assured_ukcloud_mgmt.tenant
   ukcloud_mgmt_l3_out = module.assured_ukcloud_mgmt.l3out
@@ -1031,8 +1031,9 @@ module "pod00420" {
     "10.1.10.1/24"
   ]
 
-  vmm_ci = "vcv00069i2"
-  vmm_host = "10.1.9.2"
+  vmm_ci      = "vcv00069i2"
+  vmm_host    = "10.1.9.2"
+  vmm_svc_acc = "svc_pod00420-vmm@il2management"
 }
 /***
 module "openstack" {
