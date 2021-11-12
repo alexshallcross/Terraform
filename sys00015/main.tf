@@ -4,7 +4,7 @@
 
 terraform {
   backend "local" {
-    path = "S:/Networks/Terraform/terraform.tfstate"
+    path = "S:/Networks/Terraform/statefiles/sys00015.tfstate"
   }
 }
 
@@ -24,7 +24,7 @@ provider "aci" {
 #################
 
 module "fabric_base" {
-  source = "./modules/fabric_base"
+  source = "../modules/fabric_base"
 
   spine_nodes      = [1001, 1002]
   bgp_as_number    = 65515
@@ -114,7 +114,7 @@ module "fabric_base" {
 }
 
 module "assured_underlay_transport" {
-  source = "./modules/assured_underlay_transport"
+  source = "../modules/assured_underlay_transport"
 
   assured_underlay_transport_ospf_interface_vlan = 3963
   assured_underlay_transport_ospf_area_id        = "0.0.0.6"
@@ -212,7 +212,7 @@ module "assured_underlay_transport" {
 }
 
 module "assured_ukcloud_mgmt" {
-  source = "./modules/assured_ukcloud_mgmt"
+  source = "../modules/assured_ukcloud_mgmt"
 
   assured_ukcloud_mgmt_ospf_interface_vlan = 3964
   assured_ukcloud_mgmt_ospf_area_id        = "0.0.0.5"
@@ -372,7 +372,7 @@ module "elevated_underlay_transport" {
 }
 ***/
 module "assured_protection" {
-  source = "./modules/assured_protection"
+  source = "../modules/assured_protection"
 
   assured_protection_ospf_interface_vlan = 3963
   assured_protection_ospf_area_id        = "0.0.0.6"
@@ -967,7 +967,7 @@ module "internet" {
 }
 ***/
 module "pod00420" {
-  source = "./modules/vmware_pod"
+  source = "../modules/vmware_pod"
   pod_id = "pod00420"
 
   interface_map = {
@@ -985,9 +985,9 @@ module "pod00420" {
     }
   }
 
-  lldp_policy       = module.fabric_base.aci_fabric_if_pol_10G
+  lldp_policy       = module.fabric_base.aci_lldp_interface_policy_enabled
   cdp_policy        = module.fabric_base.aci_cdp_interface_policy_disabled
-  link_level_policy = module.fabric_base.aci_lldp_interface_policy_enabled
+  link_level_policy = module.fabric_base.aci_fabric_if_pol_10G
 
   ukcloud_mgmt_tenant = module.assured_ukcloud_mgmt.tenant
   ukcloud_mgmt_l3_out = module.assured_ukcloud_mgmt.l3out
@@ -1030,6 +1030,10 @@ module "pod00420" {
   client_avamar_subnets = [
     "10.1.10.1/24"
   ]
+
+  vmm_ci      = "vcv00069i2"
+  vmm_host    = "10.1.9.2"
+  vmm_svc_acc = "svc_pod00420-vmm@il2management"
 }
 /***
 module "openstack" {

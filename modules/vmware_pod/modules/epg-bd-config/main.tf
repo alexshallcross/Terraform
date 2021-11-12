@@ -80,3 +80,9 @@ resource "aci_subnet" "subnet" {
     "public"
   ]
 }
+
+### Output EPG DN
+
+output "epg" {
+  value = aci_application_epg.epg.id
+}

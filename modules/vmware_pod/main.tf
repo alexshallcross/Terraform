@@ -206,7 +206,8 @@ resource "aci_vpc_explicit_protection_group" "vpc_protection" {
 resource "aci_attachable_access_entity_profile" "client_esx" {
   name = join("", [var.pod_id, "_client_esx"])
   relation_infra_rs_dom_p = [
-    aci_physical_domain.vmware.id
+    aci_physical_domain.vmware.id,
+    aci_vmm_domain.vmware.id
   ]
 }
 
@@ -484,4 +485,37 @@ module "client_avamar" {
   tenant   = var.protection_tenant
   l3_out   = [var.protection_l3_out]
   vrf      = var.protection_vrf
+}
+
+#########################
+#### VMM Integration ####
+#########################
+
+resource "aci_vmm_domain" "vmware" {
+  provider_profile_dn       = "uni/vmmp-VMware"
+  name                      = "${var.pod_id}_ext_vmm"
+  encap_mode                = "vlan"
+  relation_infra_rs_vlan_ns = aci_vlan_pool.vmm_dynamic.id
+}
+
+resource "aci_vmm_controller" "vmware" {
+  vmm_domain_dn             = aci_vmm_domain.vmware.id
+  name                      = var.vmm_ci
+  host_or_ip                = var.vmm_host
+  root_cont_name            = var.pod_id
+  stats_mode                = "enabled"
+  relation_vmm_rs_mgmt_e_pg = module.mgmt_vmm.epg
+  relation_vmm_rs_acc       = aci_vmm_credential.vmware.id
+}
+
+resource "aci_vmm_credential" "vmware" {
+  vmm_domain_dn = aci_vmm_domain.vmware.id
+  name          = var.vmm_ci
+  usr           = var.vmm_svc_acc
+}
+
+resource "aci_vswitch_policy" "vmware" {
+  vmm_domain_dn  = aci_vmm_domain.vmware.id
+  relation_vmm_rs_vswitch_override_cdp_if_pol = var.cdp_policy
+  relation_vmm_rs_vswitch_override_lldp_if_pol = var.lldp_policy
 }
