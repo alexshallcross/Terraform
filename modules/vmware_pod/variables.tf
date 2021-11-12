@@ -114,3 +114,13 @@ variable "client_avamar_subnets" {
   type        = list(string)
   description = "List of subnets in the podxxxxx_client_avamar bridge domain"
 }
+
+variable "vmm_ci" {
+  type        = string
+  description = "The CI for the VMM controller; e.g vcv00004i2"
+}
+
+variable "vmm_host" {
+  type        = string
+  description = "The IP address or hostname for the VMM controller; e.g 10.40.16.151"
+}

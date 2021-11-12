@@ -42,7 +42,7 @@ resource "aci_l3_domain_profile" "internet" {
 # Create the AEP
 
 resource "aci_attachable_access_entity_profile" "internet" {
-  name                    = "internet"
+  name = "internet"
   relation_infra_rs_dom_p = [
     aci_l3_domain_profile.internet.id
   ]

@@ -485,3 +485,23 @@ module "client_avamar" {
   l3_out   = [var.protection_l3_out]
   vrf      = var.protection_vrf
 }
+
+#########################
+#### VMM Integration ####
+#########################
+
+resource "aci_vmm_domain" "vmware" {
+  provider_profile_dn       = "uni/vmmp-VMware"
+  name                      = "${var.pod_id}_ext_vmm"
+  encap_mode                = "vlan"
+  relation_infra_rs_vlan_ns = aci_vlan_pool.vmm_dynamic.id
+}
+
+resource "aci_vmm_controller" "vmware" {
+  vmm_domain_dn             = aci_vmm_domain.vmware.id
+  name                      = var.vmm_ci
+  host_or_ip                = var.vmm_host
+  root_cont_name            = var.pod_id
+  stats_mode                = "enabled"
+  relation_vmm_rs_mgmt_e_pg = module.mgmt_vmm.aci_application_epg.epg.id
+}
