@@ -2,7 +2,7 @@
 terraform.exe
 
 # Provider files
-/.terraform
+/sys00015/.terraform
 
 # Terraform State file
 terraform.tfstate
