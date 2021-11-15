@@ -145,8 +145,8 @@ resource "aci_leaf_access_port_policy_group" "client_esx" {
   name = join("", [var.pod_id, "_client_esx"])
 
   relation_infra_rs_h_if_pol    = var.link_level_policy
-  relation_infra_rs_cdp_if_pol  = var.cdp_policy
-  relation_infra_rs_lldp_if_pol = var.lldp_policy
+  relation_infra_rs_cdp_if_pol  = var.cdp_disabled_policy
+  relation_infra_rs_lldp_if_pol = var.lldp_enabled_policy
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.client_esx.id
 }
 
@@ -160,8 +160,8 @@ resource "aci_leaf_access_port_policy_group" "mgmt_esx" {
   name = join("", [var.pod_id, "_mgmt_esx"])
 
   relation_infra_rs_h_if_pol    = var.link_level_policy
-  relation_infra_rs_cdp_if_pol  = var.cdp_policy
-  relation_infra_rs_lldp_if_pol = var.lldp_policy
+  relation_infra_rs_cdp_if_pol  = var.cdp_disabled_policy
+  relation_infra_rs_lldp_if_pol = var.lldp_enabled_policy
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.mgmt_esx.id
 }
 
@@ -176,8 +176,8 @@ resource "aci_leaf_access_bundle_policy_group" "cimc" {
   lag_t = "node"
 
   relation_infra_rs_h_if_pol    = var.link_level_policy
-  relation_infra_rs_cdp_if_pol  = var.cdp_policy
-  relation_infra_rs_lldp_if_pol = var.lldp_policy
+  relation_infra_rs_cdp_if_pol  = var.cdp_disabled_policy
+  relation_infra_rs_lldp_if_pol = var.lldp_enabled_policy
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.cimc.id
 }
 
@@ -515,7 +515,7 @@ resource "aci_vmm_credential" "vmware" {
 }
 
 resource "aci_vswitch_policy" "vmware" {
-  vmm_domain_dn  = aci_vmm_domain.vmware.id
-  relation_vmm_rs_vswitch_override_cdp_if_pol = var.cdp_policy
-  relation_vmm_rs_vswitch_override_lldp_if_pol = var.lldp_policy
+  vmm_domain_dn                                = aci_vmm_domain.vmware.id
+  relation_vmm_rs_vswitch_override_cdp_if_pol  = var.cdp_enabled_policy
+  relation_vmm_rs_vswitch_override_lldp_if_pol = var.lldp_disabled_policy
 }

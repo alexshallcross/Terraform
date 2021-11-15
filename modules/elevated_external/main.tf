@@ -300,11 +300,3 @@ resource "aci_l3out_ospf_external_policy" "elevated_external" {
   area_id       = var.elevated_external_ospf_area_id
   area_type     = "regular"
 }
-
-#######################
-#### Output Values ####
-#######################
-
-output "aci_elevated_external_aep_domain" {
-  value = aci_l3_domain_profile.elevated_external.id
-}

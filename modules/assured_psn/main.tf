@@ -404,11 +404,3 @@ resource "aci_contract_subject" "assured_psn_out" {
     aci_filter.assured_psn_out.id
   ]
 }
-
-#######################
-#### Output Values ####
-#######################
-
-output "aci_assured_psn_aep_domain" {
-  value = aci_l3_domain_profile.assured_psn.id
-}

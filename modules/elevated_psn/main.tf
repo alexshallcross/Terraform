@@ -404,11 +404,3 @@ resource "aci_contract_subject" "elevated_psn_out" {
     aci_filter.elevated_psn_out.id
   ]
 }
-
-#######################
-#### Output Values ####
-#######################
-
-output "aci_elevated_psn_aep_domain" {
-  value = aci_l3_domain_profile.elevated_psn.id
-}

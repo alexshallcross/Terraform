@@ -126,11 +126,3 @@ resource "aci_l3out_ospf_external_policy" "assured_hscn" {
   area_id       = var.assured_hscn_ospf_area_id
   area_type     = "regular"
 }
-
-#######################
-#### Output Values ####
-#######################
-
-output "aci_assured_hscn_aep_domain" {
-  value = aci_l3_domain_profile.assured_hscn.id
-}

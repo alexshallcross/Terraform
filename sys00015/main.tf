@@ -206,7 +206,7 @@ module "assured_underlay_transport" {
     }
   }
 
-  interface_speed_policy = module.fabric_base.aci_fabric_if_pol_10G
+  interface_speed_policy = module.fabric_base.aci_fabric_if_pol_40G
   interface_cdp_policy   = module.fabric_base.aci_cdp_interface_policy_disabled
   interface_lldp_policy  = module.fabric_base.aci_lldp_interface_policy_enabled
 }
@@ -985,9 +985,11 @@ module "pod00420" {
     }
   }
 
-  lldp_policy       = module.fabric_base.aci_lldp_interface_policy_enabled
-  cdp_policy        = module.fabric_base.aci_cdp_interface_policy_disabled
-  link_level_policy = module.fabric_base.aci_fabric_if_pol_10G
+  lldp_enabled_policy  = module.fabric_base.aci_lldp_interface_policy_enabled
+  lldp_disabled_policy = module.fabric_base.aci_lldp_interface_policy_disabled
+  cdp_enabled_policy   = module.fabric_base.aci_cdp_interface_policy_enabled
+  cdp_disabled_policy  = module.fabric_base.aci_cdp_interface_policy_disabled
+  link_level_policy    = module.fabric_base.aci_fabric_if_pol_40G
 
   ukcloud_mgmt_tenant = module.assured_ukcloud_mgmt.tenant
   ukcloud_mgmt_l3_out = module.assured_ukcloud_mgmt.l3out
