@@ -1062,7 +1062,6 @@ module "openstack" {
   mgmt_openstack_bd_subnet    = "10.0.7.1/24"
 }
 ***/
-***/
 module "pod00100" {
   source = "../modules/vmware_pod"
   pod_id = "pod00100"
@@ -1122,4 +1121,3 @@ module "pod00100" {
   vmm_host    = "10.44.34.2"
   vmm_svc_acc = "svc_pod00100-vmm@il2management"
 }
-/***
