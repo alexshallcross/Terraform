@@ -1020,19 +1020,3 @@ resource "aci_rest" "leaf_switch_profile_dom_policy_selector" {
 resource "aci_tenant" "elevated_cds" {
   name = "elevated_cds"
 }
-
-#######################
-#### Output Values ####
-#######################
-
-output "aci_fabric_if_pol_10G" {
-  value = aci_fabric_if_pol._10G.id
-}
-
-output "aci_cdp_interface_policy_disabled" {
-  value = aci_cdp_interface_policy.disabled.id
-}
-
-output "aci_lldp_interface_policy_enabled" {
-  value = aci_lldp_interface_policy.enabled.id
-}
