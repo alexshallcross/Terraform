@@ -121,19 +121,3 @@ resource "aci_l3out_ospf_external_policy" "assured_ukcloud_mgmt" {
   area_id       = var.assured_ukcloud_mgmt_ospf_area_id
   area_type     = "regular"
 }
-
-#######################
-#### Output Values ####
-#######################
-
-output "tenant" {
-  value = aci_tenant.assured_ukcloud_mgmt.id
-}
-
-output "vrf" {
-  value = aci_vrf.assured_ukcloud_mgmt.id
-}
-
-output "l3out" {
-  value = aci_l3_outside.assured_ukcloud_mgmt.id
-}
