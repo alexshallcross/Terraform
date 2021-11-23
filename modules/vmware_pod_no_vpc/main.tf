@@ -238,8 +238,6 @@ resource "aci_application_profile" "avamar" {
 #### In Line CIMC ####
 ######################
 
-### Create the EPG
-
 resource "aci_application_epg" "cimc" {
   name = join("", [var.pod_id, "_cimc"])
   application_profile_dn = aci_application_profile.vmware.id
@@ -270,7 +268,7 @@ resource "aci_epgs_using_function" "client_cimc_epg_to_aep" {
   mode              = "native"
 }
 
-resource "aci_epgs_using_function" "client_cimc_epg_to_aep" {
+resource "aci_epgs_using_function" "mgmt_cimc_epg_to_aep" {
   access_generic_dn = aci_access_generic.mgmt_esx.id
   tdn               = aci_application_epg.cimc.id
   encap             = "vlan-100"
