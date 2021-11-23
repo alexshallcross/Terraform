@@ -24,7 +24,7 @@ provider "aci" {
 #################
 
 module "pod00034" {
-  source = "../modules/vmware_pod"
+  source = "../modules/vmware_pod_no_vpc"
   pod_id = "pod00034"
 
   interface_map = {
@@ -83,7 +83,7 @@ module "pod00034" {
   vmm_svc_acc = "svc_pod00034-vmm@il2management"
 }
 module "pod00035" {
-  source = "../modules/vmware_pod"
+  source = "../modules/vmware_pod_no_vpc"
   pod_id = "pod00035"
 
   interface_map = {
