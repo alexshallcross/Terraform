@@ -239,9 +239,9 @@ resource "aci_application_profile" "avamar" {
 ######################
 
 resource "aci_application_epg" "cimc" {
-  name = join("", [var.pod_id, "_cimc"])
+  name                   = join("", [var.pod_id, "_cimc"])
   application_profile_dn = aci_application_profile.vmware.id
-  relation_fv_rs_bd = aci_bridge_domain.cimc.id
+  relation_fv_rs_bd      = aci_bridge_domain.cimc.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -277,13 +277,13 @@ resource "aci_epgs_using_function" "mgmt_cimc_epg_to_aep" {
 }
 
 resource "aci_bridge_domain" "cimc" {
-  name = join("", [var.pod_id, "_cimc"])
-  tenant_dn = var.ukcloud_mgmt_tenant
+  name                = join("", [var.pod_id, "_cimc"])
+  tenant_dn           = var.ukcloud_mgmt_tenant
   ep_move_detect_mode = "garp"
   relation_fv_rs_bd_to_out = [
     var.ukcloud_mgmt_l3_out
-    ]
-  relation_fv_rs_ctx =var.ukcloud_mgmt_vrf
+  ]
+  relation_fv_rs_ctx = var.ukcloud_mgmt_vrf
 }
 
 
