@@ -19,14 +19,6 @@ locals {
       }
     ]
   ])
-  flattened_cimc_interface_map = flatten([
-    for pair_key, pair in var.interface_map : [
-      for cimc_port in pair.cimc_ports : {
-        pair_key  = pair_key
-        cimc_port = cimc_port
-      }
-    ]
-  ])
 }
 
 
@@ -115,26 +107,6 @@ resource "aci_access_port_block" "mgmt_esx" {
   to_port                 = each.value.mgmt_port
 }
 
-resource "aci_access_port_selector" "cimc" {
-  for_each = var.interface_map
-
-  leaf_interface_profile_dn      = aci_leaf_interface_profile.vmware[each.key].id
-  name                           = join("", [var.pod_id, "_cimc_vpc"])
-  access_port_selector_type      = "range"
-  relation_infra_rs_acc_base_grp = aci_leaf_access_bundle_policy_group.cimc.id
-}
-
-resource "aci_access_port_block" "cimc" {
-  for_each = {
-    for interface in local.flattened_cimc_interface_map : "${interface.pair_key}.${interface.cimc_port}" => interface
-  }
-
-  access_port_selector_dn = aci_access_port_selector.cimc[each.value.pair_key].id
-  name                    = join("", ["port_", each.value.cimc_port])
-  from_port               = each.value.cimc_port
-  to_port                 = each.value.cimc_port
-}
-
 
 
 ###########################################
@@ -163,38 +135,6 @@ resource "aci_leaf_access_port_policy_group" "mgmt_esx" {
   relation_infra_rs_cdp_if_pol  = var.cdp_disabled_policy
   relation_infra_rs_lldp_if_pol = var.lldp_enabled_policy
   relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.mgmt_esx.id
-}
-
-
-
-###############################
-#### CIMC VPC Policy Group ####
-###############################
-
-resource "aci_leaf_access_bundle_policy_group" "cimc" {
-  name  = join("", [var.pod_id, "_cimc"])
-  lag_t = "node"
-
-  relation_infra_rs_h_if_pol    = var.link_level_policy
-  relation_infra_rs_cdp_if_pol  = var.cdp_disabled_policy
-  relation_infra_rs_lldp_if_pol = var.lldp_enabled_policy
-  relation_infra_rs_att_ent_p   = aci_attachable_access_entity_profile.cimc.id
-}
-
-
-
-###############################
-#### VPC Protection Policy ####
-###############################
-
-resource "aci_vpc_explicit_protection_group" "vpc_protection" {
-  for_each = var.interface_map
-
-  name    = join("", [var.pod_id, "_", each.key])
-  switch1 = each.value.node_ids[0]
-  switch2 = each.value.node_ids[1]
-
-  vpc_explicit_protection_group_id = each.value.node_ids[0]
 }
 
 
@@ -229,20 +169,6 @@ resource "aci_access_generic" "mgmt_esx" {
 
   attachable_access_entity_profile_dn = aci_attachable_access_entity_profile.mgmt_esx.id
 }
-
-resource "aci_attachable_access_entity_profile" "cimc" {
-  name = join("", [var.pod_id, "_cimc"])
-  relation_infra_rs_dom_p = [
-    aci_physical_domain.vmware.id
-  ]
-}
-
-resource "aci_access_generic" "cimc" {
-  name = "default"
-
-  attachable_access_entity_profile_dn = aci_attachable_access_entity_profile.cimc.id
-}
-
 
 
 ##########################
@@ -308,25 +234,72 @@ resource "aci_application_profile" "avamar" {
   name      = join("", [var.pod_id, "_avamar"])
 }
 
+######################
+#### In Line CIMC ####
+######################
+
+resource "aci_application_epg" "cimc" {
+  name                   = join("", [var.pod_id, "_cimc"])
+  application_profile_dn = aci_application_profile.vmware.id
+  relation_fv_rs_bd      = aci_bridge_domain.cimc.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_epg_to_domain" "cimc" {
+  application_epg_dn = aci_application_epg.cimc.id
+  tdn                = aci_physical_domain.vmware.id
+}
+
+resource "aci_epgs_using_function" "client_cimc_epg_to_aep" {
+  access_generic_dn = aci_access_generic.client_esx.id
+  tdn               = aci_application_epg.cimc.id
+  encap             = "vlan-100"
+  instr_imedcy      = "immediate"
+  mode              = "native"
+}
+
+resource "aci_epgs_using_function" "mgmt_cimc_epg_to_aep" {
+  access_generic_dn = aci_access_generic.mgmt_esx.id
+  tdn               = aci_application_epg.cimc.id
+  encap             = "vlan-100"
+  instr_imedcy      = "immediate"
+  mode              = "native"
+}
+
+resource "aci_bridge_domain" "cimc" {
+  name                = join("", [var.pod_id, "_cimc"])
+  tenant_dn           = var.ukcloud_mgmt_tenant
+  ep_move_detect_mode = "garp"
+  relation_fv_rs_bd_to_out = [
+    var.ukcloud_mgmt_l3_out
+  ]
+  relation_fv_rs_ctx = var.ukcloud_mgmt_vrf
+}
+
+
+resource "aci_subnet" "subnet" {
+  for_each = toset(var.cimc_subnets)
+
+  parent_dn = aci_bridge_domain.cimc.id
+  ip        = each.value
+  scope = [
+    "public"
+  ]
+}
+
 #################
 #### EPG/BDs ####
 #################
-
-module "cimc" {
-  source = "./modules/epg-bd-config"
-
-  epg_name          = "cimc"
-  vlan_tag          = "vlan-100"
-  subnets           = var.cimc_subnets
-  access_generic_id = aci_access_generic.cimc.id
-
-  pod_id   = var.pod_id
-  app_prof = aci_application_profile.vmware.id
-  phys_dom = aci_physical_domain.vmware.id
-  tenant   = var.ukcloud_mgmt_tenant
-  l3_out   = [var.ukcloud_mgmt_l3_out]
-  vrf      = var.ukcloud_mgmt_vrf
-}
 
 module "client_cluster_1_vmotion" {
   source = "./modules/epg-bd-config"
@@ -431,22 +404,6 @@ module "mgmt_cluster_vmware" {
   vlan_tag          = "vlan-101"
   subnets           = var.mgmt_cluster_vmware_subnets
   access_generic_id = aci_access_generic.mgmt_esx.id
-
-  pod_id   = var.pod_id
-  app_prof = aci_application_profile.vmware.id
-  phys_dom = aci_physical_domain.vmware.id
-  tenant   = var.ukcloud_mgmt_tenant
-  l3_out   = [var.ukcloud_mgmt_l3_out]
-  vrf      = var.ukcloud_mgmt_vrf
-}
-
-module "storage_mgmt" {
-  source = "./modules/epg-bd-config"
-
-  epg_name          = "storage_mgmt"
-  vlan_tag          = "vlan-118"
-  subnets           = var.storage_mgmt_subnets
-  access_generic_id = aci_access_generic.cimc.id
 
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
