@@ -332,7 +332,7 @@ module "client_cluster_1_vmotion" {
   source = "./modules/epg-bd-config"
 
   epg_name          = "client_cluster_1_vmotion"
-  vlan_tag          = "vlan-104"
+  vlan_tag          = "vlan-105"
   subnets           = var.client_cluster_1_vmotion_subnets
   access_generic_id = aci_access_generic.client_esx.id
 
