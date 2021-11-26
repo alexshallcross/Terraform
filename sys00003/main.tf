@@ -31,7 +31,7 @@ module "pod00035" {
     leafs_601_602 = {
       node_ids   = [601, 602]
       clnt_ports = [1, 2, 3, 4, 13, 14, 15]
-      mgmt_ports = [23, 24]
+      mgmt_ports = []
       cimc_ports = []
     }
   }
