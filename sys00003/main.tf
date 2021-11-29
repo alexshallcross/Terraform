@@ -82,3 +82,127 @@ module "pod00035" {
   vmm_host    = "10.44.42.2"
   vmm_svc_acc = "svc_pod00035-vmm@il2management"
 }
+
+#########################
+#### Imported Config ####
+#########################
+
+# tn-skyscape_mgmt
+
+# ap-pod00008_avamar_mgmt
+
+resource "aci_application_epg" "pod00008_avamar_mgmt_protection" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_avamar_mgmt"
+  name                   = "pod00008_avamar_mgmt_protection"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_avamar_mgmt_protection"
+}
+
+# ap-pod00008_client_cluster1
+
+resource "aci_application_epg" "pod00008_client_cluster1_scaleio_data1" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
+  name                   = "pod00008_client_cluster1_scaleio_data1"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster1_scaleio_data1"
+}
+
+resource "aci_application_epg" "pod00008_client_cluster1_scaleio_data2" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
+  name                   = "pod00008_client_cluster1_scaleio_data2"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster1_scaleio_data2"
+}
+
+resource "aci_application_epg" "pod00008_client_cluster1_scaleio_mgmt" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
+  name                   = "pod00008_client_cluster1_scaleio_mgmt"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster1_scaleio_mgmt"
+}
+
+resource "aci_application_epg" "pod00008_client_cluster1_vmotion" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
+  name                   = "pod00008_client_cluster1_vmotion"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster1_vmotion"
+}
+
+resource "aci_application_epg" "pod00008_client_cluster1_vmware" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
+  name                   = "pod00008_client_cluster1_vmware"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster1_vmware"
+}
+
+resource "aci_application_epg" "pod00008_client_cluster1_vxlan" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
+  name                   = "pod00008_client_cluster1_vxlan"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster1_vxlan"
+}
+
+# ap-pod00008_client_cluster2
+
+resource "aci_application_epg" "pod00008_client_cluster2_scaleio_mgmt" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster2"
+  name                   = "pod00008_client_cluster2_scaleio_mgmt"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster2_scaleio_mgmt"
+}
+
+resource "aci_application_epg" "pod00008_client_cluster2_vmotion" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster2"
+  name                   = "pod00008_client_cluster2_vmotion"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster2_vmotion"
+}
+
+resource "aci_application_epg" "pod00008_client_cluster2_vmware" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster2"
+  name                   = "pod00008_client_cluster2_vmware"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster2_vmware"
+}
+
+# ap-pod00008_container_transit
+
+resource "aci_application_epg" "pod00008_container_transit" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_container_transit"
+  name                   = "pod00008_container_transit"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_container_transit"
+}
+
+# ap-pod00008_management
+
+resource "aci_application_epg" "pod00008_cimc" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
+  name                   = "pod00008_cimc"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_cimc"
+}
+
+resource "aci_application_epg" "pod00008_mgmt_scaleio_data1" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
+  name                   = "pod00008_mgmt_scaleio_data1"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_scaleio_data1"
+}
+
+resource "aci_application_epg" "pod00008_mgmt_scaleio_data2" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
+  name                   = "pod00008_mgmt_scaleio_data2"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_scaleio_data2"
+}
+
+resource "aci_application_epg" "pod00008_mgmt_scaleio_mgmt" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
+  name                   = "pod00008_mgmt_scaleio_mgmt"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_scaleio_mgmt"
+}
+
+resource "aci_application_epg" "pod00008_mgmt_tools" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
+  name                   = "pod00008_mgmt_tools"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_tools"
+}
+
+resource "aci_application_epg" "pod00008_mgmt_vmotion" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
+  name                   = "pod00008_mgmt_vmotion"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_vmotion"
+}
+
+resource "aci_application_epg" "pod00008_mgmt_vmware" {
+  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
+  name                   = "pod00008_mgmt_vmware"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_vmware"
+}
