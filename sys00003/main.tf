@@ -236,3 +236,49 @@ resource "aci_application_epg" "pod00008_mgmt_zvm" {
   name                   = "pod00008_mgmt_zvm"
   relation_fv_rs_bd      = "uni/tn-assured_protection/bd-bd_pod00008_mgmt_zvm"
 }
+
+# tn-internet
+
+# ap-pod00008_internet_tenants
+
+resource "aci_application_epg" "pod00008_mgmt_vmware" {
+  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  name                   = "pod00008_mgmt_vmware"
+  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_mgmt_vmware"
+}
+
+resource "aci_application_epg" "pod00008_nti00009i2" {
+  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  name                   = "pod00008_nti00009i2"
+  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_nti00009i2"
+}
+
+resource "aci_application_epg" "pod00008_nti00219i2" {
+  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  name                   = "pod00008_nti00219i2"
+  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_nti00219i2"
+}
+
+resource "aci_application_epg" "pod00008_nti00241i2" {
+  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  name                   = "pod00008_nti00241i2"
+  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_nti00241i2"
+}
+
+resource "aci_application_epg" "pod00008_nti00242i2" {
+  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  name                   = "pod00008_nti00242i2"
+  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_nti00242i2"
+}
+
+resource "aci_application_epg" "pod00008_t0_internet_provider_transit" {
+  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  name                   = "pod00008_t0_internet_provider_transit"
+  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_t0_internet_provider_transit"
+}
+
+resource "aci_application_epg" "pod00008_t0_transit_epg1" {
+  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  name                   = "pod00008_t0_transit_epg1"
+  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_t0_transit_epg1"
+}
