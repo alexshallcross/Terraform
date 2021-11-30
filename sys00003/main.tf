@@ -206,3 +206,33 @@ resource "aci_application_epg" "pod00008_mgmt_vmware" {
   name                   = "pod00008_mgmt_vmware"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_vmware"
 }
+
+# tn-assured_protection
+
+# ap-pod0008_avamar (sic)
+
+resource "aci_application_epg" "pod00008_client_avamar" {
+  application_profile_dn = "uni/tn-assured_protection/ap-pod0008_avamar"
+  name                   = "pod00008_client_avamar"
+  relation_fv_rs_bd      = "uni/tn-assured_protection/bd-bd_pod00008_client_avamar"
+}
+
+# ap-pod00008_zerto
+
+resource "aci_application_epg" "pod00008_client_zcc" {
+  application_profile_dn = "uni/tn-assured_protection/ap-pod00008_zerto"
+  name                   = "pod00008_client_zcc"
+  relation_fv_rs_bd      = "uni/tn-assured_protection/bd-bd_pod00008_client_zcc"
+}
+
+resource "aci_application_epg" "pod00008_client_zvra" {
+  application_profile_dn = "uni/tn-assured_protection/ap-pod00008_zerto"
+  name                   = "pod00008_client_zvra"
+  relation_fv_rs_bd      = "uni/tn-assured_protection/bd-bd_pod00008_client_zvra"
+}
+
+resource "aci_application_epg" "pod00008_mgmt_zvm" {
+  application_profile_dn = "uni/tn-assured_protection/ap-pod00008_zerto"
+  name                   = "pod00008_mgmt_zvm"
+  relation_fv_rs_bd      = "uni/tn-assured_protection/bd-bd_pod00008_mgmt_zvm"
+}
