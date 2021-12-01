@@ -268,12 +268,25 @@ resource "aci_application_epg" "pod00008_client_cluster2_vmware" {
   }
 }
 
-# ap-pod00008_container_transit
+## Application Profile - pod00008_container_transit
+
+resource "aci_application_profile" "pod00008_container_transit" {
+  tenant_dn = "uni/tn-skyscape_mgmt"
+  name      = "pod00008_container_transit"
+}
+
+## EPGs in Application Profile - pod00008_container_transit
 
 resource "aci_application_epg" "pod00008_container_transit" {
-  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_container_transit"
+  application_profile_dn = aci_application_profile.pod00008_container_transit.id
   name                   = "pod00008_container_transit"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_container_transit"
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
