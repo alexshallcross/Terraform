@@ -87,7 +87,7 @@ module "pod00035" {
 #### Imported Config ####
 #########################
 
-# tn-skyscape_mgmt
+## Tenant - skyscape_mgmt
 
 ## Application Profile - pod00008_avamar_mgmt
 
@@ -96,27 +96,36 @@ resource "aci_application_profile" "pod00008_avamar_mgmt" {
   name      = "pod00008_avamar_mgmt"
 }
 
+## EPGs in Application Profile - pod00008_avamar_mgmt
+
 resource "aci_application_epg" "pod00008_avamar_mgmt_protection" {
   application_profile_dn = aci_application_profile.pod00008_avamar_mgmt.id
   name                   = "pod00008_avamar_mgmt_protection"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_avamar_mgmt_protection"
-  lifecycle {
-    ignore_changes = [
-      relation_fv_rs_graph_def,
-    ]
-  }
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
   relation_fv_rs_cons = [
     "uni/tn-common/brc-default",
   ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
-# ap-pod00008_client_cluster1
+## Application Profile - pod00008_client_cluster1
+
+resource "aci_application_profile" "pod00008_client_cluster1" {
+  tenant_dn = "uni/tn-skyscape_mgmt"
+  name      = "pod00008_client_cluster1"
+}
+
+## EPGs in Application Profile - pod00008_client_cluster1
 
 resource "aci_application_epg" "pod00008_client_cluster1_scaleio_data1" {
-  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
+  application_profile_dn = aci_application_profile.pod00008_client_cluster1.id
   name                   = "pod00008_client_cluster1_scaleio_data1"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_scaleio_data1"
   lifecycle {
@@ -127,7 +136,7 @@ resource "aci_application_epg" "pod00008_client_cluster1_scaleio_data1" {
 }
 
 resource "aci_application_epg" "pod00008_client_cluster1_scaleio_data2" {
-  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
+  application_profile_dn = aci_application_profile.pod00008_client_cluster1.id
   name                   = "pod00008_client_cluster1_scaleio_data2"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_scaleio_data2"
   lifecycle {
@@ -138,7 +147,7 @@ resource "aci_application_epg" "pod00008_client_cluster1_scaleio_data2" {
 }
 
 resource "aci_application_epg" "pod00008_client_cluster1_scaleio_mgmt" {
-  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
+  application_profile_dn = aci_application_profile.pod00008_client_cluster1.id
   name                   = "pod00008_client_cluster1_scaleio_mgmt"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_scaleio_mgmt"
   lifecycle {
@@ -149,7 +158,7 @@ resource "aci_application_epg" "pod00008_client_cluster1_scaleio_mgmt" {
 }
 
 resource "aci_application_epg" "pod00008_client_cluster1_vmotion" {
-  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
+  application_profile_dn = aci_application_profile.pod00008_client_cluster1.id
   name                   = "pod00008_client_cluster1_vmotion"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_vmotion"
   lifecycle {
@@ -160,7 +169,7 @@ resource "aci_application_epg" "pod00008_client_cluster1_vmotion" {
 }
 
 resource "aci_application_epg" "pod00008_client_cluster1_vmware" {
-  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
+  application_profile_dn = aci_application_profile.pod00008_client_cluster1.id
   name                   = "pod00008_client_cluster1_vmware"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_vmware"
   lifecycle {
@@ -171,7 +180,7 @@ resource "aci_application_epg" "pod00008_client_cluster1_vmware" {
 }
 
 resource "aci_application_epg" "pod00008_client_cluster1_vxlan" {
-  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
+  application_profile_dn = aci_application_profile.pod00008_client_cluster1.id
   name                   = "pod00008_client_cluster1_vxlan"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_vxlan"
   lifecycle {
