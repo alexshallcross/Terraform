@@ -94,7 +94,18 @@ module "pod00035" {
 resource "aci_application_epg" "pod00008_avamar_mgmt_protection" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_avamar_mgmt"
   name                   = "pod00008_avamar_mgmt_protection"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_avamar_mgmt_protection"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_avamar_mgmt_protection"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
 }
 
 # ap-pod00008_client_cluster1
@@ -102,37 +113,67 @@ resource "aci_application_epg" "pod00008_avamar_mgmt_protection" {
 resource "aci_application_epg" "pod00008_client_cluster1_scaleio_data1" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
   name                   = "pod00008_client_cluster1_scaleio_data1"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster1_scaleio_data1"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_scaleio_data1"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_client_cluster1_scaleio_data2" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
   name                   = "pod00008_client_cluster1_scaleio_data2"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster1_scaleio_data2"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_scaleio_data2"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_client_cluster1_scaleio_mgmt" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
   name                   = "pod00008_client_cluster1_scaleio_mgmt"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster1_scaleio_mgmt"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_scaleio_mgmt"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_client_cluster1_vmotion" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
   name                   = "pod00008_client_cluster1_vmotion"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster1_vmotion"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_vmotion"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_client_cluster1_vmware" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
   name                   = "pod00008_client_cluster1_vmware"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster1_vmware"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_vmware"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_client_cluster1_vxlan" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster1"
   name                   = "pod00008_client_cluster1_vxlan"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster1_vxlan"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_vxlan"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 # ap-pod00008_client_cluster2
@@ -140,19 +181,34 @@ resource "aci_application_epg" "pod00008_client_cluster1_vxlan" {
 resource "aci_application_epg" "pod00008_client_cluster2_scaleio_mgmt" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster2"
   name                   = "pod00008_client_cluster2_scaleio_mgmt"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster2_scaleio_mgmt"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster2_scaleio_mgmt"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_client_cluster2_vmotion" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster2"
   name                   = "pod00008_client_cluster2_vmotion"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster2_vmotion"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster2_vmotion"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_client_cluster2_vmware" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_client_cluster2"
   name                   = "pod00008_client_cluster2_vmware"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_client_cluster2_vmware"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster2_vmware"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 # ap-pod00008_container_transit
@@ -160,7 +216,12 @@ resource "aci_application_epg" "pod00008_client_cluster2_vmware" {
 resource "aci_application_epg" "pod00008_container_transit" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_container_transit"
   name                   = "pod00008_container_transit"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_container_transit"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_container_transit"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 # ap-pod00008_management
@@ -168,43 +229,78 @@ resource "aci_application_epg" "pod00008_container_transit" {
 resource "aci_application_epg" "pod00008_cimc" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
   name                   = "pod00008_cimc"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_cimc"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_cimc"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_mgmt_scaleio_data1" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
   name                   = "pod00008_mgmt_scaleio_data1"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_scaleio_data1"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_mgmt_scaleio_data1"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_mgmt_scaleio_data2" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
   name                   = "pod00008_mgmt_scaleio_data2"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_scaleio_data2"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_mgmt_scaleio_data2"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_mgmt_scaleio_mgmt" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
   name                   = "pod00008_mgmt_scaleio_mgmt"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_scaleio_mgmt"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_mgmt_scaleio_mgmt"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_mgmt_tools" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
   name                   = "pod00008_mgmt_tools"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_tools"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_mgmt_tools"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_mgmt_vmotion" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
   name                   = "pod00008_mgmt_vmotion"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_vmotion"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_mgmt_vmotion"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_mgmt_vmware" {
   application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_management"
   name                   = "pod00008_mgmt_vmware"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/bd-bd_pod00008_mgmt_vmware"
+  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_mgmt_vmware"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 # tn-assured_protection
@@ -214,7 +310,12 @@ resource "aci_application_epg" "pod00008_mgmt_vmware" {
 resource "aci_application_epg" "pod00008_client_avamar" {
   application_profile_dn = "uni/tn-assured_protection/ap-pod0008_avamar"
   name                   = "pod00008_client_avamar"
-  relation_fv_rs_bd      = "uni/tn-assured_protection/bd-bd_pod00008_client_avamar"
+  relation_fv_rs_bd      = "uni/tn-assured_protection/BD-bd_pod00008_client_avamar"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 # ap-pod00008_zerto
@@ -222,63 +323,114 @@ resource "aci_application_epg" "pod00008_client_avamar" {
 resource "aci_application_epg" "pod00008_client_zcc" {
   application_profile_dn = "uni/tn-assured_protection/ap-pod00008_zerto"
   name                   = "pod00008_client_zcc"
-  relation_fv_rs_bd      = "uni/tn-assured_protection/bd-bd_pod00008_client_zcc"
+  relation_fv_rs_bd      = "uni/tn-assured_protection/BD-bd_pod00008_client_zcc"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_client_zvra" {
   application_profile_dn = "uni/tn-assured_protection/ap-pod00008_zerto"
   name                   = "pod00008_client_zvra"
-  relation_fv_rs_bd      = "uni/tn-assured_protection/bd-bd_pod00008_client_zvra"
+  relation_fv_rs_bd      = "uni/tn-assured_protection/BD-bd_pod00008_client_zvra"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_mgmt_zvm" {
   application_profile_dn = "uni/tn-assured_protection/ap-pod00008_zerto"
   name                   = "pod00008_mgmt_zvm"
-  relation_fv_rs_bd      = "uni/tn-assured_protection/bd-bd_pod00008_mgmt_zvm"
+  relation_fv_rs_bd      = "uni/tn-assured_protection/BD-bd_pod00008_mgmt_zvm"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
+
 
 # tn-internet
 
 # ap-pod00008_internet_tenants
 
-resource "aci_application_epg" "pod00008_mgmt_vmware" {
+resource "aci_application_epg" "pod00008_mgmt_vmware_internet" {
   application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
   name                   = "pod00008_mgmt_vmware"
-  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_mgmt_vmware"
+  relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_mgmt_vmware"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_nti00009i2" {
   application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
   name                   = "pod00008_nti00009i2"
-  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_nti00009i2"
+  relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_nti00009i2"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_nti00219i2" {
   application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
   name                   = "pod00008_nti00219i2"
-  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_nti00219i2"
+  relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_nti00219i2"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_nti00241i2" {
   application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
   name                   = "pod00008_nti00241i2"
-  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_nti00241i2"
+  relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_nti00241i2"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_nti00242i2" {
   application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
   name                   = "pod00008_nti00242i2"
-  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_nti00242i2"
+  relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_nti00242i2"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_t0_internet_provider_transit" {
   application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
   name                   = "pod00008_t0_internet_provider_transit"
-  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_t0_internet_provider_transit"
+  relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_t0_internet_provider_transit"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
 
 resource "aci_application_epg" "pod00008_t0_transit_epg1" {
   application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
   name                   = "pod00008_t0_transit_epg1"
-  relation_fv_rs_bd      = "uni/tn-internet/bd-bd_pod00008_t0_transit_epg1"
+  relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_t0_transit_epg1"
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
 }
