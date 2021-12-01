@@ -422,12 +422,19 @@ resource "aci_application_epg" "pod00008_mgmt_vmware" {
   }
 }
 
-# tn-assured_protection
+## Tenant - assured_protection
 
-# ap-pod0008_avamar (sic)
+## Application Profile - pod0008_avamar (sic)
+
+resource "aci_application_profile" "pod00008_avamar" {
+  tenant_dn = "uni/tn-assured_protection"
+  name      = "pod0008_avamar"
+}
+
+## EPGs in Application Profile - pod0008_avamar (sic)
 
 resource "aci_application_epg" "pod00008_client_avamar" {
-  application_profile_dn = "uni/tn-assured_protection/ap-pod0008_avamar"
+  application_profile_dn = aci_application_profile.pod00008_avamar.id
   name                   = "pod00008_client_avamar"
   relation_fv_rs_bd      = "uni/tn-assured_protection/BD-bd_pod00008_client_avamar"
   lifecycle {
