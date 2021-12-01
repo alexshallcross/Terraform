@@ -89,10 +89,15 @@ module "pod00035" {
 
 # tn-skyscape_mgmt
 
-# ap-pod00008_avamar_mgmt
+## Application Profile - pod00008_avamar_mgmt
+
+resource "aci_application_profile" "pod00008_avamar_mgmt" {
+  tenant_dn = "uni/tn-skyscape_mgmt"
+  name      = "pod00008_avamar_mgmt"
+}
 
 resource "aci_application_epg" "pod00008_avamar_mgmt_protection" {
-  application_profile_dn = "uni/tn-skyscape_mgmt/ap-pod00008_avamar_mgmt"
+  application_profile_dn = aci_application_profile.pod00008_avamar_mgmt.id
   name                   = "pod00008_avamar_mgmt_protection"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_avamar_mgmt_protection"
   lifecycle {
