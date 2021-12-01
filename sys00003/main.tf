@@ -437,6 +437,12 @@ resource "aci_application_epg" "pod00008_client_avamar" {
   application_profile_dn = aci_application_profile.pod00008_avamar.id
   name                   = "pod00008_client_avamar"
   relation_fv_rs_bd      = "uni/tn-assured_protection/BD-bd_pod00008_client_avamar"
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -444,12 +450,27 @@ resource "aci_application_epg" "pod00008_client_avamar" {
   }
 }
 
-# ap-pod00008_zerto
+## Application Profile - pod00008_zerto
+
+resource "aci_application_profile" "pod00008_zerto" {
+  tenant_dn = "uni/tn-assured_protection"
+  name      = "pod00008_zerto"
+}
+
+## EPGs in Application Profile - pod00008_zerto
 
 resource "aci_application_epg" "pod00008_client_zcc" {
-  application_profile_dn = "uni/tn-assured_protection/ap-pod00008_zerto"
+  application_profile_dn = aci_application_profile.pod00008_zerto.id
   name                   = "pod00008_client_zcc"
   relation_fv_rs_bd      = "uni/tn-assured_protection/BD-bd_pod00008_client_zcc"
+  relation_fv_rs_prov = [
+    "uni/tn-assured_protection/brc-zvm_to_zcc",
+    "uni/tn-assured_protection/brc-zvra_to_zcc",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-assured_protection/brc-zcc_to_zvm",
+    "uni/tn-assured_protection/brc-zcc_to_zvra",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -458,9 +479,19 @@ resource "aci_application_epg" "pod00008_client_zcc" {
 }
 
 resource "aci_application_epg" "pod00008_client_zvra" {
-  application_profile_dn = "uni/tn-assured_protection/ap-pod00008_zerto"
+  application_profile_dn = aci_application_profile.pod00008_zerto.id
   name                   = "pod00008_client_zvra"
   relation_fv_rs_bd      = "uni/tn-assured_protection/BD-bd_pod00008_client_zvra"
+  relation_fv_rs_prov = [
+    "uni/tn-assured_protection/brc-ext_to_zvra",
+    "uni/tn-assured_protection/brc-zcc_to_zvra",
+    "uni/tn-assured_protection/brc-zvm_to_zvra",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-assured_protection/brc-zvra_to_ext",
+    "uni/tn-assured_protection/brc-zvra_to_zcc",
+    "uni/tn-assured_protection/brc-zvra_to_zvm",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -469,9 +500,19 @@ resource "aci_application_epg" "pod00008_client_zvra" {
 }
 
 resource "aci_application_epg" "pod00008_mgmt_zvm" {
-  application_profile_dn = "uni/tn-assured_protection/ap-pod00008_zerto"
+  application_profile_dn = aci_application_profile.pod00008_zerto.id
   name                   = "pod00008_mgmt_zvm"
   relation_fv_rs_bd      = "uni/tn-assured_protection/BD-bd_pod00008_mgmt_zvm"
+  relation_fv_rs_prov = [
+    "uni/tn-assured_protection/brc-ext_to_zvm",
+    "uni/tn-assured_protection/brc-zcc_to_zvm",
+    "uni/tn-assured_protection/brc-zvra_to_zvm",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-assured_protection/brc-zvm_to_ext",
+    "uni/tn-assured_protection/brc-zvm_to_zcc",
+    "uni/tn-assured_protection/brc-zvm_to_zvra",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
