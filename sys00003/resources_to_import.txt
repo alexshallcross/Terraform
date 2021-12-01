@@ -5,3 +5,4 @@ terraform import aci_application_profile.pod00008_container_transit uni/tn-skysc
 terraform import aci_application_profile.pod00008_management uni/tn-skyscape_mgmt/ap-pod00008_management
 terraform import aci_application_profile.pod00008_avamar uni/tn-assured_protection/ap-pod00008_avamar
 terraform import aci_application_profile.pod00008_zerto uni/tn-assured_protection/ap-pod00008_zerto
+terraform import aci_application_profile.pod00008_internet_tenants uni/tn-internet/ap-pod00008_internet_tenants

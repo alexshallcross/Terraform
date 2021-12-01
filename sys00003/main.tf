@@ -521,14 +521,27 @@ resource "aci_application_epg" "pod00008_mgmt_zvm" {
 }
 
 
-# tn-internet
+## Tenant - internet
 
-# ap-pod00008_internet_tenants
+## Application profile - pod00008_internet_tenants
+
+resource "aci_application_profile" "pod00008_internet_tenants" {
+  tenant_dn = "uni/tn-internet"
+  name      = "pod00008_internet_tenants"
+}
+
+## EPGs in Application profile - pod00008_internet_tenants
 
 resource "aci_application_epg" "pod00008_mgmt_vmware_internet" {
-  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
   name                   = "pod00008_mgmt_vmware"
   relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_mgmt_vmware"
+  relation_fv_rs_prov = [
+    "uni/tn-internet/brc-skyscape_vmware_mgmt_internet_in",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-internet/brc-skyscape_vmware_mgmt_internet_out",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -537,9 +550,18 @@ resource "aci_application_epg" "pod00008_mgmt_vmware_internet" {
 }
 
 resource "aci_application_epg" "pod00008_nti00009i2" {
-  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
   name                   = "pod00008_nti00009i2"
   relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_nti00009i2"
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+    "uni/tn-internet/brc-internet_in",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+    "uni/tn-internet/brc-internet_out",
+    "uni/tn-internet/brc-skyscape_vmware_mgmt_internet_in",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -548,7 +570,7 @@ resource "aci_application_epg" "pod00008_nti00009i2" {
 }
 
 resource "aci_application_epg" "pod00008_nti00219i2" {
-  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
   name                   = "pod00008_nti00219i2"
   relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_nti00219i2"
   lifecycle {
@@ -559,9 +581,15 @@ resource "aci_application_epg" "pod00008_nti00219i2" {
 }
 
 resource "aci_application_epg" "pod00008_nti00241i2" {
-  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
   name                   = "pod00008_nti00241i2"
   relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_nti00241i2"
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -570,9 +598,15 @@ resource "aci_application_epg" "pod00008_nti00241i2" {
 }
 
 resource "aci_application_epg" "pod00008_nti00242i2" {
-  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
   name                   = "pod00008_nti00242i2"
   relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_nti00242i2"
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -581,9 +615,15 @@ resource "aci_application_epg" "pod00008_nti00242i2" {
 }
 
 resource "aci_application_epg" "pod00008_t0_internet_provider_transit" {
-  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
   name                   = "pod00008_t0_internet_provider_transit"
   relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_t0_internet_provider_transit"
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -592,9 +632,15 @@ resource "aci_application_epg" "pod00008_t0_internet_provider_transit" {
 }
 
 resource "aci_application_epg" "pod00008_t0_transit_epg1" {
-  application_profile_dn = "uni/tn-internet/ap-pod00008_internet_tenants"
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
   name                   = "pod00008_t0_transit_epg1"
   relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_t0_transit_epg1"
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
