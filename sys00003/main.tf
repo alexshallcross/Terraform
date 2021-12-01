@@ -150,6 +150,12 @@ resource "aci_application_epg" "pod00008_client_cluster1_scaleio_mgmt" {
   application_profile_dn = aci_application_profile.pod00008_client_cluster1.id
   name                   = "pod00008_client_cluster1_scaleio_mgmt"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_scaleio_mgmt"
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -161,6 +167,12 @@ resource "aci_application_epg" "pod00008_client_cluster1_vmotion" {
   application_profile_dn = aci_application_profile.pod00008_client_cluster1.id
   name                   = "pod00008_client_cluster1_vmotion"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_vmotion"
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -172,6 +184,12 @@ resource "aci_application_epg" "pod00008_client_cluster1_vmware" {
   application_profile_dn = aci_application_profile.pod00008_client_cluster1.id
   name                   = "pod00008_client_cluster1_vmware"
   relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_vmware"
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
