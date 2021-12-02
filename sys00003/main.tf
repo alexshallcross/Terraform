@@ -280,7 +280,7 @@ resource "aci_application_profile" "pod00008_container_transit" {
 resource "aci_application_epg" "pod00008_container_transit" {
   application_profile_dn = aci_application_profile.pod00008_container_transit.id
   name                   = "pod00008_container_transit"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_container_transit"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_container_transit.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -718,4 +718,11 @@ resource "aci_bridge_domain" "bd_pod00008_client_cluster2_vmware" {
   name                = "bd_pod00008_client_cluster2_vmware"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00008_container_transit" {
+  tenant_dn     = "uni/tn-skyscape_mgmt"
+  name          = "bd_pod00008_container_transit"
+  unicast_route = "no"
+  ip_learning   = "no"
 }
