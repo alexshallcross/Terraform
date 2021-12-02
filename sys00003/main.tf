@@ -237,7 +237,7 @@ resource "aci_application_epg" "pod00008_client_cluster2_scaleio_mgmt" {
 resource "aci_application_epg" "pod00008_client_cluster2_vmotion" {
   application_profile_dn = aci_application_profile.pod00008_client_cluster2.id
   name                   = "pod00008_client_cluster2_vmotion"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster2_vmotion"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_client_cluster2_vmotion.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -702,6 +702,13 @@ resource "aci_bridge_domain" "bd_pod00008_client_cluster1_vxlan" {
 resource "aci_bridge_domain" "bd_pod00008_client_cluster2_scaleio_mgmt" {
   tenant_dn           = "uni/tn-skyscape_mgmt"
   name                = "bd_pod00008_client_cluster2_scaleio_mgmt"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00008_client_cluster2_vmotion" {
+  tenant_dn           = "uni/tn-skyscape_mgmt"
+  name                = "bd_pod00008_client_cluster2_vmotion"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
