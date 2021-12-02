@@ -200,7 +200,7 @@ resource "aci_application_epg" "pod00008_client_cluster1_vmware" {
 resource "aci_application_epg" "pod00008_client_cluster1_vxlan" {
   application_profile_dn = aci_application_profile.pod00008_client_cluster1.id
   name                   = "pod00008_client_cluster1_vxlan"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_vxlan"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_client_cluster1_vxlan.id
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -688,6 +688,13 @@ resource "aci_bridge_domain" "bd_pod00008_client_cluster1_vmotion" {
 resource "aci_bridge_domain" "bd_pod00008_client_cluster1_vmware" {
   tenant_dn           = "uni/tn-skyscape_mgmt"
   name                = "bd_pod00008_client_cluster1_vmware"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00008_client_cluster1_vxlan" {
+  tenant_dn           = "uni/tn-skyscape_mgmt"
+  name                = "bd_pod00008_client_cluster1_vxlan"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
