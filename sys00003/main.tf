@@ -436,7 +436,7 @@ resource "aci_application_profile" "pod00008_avamar" {
 resource "aci_application_epg" "pod00008_client_avamar" {
   application_profile_dn = aci_application_profile.pod00008_avamar.id
   name                   = "pod00008_client_avamar"
-  relation_fv_rs_bd      = "uni/tn-assured_protection/BD-bd_pod00008_client_avamar"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_client_avamar.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -648,7 +648,7 @@ resource "aci_application_epg" "pod00008_t0_transit_epg1" {
   }
 }
 
-## Bridge Domains
+## Bridge Domains - skyscape_mgmt
 
 resource "aci_bridge_domain" "bd_pod00008_avamar_mgmt_protection" {
   tenant_dn           = "uni/tn-skyscape_mgmt"
@@ -772,6 +772,15 @@ resource "aci_bridge_domain" "bd_pod00008_mgmt_vmotion" {
 resource "aci_bridge_domain" "bd_pod00008_mgmt_vmware" {
   tenant_dn           = "uni/tn-skyscape_mgmt"
   name                = "bd_pod00008_mgmt_vmware"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+## Bridge Domains- assured_protection
+
+resource "aci_bridge_domain" "bd_pod00008_client_avamar" {
+  tenant_dn           = "uni/tn-assured_protection"
+  name                = "bd_pod00008_client_avamar"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
