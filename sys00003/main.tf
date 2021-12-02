@@ -306,7 +306,7 @@ resource "aci_application_profile" "pod00008_management" {
 resource "aci_application_epg" "pod00008_cimc" {
   application_profile_dn = aci_application_profile.pod00008_management.id
   name                   = "pod00008_cimc"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_cimc"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_cimc.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
