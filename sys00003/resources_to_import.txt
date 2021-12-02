@@ -27,3 +27,4 @@ terraform import aci_bridge_domain.bd_pod00008_mgmt_vmware uni/tn-skyscape_mgmt/
 terraform import aci_bridge_domain.bd_pod00008_client_avamar uni/tn-assured_protection/BD-bd_pod00008_client_avamar
 terraform import aci_bridge_domain.bd_pod00008_client_zcc uni/tn-assured_protection/BD-bd_pod00008_client_zcc
 terraform import aci_bridge_domain.bd_pod00008_client_zvra uni/tn-assured_protection/BD-bd_pod00008_client_zvra
+terraform import aci_bridge_domain.bd_pod00008_client_zvm uni/tn-assured_protection/BD-bd_pod00008_client_zvm
