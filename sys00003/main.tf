@@ -408,7 +408,7 @@ resource "aci_application_epg" "pod00008_mgmt_vmotion" {
 resource "aci_application_epg" "pod00008_mgmt_vmware" {
   application_profile_dn = aci_application_profile.pod00008_management.id
   name                   = "pod00008_mgmt_vmware"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_mgmt_vmware"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_mgmt_vmware.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -765,6 +765,13 @@ resource "aci_bridge_domain" "bd_pod00008_mgmt_tools" {
 resource "aci_bridge_domain" "bd_pod00008_mgmt_vmotion" {
   tenant_dn           = "uni/tn-skyscape_mgmt"
   name                = "bd_pod00008_mgmt_vmotion"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00008_mgmt_vmware" {
+  tenant_dn           = "uni/tn-skyscape_mgmt"
+  name                = "bd_pod00008_mgmt_vmware"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
