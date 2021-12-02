@@ -29,3 +29,4 @@ terraform import aci_bridge_domain.bd_pod00008_client_zcc uni/tn-assured_protect
 terraform import aci_bridge_domain.bd_pod00008_client_zvra uni/tn-assured_protection/BD-bd_pod00008_client_zvra
 terraform import aci_bridge_domain.bd_pod00008_client_zvm uni/tn-assured_protection/BD-bd_pod00008_client_zvm
 terraform import aci_bridge_domain.bd_pod00008_mgmt_vmware_internet uni/tn-internet/BD-bd_pod00008_mgmt_vmware
+terraform import aci_bridge_domain.bd_pod00008_nti00009i2 uni/tn-internet/BD-bd_pod00008_nti00009i2

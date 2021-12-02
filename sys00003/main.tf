@@ -552,7 +552,7 @@ resource "aci_application_epg" "pod00008_mgmt_vmware_internet" {
 resource "aci_application_epg" "pod00008_nti00009i2" {
   application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
   name                   = "pod00008_nti00009i2"
-  relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_nti00009i2"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_nti00009i2.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
     "uni/tn-internet/brc-internet_in",
@@ -809,6 +809,13 @@ resource "aci_bridge_domain" "bd_pod00008_mgmt_zvm" {
 resource "aci_bridge_domain" "bd_pod00008_mgmt_vmware_internet" {
   tenant_dn           = "uni/tn-internet"
   name                = "bd_pod00008_mgmt_vmware"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00008_nti00009i2" {
+  tenant_dn           = "uni/tn-internet"
+  name                = "bd_pod00008_nti00009i2"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
