@@ -481,7 +481,7 @@ resource "aci_application_epg" "pod00008_client_zcc" {
 resource "aci_application_epg" "pod00008_client_zvra" {
   application_profile_dn = aci_application_profile.pod00008_zerto.id
   name                   = "pod00008_client_zvra"
-  relation_fv_rs_bd      = "uni/tn-assured_protection/BD-bd_pod00008_client_zvra"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_client_zvra.id
   relation_fv_rs_prov = [
     "uni/tn-assured_protection/brc-ext_to_zvra",
     "uni/tn-assured_protection/brc-zcc_to_zvra",
@@ -788,6 +788,13 @@ resource "aci_bridge_domain" "bd_pod00008_client_avamar" {
 resource "aci_bridge_domain" "bd_pod00008_client_zcc" {
   tenant_dn           = "uni/tn-assured_protection"
   name                = "bd_pod00008_client_zcc"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00008_client_zvra" {
+  tenant_dn           = "uni/tn-assured_protection"
+  name                = "bd_pod00008_client_zvra"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
