@@ -127,7 +127,7 @@ resource "aci_application_profile" "pod00008_client_cluster1" {
 resource "aci_application_epg" "pod00008_client_cluster1_scaleio_data1" {
   application_profile_dn = aci_application_profile.pod00008_client_cluster1.id
   name                   = "pod00008_client_cluster1_scaleio_data1"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_scaleio_data1"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_client_cluster1_scaleio_data1.id
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -653,6 +653,13 @@ resource "aci_application_epg" "pod00008_t0_transit_epg1" {
 resource "aci_bridge_domain" "bd_pod00008_avamar_mgmt_protection" {
   tenant_dn                   = "uni/tn-skyscape_mgmt"
   name                        = "bd_pod00008_avamar_mgmt_protection"
+  arp_flood                   = "yes"
+  ep_move_detect_mode         = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00008_client_cluster1_scaleio_data1" {
+  tenant_dn                   = "uni/tn-skyscape_mgmt"
+  name                        = "bd_pod00008_client_cluster1_scaleio_data1"
   arp_flood                   = "yes"
   ep_move_detect_mode         = "garp"
 }

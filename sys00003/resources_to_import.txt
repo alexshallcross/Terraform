@@ -7,3 +7,4 @@ terraform import aci_application_profile.pod00008_avamar uni/tn-assured_protecti
 terraform import aci_application_profile.pod00008_zerto uni/tn-assured_protection/ap-pod00008_zerto
 terraform import aci_application_profile.pod00008_internet_tenants uni/tn-internet/ap-pod00008_internet_tenants
 terraform import aci_bridge_domain.bd_pod00008_avamar_mgmt_protection uni/tn-skyscape_mgmt/BD-bd_pod00008_avamar_mgmt_protection
+terraform import aci_bridge_domain.bd_pod00008_client_cluster1_scaleio_data1 uni/tn-skyscape_mgmt/BD-bd_pod00008_client_cluster1_scaleio_data1
