@@ -726,3 +726,10 @@ resource "aci_bridge_domain" "bd_pod00008_container_transit" {
   unicast_route = "no"
   ip_learning   = "no"
 }
+
+resource "aci_bridge_domain" "bd_pod00008_cimc" {
+  tenant_dn           = "uni/tn-skyscape_mgmt"
+  name                = "bd_pod00008_cimc"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
