@@ -374,7 +374,7 @@ resource "aci_application_epg" "pod00008_mgmt_scaleio_mgmt" {
 resource "aci_application_epg" "pod00008_mgmt_tools" {
   application_profile_dn = aci_application_profile.pod00008_management.id
   name                   = "pod00008_mgmt_tools"
-  relation_fv_rs_bd      = "uni/tn-skyscape_mgmt/BD-bd_pod00008_mgmt_tools"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_mgmt_tools.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -751,6 +751,13 @@ resource "aci_bridge_domain" "bd_pod00008_mgmt_scaleio_data2" {
 resource "aci_bridge_domain" "bd_pod00008_mgmt_scaleio_mgmt" {
   tenant_dn           = "uni/tn-skyscape_mgmt"
   name                = "bd_pod00008_mgmt_scaleio_mgmt"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00008_mgmt_tools" {
+  tenant_dn           = "uni/tn-skyscape_mgmt"
+  name                = "bd_pod00008_mgmt_tools"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }

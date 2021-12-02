@@ -21,3 +21,4 @@ terraform import aci_bridge_domain.bd_pod00008_cimc uni/tn-skyscape_mgmt/BD-bd_p
 terraform import aci_bridge_domain.bd_pod00008_mgmt_scaleio_data1 uni/tn-skyscape_mgmt/BD-bd_pod00008_mgmt_scaleio_data1
 terraform import aci_bridge_domain.bd_pod00008_mgmt_scaleio_data2 uni/tn-skyscape_mgmt/BD-bd_pod00008_mgmt_scaleio_data2
 terraform import aci_bridge_domain.bd_pod00008_mgmt_scaleio_mgmt uni/tn-skyscape_mgmt/BD-bd_pod00008_mgmt_scaleio_mgmt
+terraform import aci_bridge_domain.bd_pod00008_mgmt_tools uni/tn-skyscape_mgmt/BD-bd_pod00008_mgmt_tools
