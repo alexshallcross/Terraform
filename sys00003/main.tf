@@ -619,6 +619,13 @@ resource "aci_bridge_domain" "bd_pod0002b_pdu_mgmt" {
   ep_move_detect_mode = "garp"
 }
 
+resource "aci_bridge_domain" "bd_pod0002b_internal_api" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod0002b_internal_api"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
 ##########################################
 #### assured_protection tenant config ####
 ##########################################
