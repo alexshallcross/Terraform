@@ -667,6 +667,13 @@ resource "aci_bridge_domain" "bd_pod0002b_openstack_mgmt" {
   ep_move_detect_mode = "garp"
 }
 
+resource "aci_bridge_domain" "bd_pod0002b_openstack_mgmt_provisioning" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod0002b_openstack_mgmt_provisioning"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
 ##########################################
 #### assured_protection tenant config ####
 ##########################################
