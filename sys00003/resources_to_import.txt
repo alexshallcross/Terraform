@@ -34,3 +34,4 @@ terraform import aci_bridge_domain.bd_pod00008_nti00219i2 uni/tn-internet/BD-bd_
 terraform import aci_bridge_domain.bd_pod00008_nti00241i2 uni/tn-internet/BD-bd_pod00008_nti00241i2
 terraform import aci_bridge_domain.bd_pod00008_nti00242i2 uni/tn-internet/BD-bd_pod00008_nti00242i2
 terraform import aci_bridge_domain.bd_pod00008_t0_internet_provider_transit uni/tn-internet/BD-bd_pod00008_t0_internet_provider_transit
+terraform import aci_bridge_domain.bd_pod00008_t0_transit_epg1 uni/tn-internet/BD-bd_pod00008_t0_transit_epg1
