@@ -146,7 +146,7 @@ resource "aci_application_profile" "pod0002b_openstack" {
 resource "aci_application_epg" "pod0002b_internal_api" {
   application_profile_dn = aci_application_profile.pod0002b_openstack.id
   name                   = "pod0002b_internal_api"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod0002b_internal_api.id
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod0002b_openstack_internal_api.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -163,7 +163,7 @@ resource "aci_application_epg" "pod0002b_internal_api" {
 resource "aci_application_epg" "pod0002b_mgmt" {
   application_profile_dn = aci_application_profile.pod0002b_openstack.id
   name                   = "pod0002b_mgmt"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod0002b_mgmt.id
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod0002b_openstack_mgmt.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -636,9 +636,16 @@ resource "aci_bridge_domain" "bd_pod0002b_pdu_mgmt" {
   ep_move_detect_mode = "garp"
 }
 
-resource "aci_bridge_domain" "bd_pod0002b_internal_api" {
+resource "aci_bridge_domain" "bd_pod0002b_openstack_internal_api" {
   tenant_dn           = aci_tenant.skyscape_mgmt.id
-  name                = "bd_pod0002b_internal_api"
+  name                = "bd_pod0002b_openstack_internal_api"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod0002b_openstack_mgmt" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod0002b_openstack_mgmt"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
