@@ -40,7 +40,7 @@ module "pod00035" {
   ukcloud_mgmt_l3_out = "uni/tn-skyscape_mgmt/out-l3_out_skyscape_mgmt"
   ukcloud_mgmt_vrf    = "uni/tn-skyscape_mgmt/ctx-vrf_skyscape_mgmt"
 
-  protection_tenant = "uni/tn-assured_protection"
+  protection_tenant = aci_tenant.assured_protection.id
   protection_l3_out = "uni/tn-assured_protection/out-l3_out_vrf_assured_protection"
   protection_vrf    = "uni/tn-assured_protection/ctx-vrf_assured_protection"
 
@@ -428,10 +428,14 @@ resource "aci_application_epg" "pod00008_mgmt_vmware" {
 
 ## Tenant - assured_protection
 
+resource "aci_tenant" "assured_protection" {
+  name = "assured_protection"
+}
+
 ## Application Profile - pod0008_avamar (sic)
 
 resource "aci_application_profile" "pod00008_avamar" {
-  tenant_dn = "uni/tn-assured_protection"
+  tenant_dn = aci_tenant.assured_protection.id
   name      = "pod0008_avamar"
 }
 
@@ -457,7 +461,7 @@ resource "aci_application_epg" "pod00008_client_avamar" {
 ## Application Profile - pod00008_zerto
 
 resource "aci_application_profile" "pod00008_zerto" {
-  tenant_dn = "uni/tn-assured_protection"
+  tenant_dn = aci_tenant.assured_protection.id
   name      = "pod00008_zerto"
 }
 
@@ -783,28 +787,28 @@ resource "aci_bridge_domain" "bd_pod00008_mgmt_vmware" {
 ## Bridge Domains- assured_protection
 
 resource "aci_bridge_domain" "bd_pod00008_client_avamar" {
-  tenant_dn           = "uni/tn-assured_protection"
+  tenant_dn           = aci_tenant.assured_protection.id
   name                = "bd_pod00008_client_avamar"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_client_zcc" {
-  tenant_dn           = "uni/tn-assured_protection"
+  tenant_dn           = aci_tenant.assured_protection.id
   name                = "bd_pod00008_client_zcc"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_client_zvra" {
-  tenant_dn           = "uni/tn-assured_protection"
+  tenant_dn           = aci_tenant.assured_protection.id
   name                = "bd_pod00008_client_zvra"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_mgmt_zvm" {
-  tenant_dn           = "uni/tn-assured_protection"
+  tenant_dn           = aci_tenant.assured_protection.id
   name                = "bd_pod00008_mgmt_zvm"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
