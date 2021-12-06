@@ -87,6 +87,10 @@ module "pod00035" {
 #### Imported Config ####
 #########################
 
+#####################################
+#### skyscape_mgmt tenant config ####
+#####################################
+
 ## Tenant - skyscape_mgmt
 
 resource "aci_tenant" "skyscape_mgmt" {
@@ -426,240 +430,6 @@ resource "aci_application_epg" "pod00008_mgmt_vmware" {
   }
 }
 
-## Tenant - assured_protection
-
-resource "aci_tenant" "assured_protection" {
-  name = "assured_protection"
-}
-
-## Application Profile - pod0008_avamar (sic)
-
-resource "aci_application_profile" "pod00008_avamar" {
-  tenant_dn = aci_tenant.assured_protection.id
-  name      = "pod0008_avamar"
-}
-
-## EPGs in Application Profile - pod0008_avamar (sic)
-
-resource "aci_application_epg" "pod00008_client_avamar" {
-  application_profile_dn = aci_application_profile.pod00008_avamar.id
-  name                   = "pod00008_client_avamar"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_client_avamar.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
-  lifecycle {
-    ignore_changes = [
-      relation_fv_rs_graph_def,
-    ]
-  }
-}
-
-## Application Profile - pod00008_zerto
-
-resource "aci_application_profile" "pod00008_zerto" {
-  tenant_dn = aci_tenant.assured_protection.id
-  name      = "pod00008_zerto"
-}
-
-## EPGs in Application Profile - pod00008_zerto
-
-resource "aci_application_epg" "pod00008_client_zcc" {
-  application_profile_dn = aci_application_profile.pod00008_zerto.id
-  name                   = "pod00008_client_zcc"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_client_zcc.id
-  relation_fv_rs_prov = [
-    "uni/tn-assured_protection/brc-zvm_to_zcc",
-    "uni/tn-assured_protection/brc-zvra_to_zcc",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-assured_protection/brc-zcc_to_zvm",
-    "uni/tn-assured_protection/brc-zcc_to_zvra",
-  ]
-  lifecycle {
-    ignore_changes = [
-      relation_fv_rs_graph_def,
-    ]
-  }
-}
-
-resource "aci_application_epg" "pod00008_client_zvra" {
-  application_profile_dn = aci_application_profile.pod00008_zerto.id
-  name                   = "pod00008_client_zvra"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_client_zvra.id
-  relation_fv_rs_prov = [
-    "uni/tn-assured_protection/brc-ext_to_zvra",
-    "uni/tn-assured_protection/brc-zcc_to_zvra",
-    "uni/tn-assured_protection/brc-zvm_to_zvra",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-assured_protection/brc-zvra_to_ext",
-    "uni/tn-assured_protection/brc-zvra_to_zcc",
-    "uni/tn-assured_protection/brc-zvra_to_zvm",
-  ]
-  lifecycle {
-    ignore_changes = [
-      relation_fv_rs_graph_def,
-    ]
-  }
-}
-
-resource "aci_application_epg" "pod00008_mgmt_zvm" {
-  application_profile_dn = aci_application_profile.pod00008_zerto.id
-  name                   = "pod00008_mgmt_zvm"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_mgmt_zvm.id
-  relation_fv_rs_prov = [
-    "uni/tn-assured_protection/brc-ext_to_zvm",
-    "uni/tn-assured_protection/brc-zcc_to_zvm",
-    "uni/tn-assured_protection/brc-zvra_to_zvm",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-assured_protection/brc-zvm_to_ext",
-    "uni/tn-assured_protection/brc-zvm_to_zcc",
-    "uni/tn-assured_protection/brc-zvm_to_zvra",
-  ]
-  lifecycle {
-    ignore_changes = [
-      relation_fv_rs_graph_def,
-    ]
-  }
-}
-
-
-## Tenant - internet
-
-resource "aci_tenant" "internet" {
-  name = "internet"
-}
-
-## Application profile - pod00008_internet_tenants
-
-resource "aci_application_profile" "pod00008_internet_tenants" {
-  tenant_dn = "uni/tn-internet"
-  name      = "pod00008_internet_tenants"
-}
-
-## EPGs in Application profile - pod00008_internet_tenants
-
-resource "aci_application_epg" "pod00008_mgmt_vmware_internet" {
-  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
-  name                   = "pod00008_mgmt_vmware"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_mgmt_vmware_internet.id
-  relation_fv_rs_prov = [
-    "uni/tn-internet/brc-skyscape_vmware_mgmt_internet_in",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-internet/brc-skyscape_vmware_mgmt_internet_out",
-  ]
-  lifecycle {
-    ignore_changes = [
-      relation_fv_rs_graph_def,
-    ]
-  }
-}
-
-resource "aci_application_epg" "pod00008_nti00009i2" {
-  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
-  name                   = "pod00008_nti00009i2"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_nti00009i2.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-    "uni/tn-internet/brc-internet_in",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-    "uni/tn-internet/brc-internet_out",
-    "uni/tn-internet/brc-skyscape_vmware_mgmt_internet_in",
-  ]
-  lifecycle {
-    ignore_changes = [
-      relation_fv_rs_graph_def,
-    ]
-  }
-}
-
-resource "aci_application_epg" "pod00008_nti00219i2" {
-  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
-  name                   = "pod00008_nti00219i2"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_nti00219i2.id
-  lifecycle {
-    ignore_changes = [
-      relation_fv_rs_graph_def,
-    ]
-  }
-}
-
-resource "aci_application_epg" "pod00008_nti00241i2" {
-  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
-  name                   = "pod00008_nti00241i2"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_nti00241i2.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
-  lifecycle {
-    ignore_changes = [
-      relation_fv_rs_graph_def,
-    ]
-  }
-}
-
-resource "aci_application_epg" "pod00008_nti00242i2" {
-  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
-  name                   = "pod00008_nti00242i2"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_nti00242i2.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
-  lifecycle {
-    ignore_changes = [
-      relation_fv_rs_graph_def,
-    ]
-  }
-}
-
-resource "aci_application_epg" "pod00008_t0_internet_provider_transit" {
-  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
-  name                   = "pod00008_t0_internet_provider_transit"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_t0_internet_provider_transit.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
-  lifecycle {
-    ignore_changes = [
-      relation_fv_rs_graph_def,
-    ]
-  }
-}
-
-resource "aci_application_epg" "pod00008_t0_transit_epg1" {
-  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
-  name                   = "pod00008_t0_transit_epg1"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_t0_transit_epg1.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
-  lifecycle {
-    ignore_changes = [
-      relation_fv_rs_graph_def,
-    ]
-  }
-}
-
 ## Bridge Domains - skyscape_mgmt
 
 resource "aci_bridge_domain" "bd_pod00008_avamar_mgmt_protection" {
@@ -788,6 +558,112 @@ resource "aci_bridge_domain" "bd_pod00008_mgmt_vmware" {
   ep_move_detect_mode = "garp"
 }
 
+##########################################
+#### assured_protection tenant config ####
+##########################################
+
+## Tenant - assured_protection
+
+resource "aci_tenant" "assured_protection" {
+  name = "assured_protection"
+}
+
+## Application Profile - pod0008_avamar (sic)
+
+resource "aci_application_profile" "pod00008_avamar" {
+  tenant_dn = aci_tenant.assured_protection.id
+  name      = "pod0008_avamar"
+}
+
+## EPGs in Application Profile - pod0008_avamar (sic)
+
+resource "aci_application_epg" "pod00008_client_avamar" {
+  application_profile_dn = aci_application_profile.pod00008_avamar.id
+  name                   = "pod00008_client_avamar"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_client_avamar.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+## Application Profile - pod00008_zerto
+
+resource "aci_application_profile" "pod00008_zerto" {
+  tenant_dn = aci_tenant.assured_protection.id
+  name      = "pod00008_zerto"
+}
+
+## EPGs in Application Profile - pod00008_zerto
+
+resource "aci_application_epg" "pod00008_client_zcc" {
+  application_profile_dn = aci_application_profile.pod00008_zerto.id
+  name                   = "pod00008_client_zcc"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_client_zcc.id
+  relation_fv_rs_prov = [
+    "uni/tn-assured_protection/brc-zvm_to_zcc",
+    "uni/tn-assured_protection/brc-zvra_to_zcc",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-assured_protection/brc-zcc_to_zvm",
+    "uni/tn-assured_protection/brc-zcc_to_zvra",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00008_client_zvra" {
+  application_profile_dn = aci_application_profile.pod00008_zerto.id
+  name                   = "pod00008_client_zvra"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_client_zvra.id
+  relation_fv_rs_prov = [
+    "uni/tn-assured_protection/brc-ext_to_zvra",
+    "uni/tn-assured_protection/brc-zcc_to_zvra",
+    "uni/tn-assured_protection/brc-zvm_to_zvra",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-assured_protection/brc-zvra_to_ext",
+    "uni/tn-assured_protection/brc-zvra_to_zcc",
+    "uni/tn-assured_protection/brc-zvra_to_zvm",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00008_mgmt_zvm" {
+  application_profile_dn = aci_application_profile.pod00008_zerto.id
+  name                   = "pod00008_mgmt_zvm"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_mgmt_zvm.id
+  relation_fv_rs_prov = [
+    "uni/tn-assured_protection/brc-ext_to_zvm",
+    "uni/tn-assured_protection/brc-zcc_to_zvm",
+    "uni/tn-assured_protection/brc-zvra_to_zvm",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-assured_protection/brc-zvm_to_ext",
+    "uni/tn-assured_protection/brc-zvm_to_zcc",
+    "uni/tn-assured_protection/brc-zvm_to_zvra",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
 ## Bridge Domains- assured_protection
 
 resource "aci_bridge_domain" "bd_pod00008_client_avamar" {
@@ -818,52 +694,187 @@ resource "aci_bridge_domain" "bd_pod00008_mgmt_zvm" {
   ep_move_detect_mode = "garp"
 }
 
+################################
+#### internet tenant config ####
+################################
+
+## Tenant - internet
+
+resource "aci_tenant" "internet" {
+  name = "internet"
+}
+
+## Application profile - pod00008_internet_tenants
+
+resource "aci_application_profile" "pod00008_internet_tenants" {
+  tenant_dn = aci_tenant.internet.id
+  name      = "pod00008_internet_tenants"
+}
+
+## EPGs in Application profile - pod00008_internet_tenants
+
+resource "aci_application_epg" "pod00008_mgmt_vmware_internet" {
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
+  name                   = "pod00008_mgmt_vmware"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_mgmt_vmware_internet.id
+  relation_fv_rs_prov = [
+    "uni/tn-internet/brc-skyscape_vmware_mgmt_internet_in",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-internet/brc-skyscape_vmware_mgmt_internet_out",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00008_nti00009i2" {
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
+  name                   = "pod00008_nti00009i2"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_nti00009i2.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+    "uni/tn-internet/brc-internet_in",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+    "uni/tn-internet/brc-internet_out",
+    "uni/tn-internet/brc-skyscape_vmware_mgmt_internet_in",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00008_nti00219i2" {
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
+  name                   = "pod00008_nti00219i2"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_nti00219i2.id
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00008_nti00241i2" {
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
+  name                   = "pod00008_nti00241i2"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_nti00241i2.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00008_nti00242i2" {
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
+  name                   = "pod00008_nti00242i2"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_nti00242i2.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00008_t0_internet_provider_transit" {
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
+  name                   = "pod00008_t0_internet_provider_transit"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_t0_internet_provider_transit.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00008_t0_transit_epg1" {
+  application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
+  name                   = "pod00008_t0_transit_epg1"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_t0_transit_epg1.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
 ## Bridge Domains- internet
 
 resource "aci_bridge_domain" "bd_pod00008_mgmt_vmware_internet" {
-  tenant_dn           = "uni/tn-internet"
+  tenant_dn           = aci_tenant.internet.id
   name                = "bd_pod00008_mgmt_vmware"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_nti00009i2" {
-  tenant_dn           = "uni/tn-internet"
+  tenant_dn           = aci_tenant.internet.id
   name                = "bd_pod00008_nti00009i2"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_nti00219i2" {
-  tenant_dn           = "uni/tn-internet"
+  tenant_dn           = aci_tenant.internet.id
   name                = "bd_pod00008_nti00219i2"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_nti00241i2" {
-  tenant_dn           = "uni/tn-internet"
+  tenant_dn           = aci_tenant.internet.id
   name                = "bd_pod00008_nti00241i2"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_nti00242i2" {
-  tenant_dn           = "uni/tn-internet"
+  tenant_dn           = aci_tenant.internet.id
   name                = "bd_pod00008_nti00242i2"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_t0_internet_provider_transit" {
-  tenant_dn           = "uni/tn-internet"
+  tenant_dn           = aci_tenant.internet.id
   name                = "bd_pod00008_t0_internet_provider_transit"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_t0_transit_epg1" {
-  tenant_dn           = "uni/tn-internet"
+  tenant_dn           = aci_tenant.internet.id
   name                = "bd_pod00008_t0_transit_epg1"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
