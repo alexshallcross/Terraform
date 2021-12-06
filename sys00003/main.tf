@@ -531,6 +531,10 @@ resource "aci_application_epg" "pod00008_mgmt_zvm" {
 
 ## Tenant - internet
 
+resource "aci_tenant" "internet" {
+  name = "internet"
+}
+
 ## Application profile - pod00008_internet_tenants
 
 resource "aci_application_profile" "pod00008_internet_tenants" {

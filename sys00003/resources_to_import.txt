@@ -1,2 +1,3 @@
 terraform import aci_tenant.skyscape_mgmt uni/tn-skyscape_mgmt
 terraform import aci_tenant.assured_protection uni/tn-assured_protection
+terraform import aci_tenant.internet uni/tn-internet
