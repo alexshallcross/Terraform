@@ -91,20 +91,18 @@ module "pod00035" {
 #### skyscape_mgmt tenant config ####
 #####################################
 
-## Tenant - skyscape_mgmt
-
 resource "aci_tenant" "skyscape_mgmt" {
   name = "skyscape_mgmt"
 }
 
-## Application Profile - pod00008_avamar_mgmt
+############################################
+#### skyscape_mgmt Application Profiles ####
+############################################
 
 resource "aci_application_profile" "pod00008_avamar_mgmt" {
   tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_avamar_mgmt"
 }
-
-## EPGs in Application Profile - pod00008_avamar_mgmt
 
 resource "aci_application_epg" "pod00008_avamar_mgmt_protection" {
   application_profile_dn = aci_application_profile.pod00008_avamar_mgmt.id
@@ -123,14 +121,10 @@ resource "aci_application_epg" "pod00008_avamar_mgmt_protection" {
   }
 }
 
-## Application Profile - pod00008_client_cluster1
-
 resource "aci_application_profile" "pod00008_client_cluster1" {
   tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_client_cluster1"
 }
-
-## EPGs in Application Profile - pod00008_client_cluster1
 
 resource "aci_application_epg" "pod00008_client_cluster1_scaleio_data1" {
   application_profile_dn = aci_application_profile.pod00008_client_cluster1.id
@@ -216,14 +210,10 @@ resource "aci_application_epg" "pod00008_client_cluster1_vxlan" {
   }
 }
 
-## Application Profile - pod00008_client_cluster2
-
 resource "aci_application_profile" "pod00008_client_cluster2" {
   tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_client_cluster2"
 }
-
-## EPGs in Application Profile - pod00008_client_cluster2
 
 resource "aci_application_epg" "pod00008_client_cluster2_scaleio_mgmt" {
   application_profile_dn = aci_application_profile.pod00008_client_cluster2.id
@@ -276,14 +266,10 @@ resource "aci_application_epg" "pod00008_client_cluster2_vmware" {
   }
 }
 
-## Application Profile - pod00008_container_transit
-
 resource "aci_application_profile" "pod00008_container_transit" {
   tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_container_transit"
 }
-
-## EPGs in Application Profile - pod00008_container_transit
 
 resource "aci_application_epg" "pod00008_container_transit" {
   application_profile_dn = aci_application_profile.pod00008_container_transit.id
@@ -302,14 +288,10 @@ resource "aci_application_epg" "pod00008_container_transit" {
   }
 }
 
-## Application Profile - pod00008_management
-
 resource "aci_application_profile" "pod00008_management" {
   tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_management"
 }
-
-## EPGs in Application Profile - pod00008_management
 
 resource "aci_application_epg" "pod00008_cimc" {
   application_profile_dn = aci_application_profile.pod00008_management.id
@@ -430,7 +412,11 @@ resource "aci_application_epg" "pod00008_mgmt_vmware" {
   }
 }
 
-## Bridge Domains - skyscape_mgmt
+##################################
+#### skyscape_mgmt Networking ####
+##################################
+
+### Bridge Domains ###
 
 resource "aci_bridge_domain" "bd_pod00008_avamar_mgmt_protection" {
   tenant_dn           = aci_tenant.skyscape_mgmt.id
@@ -568,14 +554,14 @@ resource "aci_tenant" "assured_protection" {
   name = "assured_protection"
 }
 
-## Application Profile - pod0008_avamar (sic)
+#################################################
+#### assured_protection Application Profiles ####
+#################################################
 
 resource "aci_application_profile" "pod00008_avamar" {
   tenant_dn = aci_tenant.assured_protection.id
   name      = "pod0008_avamar"
 }
-
-## EPGs in Application Profile - pod0008_avamar (sic)
 
 resource "aci_application_epg" "pod00008_client_avamar" {
   application_profile_dn = aci_application_profile.pod00008_avamar.id
@@ -594,14 +580,10 @@ resource "aci_application_epg" "pod00008_client_avamar" {
   }
 }
 
-## Application Profile - pod00008_zerto
-
 resource "aci_application_profile" "pod00008_zerto" {
   tenant_dn = aci_tenant.assured_protection.id
   name      = "pod00008_zerto"
 }
-
-## EPGs in Application Profile - pod00008_zerto
 
 resource "aci_application_epg" "pod00008_client_zcc" {
   application_profile_dn = aci_application_profile.pod00008_zerto.id
@@ -664,7 +646,9 @@ resource "aci_application_epg" "pod00008_mgmt_zvm" {
   }
 }
 
-## Bridge Domains- assured_protection
+#######################################
+#### assured_protection Networking ####
+#######################################
 
 resource "aci_bridge_domain" "bd_pod00008_client_avamar" {
   tenant_dn           = aci_tenant.assured_protection.id
@@ -698,20 +682,18 @@ resource "aci_bridge_domain" "bd_pod00008_mgmt_zvm" {
 #### internet tenant config ####
 ################################
 
-## Tenant - internet
-
 resource "aci_tenant" "internet" {
   name = "internet"
 }
 
-## Application profile - pod00008_internet_tenants
+#######################################
+#### internet Application Profiles ####
+#######################################
 
 resource "aci_application_profile" "pod00008_internet_tenants" {
   tenant_dn = aci_tenant.internet.id
   name      = "pod00008_internet_tenants"
 }
-
-## EPGs in Application profile - pod00008_internet_tenants
 
 resource "aci_application_epg" "pod00008_mgmt_vmware_internet" {
   application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
@@ -829,7 +811,9 @@ resource "aci_application_epg" "pod00008_t0_transit_epg1" {
   }
 }
 
-## Bridge Domains- internet
+#############################
+#### internet Networking ####
+#############################
 
 resource "aci_bridge_domain" "bd_pod00008_mgmt_vmware_internet" {
   tenant_dn           = aci_tenant.internet.id
