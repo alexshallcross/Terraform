@@ -32,3 +32,4 @@ terraform import aci_bridge_domain.bd_pod00008_mgmt_vmware_internet uni/tn-inter
 terraform import aci_bridge_domain.bd_pod00008_nti00009i2 uni/tn-internet/BD-bd_pod00008_nti00009i2
 terraform import aci_bridge_domain.bd_pod00008_nti00219i2 uni/tn-internet/BD-bd_pod00008_nti00219i2
 terraform import aci_bridge_domain.bd_pod00008_nti00241i2 uni/tn-internet/BD-bd_pod00008_nti00241i2
+terraform import aci_bridge_domain.bd_pod00008_nti00242i2 uni/tn-internet/BD-bd_pod00008_nti00242i2
