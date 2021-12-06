@@ -160,6 +160,23 @@ resource "aci_application_epg" "pod0002b_internal_api" {
   }
 }
 
+resource "aci_application_epg" "pod0002b_mgmt" {
+  application_profile_dn = aci_application_profile.pod0002b_openstack.id
+  name                   = "pod0002b_mgmt"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod0002b_mgmt.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
 resource "aci_application_profile" "pod00008_avamar_mgmt" {
   tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_avamar_mgmt"
