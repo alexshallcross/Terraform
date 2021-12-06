@@ -36,7 +36,7 @@ module "pod00035" {
     }
   }
 
-  ukcloud_mgmt_tenant = "uni/tn-skyscape_mgmt"
+  ukcloud_mgmt_tenant = aci_tenant.skyscape_mgmt.id
   ukcloud_mgmt_l3_out = "uni/tn-skyscape_mgmt/out-l3_out_skyscape_mgmt"
   ukcloud_mgmt_vrf    = "uni/tn-skyscape_mgmt/ctx-vrf_skyscape_mgmt"
 
@@ -89,10 +89,14 @@ module "pod00035" {
 
 ## Tenant - skyscape_mgmt
 
+resource "aci_tenant" "skyscape_mgmt" {
+  name = "skyscape_mgmt"
+}
+
 ## Application Profile - pod00008_avamar_mgmt
 
 resource "aci_application_profile" "pod00008_avamar_mgmt" {
-  tenant_dn = "uni/tn-skyscape_mgmt"
+  tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_avamar_mgmt"
 }
 
@@ -118,7 +122,7 @@ resource "aci_application_epg" "pod00008_avamar_mgmt_protection" {
 ## Application Profile - pod00008_client_cluster1
 
 resource "aci_application_profile" "pod00008_client_cluster1" {
-  tenant_dn = "uni/tn-skyscape_mgmt"
+  tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_client_cluster1"
 }
 
@@ -211,7 +215,7 @@ resource "aci_application_epg" "pod00008_client_cluster1_vxlan" {
 ## Application Profile - pod00008_client_cluster2
 
 resource "aci_application_profile" "pod00008_client_cluster2" {
-  tenant_dn = "uni/tn-skyscape_mgmt"
+  tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_client_cluster2"
 }
 
@@ -271,7 +275,7 @@ resource "aci_application_epg" "pod00008_client_cluster2_vmware" {
 ## Application Profile - pod00008_container_transit
 
 resource "aci_application_profile" "pod00008_container_transit" {
-  tenant_dn = "uni/tn-skyscape_mgmt"
+  tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_container_transit"
 }
 
@@ -297,7 +301,7 @@ resource "aci_application_epg" "pod00008_container_transit" {
 ## Application Profile - pod00008_management
 
 resource "aci_application_profile" "pod00008_management" {
-  tenant_dn = "uni/tn-skyscape_mgmt"
+  tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_management"
 }
 
@@ -651,126 +655,126 @@ resource "aci_application_epg" "pod00008_t0_transit_epg1" {
 ## Bridge Domains - skyscape_mgmt
 
 resource "aci_bridge_domain" "bd_pod00008_avamar_mgmt_protection" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_avamar_mgmt_protection"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_client_cluster1_scaleio_data1" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_client_cluster1_scaleio_data1"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_client_cluster1_scaleio_data2" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_client_cluster1_scaleio_data2"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_client_cluster1_scaleio_mgmt" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_client_cluster1_scaleio_mgmt"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_client_cluster1_vmotion" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_client_cluster1_vmotion"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_client_cluster1_vmware" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_client_cluster1_vmware"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_client_cluster1_vxlan" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_client_cluster1_vxlan"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_client_cluster2_scaleio_mgmt" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_client_cluster2_scaleio_mgmt"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_client_cluster2_vmotion" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_client_cluster2_vmotion"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_client_cluster2_vmware" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_client_cluster2_vmware"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_container_transit" {
-  tenant_dn     = "uni/tn-skyscape_mgmt"
+  tenant_dn     = aci_tenant.skyscape_mgmt.id
   name          = "bd_pod00008_container_transit"
   unicast_route = "no"
   ip_learning   = "no"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_cimc" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_cimc"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_mgmt_scaleio_data1" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_mgmt_scaleio_data1"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_mgmt_scaleio_data2" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_mgmt_scaleio_data2"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_mgmt_scaleio_mgmt" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_mgmt_scaleio_mgmt"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_mgmt_tools" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_mgmt_tools"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_mgmt_vmotion" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_mgmt_vmotion"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
 
 resource "aci_bridge_domain" "bd_pod00008_mgmt_vmware" {
-  tenant_dn           = "uni/tn-skyscape_mgmt"
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_mgmt_vmware"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
