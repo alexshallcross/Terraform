@@ -583,7 +583,7 @@ resource "aci_application_epg" "pod00008_nti00219i2" {
 resource "aci_application_epg" "pod00008_nti00241i2" {
   application_profile_dn = aci_application_profile.pod00008_internet_tenants.id
   name                   = "pod00008_nti00241i2"
-  relation_fv_rs_bd      = "uni/tn-internet/BD-bd_pod00008_nti00241i2"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00008_nti00241i2.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -806,6 +806,8 @@ resource "aci_bridge_domain" "bd_pod00008_mgmt_zvm" {
   ep_move_detect_mode = "garp"
 }
 
+## Bridge Domains- internet
+
 resource "aci_bridge_domain" "bd_pod00008_mgmt_vmware_internet" {
   tenant_dn           = "uni/tn-internet"
   name                = "bd_pod00008_mgmt_vmware"
@@ -823,6 +825,13 @@ resource "aci_bridge_domain" "bd_pod00008_nti00009i2" {
 resource "aci_bridge_domain" "bd_pod00008_nti00219i2" {
   tenant_dn           = "uni/tn-internet"
   name                = "bd_pod00008_nti00219i2"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00008_nti00241i2" {
+  tenant_dn           = "uni/tn-internet"
+  name                = "bd_pod00008_nti00241i2"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
