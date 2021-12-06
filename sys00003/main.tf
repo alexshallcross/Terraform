@@ -138,6 +138,11 @@ resource "aci_application_epg" "pod0002b_pdu_mgmt" {
   }
 }
 
+resource "aci_application_profile" "pod0002b_openstack" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod0002b_openstack"
+}
+
 resource "aci_application_profile" "pod00008_avamar_mgmt" {
   tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_avamar_mgmt"
