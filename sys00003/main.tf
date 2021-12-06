@@ -99,6 +99,45 @@ resource "aci_tenant" "skyscape_mgmt" {
 #### skyscape_mgmt Application Profiles ####
 ############################################
 
+resource "aci_application_profile" "pod0002b_cimc" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod0002b_cimc"
+}
+
+resource "aci_application_epg" "pod0002b_cimc" {
+  application_profile_dn = aci_application_profile.pod0002b_cimc.id
+  name                   = "pod0002b_cimc"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod0002b_cimc.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod0002b_pdu_mgmt" {
+  application_profile_dn = aci_application_profile.pod0002b_cimc.id
+  name                   = "pod0002b_pdu_mgmt"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod0002b_pdu_mgmt.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
 resource "aci_application_profile" "pod00008_avamar_mgmt" {
   tenant_dn = aci_tenant.skyscape_mgmt.id
   name      = "pod00008_avamar_mgmt"
@@ -540,6 +579,20 @@ resource "aci_bridge_domain" "bd_pod00008_mgmt_vmotion" {
 resource "aci_bridge_domain" "bd_pod00008_mgmt_vmware" {
   tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_mgmt_vmware"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod0002b_cimc" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod0002b_cimc"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod0002b_pdu_mgmt" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod0002b_pdu_mgmt"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
