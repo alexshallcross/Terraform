@@ -558,6 +558,11 @@ resource "aci_application_epg" "pod00008_mgmt_vmware" {
   }
 }
 
+resource "aci_application_profile" "pod00017_avamar_mgmt" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00017_avamar_mgmt"
+}
+
 ##################################
 #### skyscape_mgmt Networking ####
 ##################################
