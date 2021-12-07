@@ -770,6 +770,13 @@ resource "aci_bridge_domain" "bd_pod00017_azure_stack_cimc" {
   ep_move_detect_mode = "garp"
 }
 
+resource "aci_bridge_domain" "bd_pod00017_client_cluster1_scaleio_data1" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_client_cluster1_scaleio_data1"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
 resource "aci_bridge_domain" "bd_pod0002b_cimc" {
   tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod0002b_cimc"
