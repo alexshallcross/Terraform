@@ -607,6 +607,23 @@ resource "aci_application_profile" "pod00017_client_cluster1" {
   name      = "pod00017_client_cluster1"
 }
 
+resource "aci_application_epg" "pod00017_client_cluster1_scaleio_data1" {
+  application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
+  name                   = "pod00017_client_cluster1_scaleio_data1"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_scaleio_data1.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
 ##################################
 #### skyscape_mgmt Networking ####
 ##################################
