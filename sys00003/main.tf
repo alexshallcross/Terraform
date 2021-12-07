@@ -712,6 +712,13 @@ resource "aci_bridge_domain" "bd_pod00008_mgmt_vmware" {
   ep_move_detect_mode = "garp"
 }
 
+resource "aci_bridge_domain" "bd_pod00017_avamar_mgmt_protection" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_avamar_mgmt_protection"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
 resource "aci_bridge_domain" "bd_pod0002b_cimc" {
   tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod0002b_cimc"
