@@ -602,6 +602,11 @@ resource "aci_application_epg" "pod00017_azure_stack_cimc" {
   }
 }
 
+resource "aci_application_profile" "pod00017_client_cluster1" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00017_client_cluster1"
+}
+
 ##################################
 #### skyscape_mgmt Networking ####
 ##################################
