@@ -580,6 +580,11 @@ resource "aci_application_epg" "pod00017_avamar_mgmt_protection" {
   }
 }
 
+resource "aci_application_profile" "pod00017_azure_stack" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00017_azure_stack"
+}
+
 ##################################
 #### skyscape_mgmt Networking ####
 ##################################
