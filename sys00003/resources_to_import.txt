@@ -2,3 +2,4 @@ terraform import aci_application_profile.pod00017_avamar_mgmt uni/tn-skyscape_mg
 terraform import aci_application_epg.pod00017_avamar_mgmt_protection uni/tn-skyscape_mgmt/ap-pod00017_avamar_mgmt/epg-pod00017_avamar_mgmt_protection
 terraform import aci_bridge_domain.pod00017_avamar_mgmt_protection uni/tn-skyscape_mgmt/ap-pod00017_avamar_mgmt/BD-bd_pod00017_avamar_mgmt_protection
 terraform import aci_application_profile.pod00017_azure_stack uni/tn-skyscape_mgmt/ap-pod00017_azure_stack
+terraform import aci_application_epg.pod00017_azure_stack_cimc uni/tn-skyscape_mgmt/ap-pod00017_azure_stack/epg-pod00017_azure_stack_cimc

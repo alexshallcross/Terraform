@@ -585,6 +585,23 @@ resource "aci_application_profile" "pod00017_azure_stack" {
   name      = "pod00017_azure_stack"
 }
 
+resource "aci_application_epg" "pod00017_azure_stack_cimc" {
+  application_profile_dn = aci_application_profile.pod00017_azure_stack.id
+  name                   = "pod00017_azure_stack_cimc"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_azure_stack_cimc.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
 ##################################
 #### skyscape_mgmt Networking ####
 ##################################
