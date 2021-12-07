@@ -750,8 +750,6 @@ resource "aci_bridge_domain" "bd_pod0002b_openstack_tenant" {
 #### assured_protection tenant config ####
 ##########################################
 
-## Tenant - assured_protection
-
 resource "aci_tenant" "assured_protection" {
   name = "assured_protection"
 }
