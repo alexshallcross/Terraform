@@ -1061,7 +1061,7 @@ module "openstack" {
   tenant_bd_subnet            = "10.0.6.1/24"
   mgmt_openstack_bd_subnet    = "10.0.7.1/24"
 }
-***/ 
+***/
 /***
 module "pod00100" {
   source = "../modules/vmware_pod"

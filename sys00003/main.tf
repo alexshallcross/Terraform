@@ -558,6 +558,303 @@ resource "aci_application_epg" "pod00008_mgmt_vmware" {
   }
 }
 
+resource "aci_application_profile" "pod00017_avamar_mgmt" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00017_avamar_mgmt"
+}
+
+resource "aci_application_epg" "pod00017_avamar_mgmt_protection" {
+  application_profile_dn = aci_application_profile.pod00017_avamar_mgmt.id
+  name                   = "pod00017_avamar_mgmt_protection"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_avamar_mgmt_protection.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_profile" "pod00017_azure_stack" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00017_azure_stack"
+}
+
+resource "aci_application_epg" "pod00017_azure_stack_cimc" {
+  application_profile_dn = aci_application_profile.pod00017_azure_stack.id
+  name                   = "pod00017_azure_stack_cimc"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_azure_stack_cimc.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_profile" "pod00017_client_cluster1" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00017_client_cluster1"
+}
+
+resource "aci_application_epg" "pod00017_client_cluster1_scaleio_data1" {
+  application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
+  name                   = "pod00017_client_cluster1_scaleio_data1"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_scaleio_data1.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00017_client_cluster1_scaleio_data2" {
+  application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
+  name                   = "pod00017_client_cluster1_scaleio_data2"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_scaleio_data2.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00017_client_cluster1_scaleio_mgmt" {
+  application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
+  name                   = "pod00017_client_cluster1_scaleio_mgmt"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_scaleio_mgmt.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00017_client_cluster1_vmotion" {
+  application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
+  name                   = "pod00017_client_cluster1_vmotion"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_vmotion.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00017_client_cluster1_vmware" {
+  application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
+  name                   = "pod00017_client_cluster1_vmware"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_vmware.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00017_client_cluster1_vxlan" {
+  application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
+  name                   = "pod00017_client_cluster1_vxlan"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_vxlan.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_profile" "pod00017_container_transit" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00017_container_transit"
+}
+
+resource "aci_application_epg" "pod00017_container_transit" {
+  application_profile_dn = aci_application_profile.pod00017_container_transit.id
+  name                   = "pod00017_container_transit"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_container_transit.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_profile" "pod00017_management" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00017_management"
+}
+
+resource "aci_application_epg" "pod00017_cimc" {
+  application_profile_dn = aci_application_profile.pod00017_management.id
+  name                   = "pod00017_cimc"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_cimc.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00017_mgmt_scaleio_data1" {
+  application_profile_dn = aci_application_profile.pod00017_management.id
+  name                   = "pod00017_mgmt_scaleio_data1"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_mgmt_scaleio_data1.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00017_mgmt_scaleio_data2" {
+  application_profile_dn = aci_application_profile.pod00017_management.id
+  name                   = "pod00017_mgmt_scaleio_data2"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_mgmt_scaleio_data2.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00017_mgmt_scaleio_mgmt" {
+  application_profile_dn = aci_application_profile.pod00017_management.id
+  name                   = "pod00017_mgmt_scaleio_mgmt"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_mgmt_scaleio_mgmt.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00017_mgmt_tools" {
+  application_profile_dn = aci_application_profile.pod00017_management.id
+  name                   = "pod00017_mgmt_tools"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_mgmt_tools.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00017_mgmt_vmotion" {
+  application_profile_dn = aci_application_profile.pod00017_management.id
+  name                   = "pod00017_mgmt_vmotion"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_mgmt_vmotion.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00017_mgmt_vmware" {
+  application_profile_dn = aci_application_profile.pod00017_management.id
+  name                   = "pod00017_mgmt_vmware"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_mgmt_vmware.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
 ##################################
 #### skyscape_mgmt Networking ####
 ##################################
@@ -686,6 +983,118 @@ resource "aci_bridge_domain" "bd_pod00008_mgmt_vmotion" {
 resource "aci_bridge_domain" "bd_pod00008_mgmt_vmware" {
   tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00008_mgmt_vmware"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_avamar_mgmt_protection" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_avamar_mgmt_protection"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_azure_stack_cimc" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_azure_stack_cimc"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_client_cluster1_scaleio_data1" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_client_cluster1_scaleio_data1"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_client_cluster1_scaleio_data2" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_client_cluster1_scaleio_data2"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_client_cluster1_scaleio_mgmt" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_client_cluster1_scaleio_mgmt"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_client_cluster1_vmotion" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_client_cluster1_vmotion"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_client_cluster1_vmware" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_client_cluster1_vmware"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_client_cluster1_vxlan" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_client_cluster1_vxlan"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_container_transit" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_container_transit"
+  arp_flood           = "no"
+  unicast_route       = "no"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_cimc" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_cimc"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_mgmt_scaleio_data1" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_mgmt_scaleio_data1"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_mgmt_scaleio_data2" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_mgmt_scaleio_data2"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_mgmt_scaleio_mgmt" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_mgmt_scaleio_mgmt"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_mgmt_tools" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_mgmt_tools"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_mgmt_vmotion" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_mgmt_vmotion"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00017_mgmt_vmware" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00017_mgmt_vmware"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
