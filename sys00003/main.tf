@@ -30,8 +30,8 @@ module "pod00035" {
   interface_map = {
     leafs_601_602 = {
       node_ids   = [601, 602]
-      clnt_ports = [1, 2, 3, 4, 13, 14, 15]
-      mgmt_ports = []
+      clnt_ports = []
+      mgmt_ports = [1, 2, 3, 4, 13, 14, 15]
       cimc_ports = []
     }
   }
