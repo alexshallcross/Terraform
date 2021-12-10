@@ -813,6 +813,96 @@ resource "aci_application_epg" "pod00017_mgmt_vmware" {
   }
 }
 
+resource "aci_application_profile" "pod00023_asr_services" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00023_asr_services"
+}
+
+resource "aci_application_epg" "pod00023_administration" {
+  application_profile_dn = aci_application_profile.pod00023_asr_services.id
+  name                   = "pod00023_administration"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_administration.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00023_app_services" {
+  application_profile_dn = aci_application_profile.pod00023_asr_services.id
+  name                   = "pod00023_app_services"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_app_services.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00023_data_services" {
+  application_profile_dn = aci_application_profile.pod00023_asr_services.id
+  name                   = "pod00023_data_services"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_data_services.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00023_monitoring" {
+  application_profile_dn = aci_application_profile.pod00023_asr_services.id
+  name                   = "pod00023_monitoring"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_monitoring.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00023_public_services" {
+  application_profile_dn = aci_application_profile.pod00023_asr_services.id
+  name                   = "pod00023_public_services"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_public_services.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
 ##################################
 #### skyscape_mgmt Networking ####
 ##################################
@@ -1053,6 +1143,41 @@ resource "aci_bridge_domain" "bd_pod00017_mgmt_vmotion" {
 resource "aci_bridge_domain" "bd_pod00017_mgmt_vmware" {
   tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00017_mgmt_vmware"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_administration" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_administration"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_app_services" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_app_services"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_data_services" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_data_services"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_monitoring" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_monitoring"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_public_services" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_public_services"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
