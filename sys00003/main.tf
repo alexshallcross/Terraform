@@ -588,7 +588,7 @@ resource "aci_application_profile" "pod00017_azure_stack" {
 resource "aci_application_epg" "pod00017_azure_stack_cimc" {
   application_profile_dn = aci_application_profile.pod00017_azure_stack.id
   name                   = "pod00017_azure_stack_cimc"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_azure_stack_cimc.id
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_azure_cimc.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -994,9 +994,9 @@ resource "aci_bridge_domain" "bd_pod00017_avamar_mgmt_protection" {
   ep_move_detect_mode = "garp"
 }
 
-resource "aci_bridge_domain" "bd_pod00017_azure_stack_cimc" {
+resource "aci_bridge_domain" "bd_pod00017_azure_cimc" {
   tenant_dn           = aci_tenant.skyscape_mgmt.id
-  name                = "bd_pod00017_azure_stack_cimc"
+  name                = "bd_pod00017_azure_cimc"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
