@@ -611,12 +611,6 @@ resource "aci_application_epg" "pod00017_client_cluster1_scaleio_data1" {
   application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
   name                   = "pod00017_client_cluster1_scaleio_data1"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_scaleio_data1.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -628,12 +622,6 @@ resource "aci_application_epg" "pod00017_client_cluster1_scaleio_data2" {
   application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
   name                   = "pod00017_client_cluster1_scaleio_data2"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_scaleio_data2.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -662,12 +650,6 @@ resource "aci_application_epg" "pod00017_client_cluster1_vmotion" {
   application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
   name                   = "pod00017_client_cluster1_vmotion"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_vmotion.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -696,12 +678,6 @@ resource "aci_application_epg" "pod00017_client_cluster1_vxlan" {
   application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
   name                   = "pod00017_client_cluster1_vxlan"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_vxlan.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -757,12 +733,6 @@ resource "aci_application_epg" "pod00017_mgmt_scaleio_data1" {
   application_profile_dn = aci_application_profile.pod00017_management.id
   name                   = "pod00017_mgmt_scaleio_data1"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_mgmt_scaleio_data1.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -774,12 +744,6 @@ resource "aci_application_epg" "pod00017_mgmt_scaleio_data2" {
   application_profile_dn = aci_application_profile.pod00017_management.id
   name                   = "pod00017_mgmt_scaleio_data2"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_mgmt_scaleio_data2.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -825,12 +789,6 @@ resource "aci_application_epg" "pod00017_mgmt_vmotion" {
   application_profile_dn = aci_application_profile.pod00017_management.id
   name                   = "pod00017_mgmt_vmotion"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_mgmt_vmotion.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
