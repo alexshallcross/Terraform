@@ -30,8 +30,8 @@ module "pod00035" {
   interface_map = {
     leafs_601_602 = {
       node_ids   = [601, 602]
-      clnt_ports = [1, 2, 3, 4, 13, 14, 15]
-      mgmt_ports = []
+      clnt_ports = []
+      mgmt_ports = [1, 2, 3, 4, 13, 14, 15]
       cimc_ports = []
     }
   }
@@ -588,7 +588,7 @@ resource "aci_application_profile" "pod00017_azure_stack" {
 resource "aci_application_epg" "pod00017_azure_stack_cimc" {
   application_profile_dn = aci_application_profile.pod00017_azure_stack.id
   name                   = "pod00017_azure_stack_cimc"
-  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_azure_stack_cimc.id
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_azure_cimc.id
   relation_fv_rs_prov = [
     "uni/tn-common/brc-default",
   ]
@@ -611,12 +611,6 @@ resource "aci_application_epg" "pod00017_client_cluster1_scaleio_data1" {
   application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
   name                   = "pod00017_client_cluster1_scaleio_data1"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_scaleio_data1.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -628,12 +622,6 @@ resource "aci_application_epg" "pod00017_client_cluster1_scaleio_data2" {
   application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
   name                   = "pod00017_client_cluster1_scaleio_data2"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_scaleio_data2.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -662,12 +650,6 @@ resource "aci_application_epg" "pod00017_client_cluster1_vmotion" {
   application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
   name                   = "pod00017_client_cluster1_vmotion"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_vmotion.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -696,12 +678,6 @@ resource "aci_application_epg" "pod00017_client_cluster1_vxlan" {
   application_profile_dn = aci_application_profile.pod00017_client_cluster1.id
   name                   = "pod00017_client_cluster1_vxlan"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_client_cluster1_vxlan.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -757,12 +733,6 @@ resource "aci_application_epg" "pod00017_mgmt_scaleio_data1" {
   application_profile_dn = aci_application_profile.pod00017_management.id
   name                   = "pod00017_mgmt_scaleio_data1"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_mgmt_scaleio_data1.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -774,12 +744,6 @@ resource "aci_application_epg" "pod00017_mgmt_scaleio_data2" {
   application_profile_dn = aci_application_profile.pod00017_management.id
   name                   = "pod00017_mgmt_scaleio_data2"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_mgmt_scaleio_data2.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -825,12 +789,6 @@ resource "aci_application_epg" "pod00017_mgmt_vmotion" {
   application_profile_dn = aci_application_profile.pod00017_management.id
   name                   = "pod00017_mgmt_vmotion"
   relation_fv_rs_bd      = aci_bridge_domain.bd_pod00017_mgmt_vmotion.id
-  relation_fv_rs_prov = [
-    "uni/tn-common/brc-default",
-  ]
-  relation_fv_rs_cons = [
-    "uni/tn-common/brc-default",
-  ]
   lifecycle {
     ignore_changes = [
       relation_fv_rs_graph_def,
@@ -994,9 +952,9 @@ resource "aci_bridge_domain" "bd_pod00017_avamar_mgmt_protection" {
   ep_move_detect_mode = "garp"
 }
 
-resource "aci_bridge_domain" "bd_pod00017_azure_stack_cimc" {
+resource "aci_bridge_domain" "bd_pod00017_azure_cimc" {
   tenant_dn           = aci_tenant.skyscape_mgmt.id
-  name                = "bd_pod00017_azure_stack_cimc"
+  name                = "bd_pod00017_azure_cimc"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
