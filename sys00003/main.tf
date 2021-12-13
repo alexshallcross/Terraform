@@ -48,34 +48,22 @@ module "pod00035" {
     "10.44.40.1/25"
   ]
   mgmt_cluster_transit_subnets = [
-    "10.44.43.1/26"
+    "10.44.41.193/26"
   ]
   mgmt_cluster_edge_overlay_subnets = [
-    "10.44.42.1/28"
-  ]
-  client_cluster_1_vxlan_subnets = [
-    "10.44.42.129/26"
-  ]
-  mgmt_cluster_avamar_subnets = [
-    "10.44.41.193/26"
+    "10.44.41.129/26"
   ]
   mgmt_cluster_vsan_subnets = [
     "10.44.41.1/26"
   ]
   mgmt_cluster_vmotion_subnets = [
-    "10.44.41.65/26"
+    "10.44.42.1/26"
   ]
   mgmt_cluster_vmware_subnets = [
     "10.44.40.129/25"
   ]
-  storage_mgmt_subnets = [
-    "10.44.41.129/26"
-  ]
   mgmt_cluster_host_overlay_subnets = [
     "10.44.41.65/26"
-  ]
-  client_avamar_subnets = [
-    "10.44.42.193/26"
   ]
 
   vmm_ci      = "vcv00035i2"

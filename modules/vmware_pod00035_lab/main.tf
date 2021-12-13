@@ -317,12 +317,12 @@ module "mgmt_cluster_tranit" {
   vrf      = var.ukcloud_mgmt_vrf
 }
 
-module "client_cluster_1_vmware" {
+module "mgmt_cluster_vmotion" {
   source = "./modules/epg-bd-config"
 
-  epg_name          = "client_cluster_1_vmware"
-  vlan_tag          = "vlan-104"
-  subnets           = var.client_cluster_1_vmware_subnets
+  epg_name          = "mgmt_cluster_vmotion"
+  vlan_tag          = "vlan-106"
+  subnets           = var.mgmt_cluster_vmotion_subnets
   access_generic_id = aci_access_generic.client_esx.id
 
   pod_id   = var.pod_id
