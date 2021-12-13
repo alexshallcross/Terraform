@@ -24,7 +24,7 @@ provider "aci" {
 #################
 
 module "pod00035" {
-  source = "../modules/vmware_pod_no_vpc"
+  source = "../modules/vmware_pod00035_lab"
   pod_id = "pod00035"
 
   interface_map = {
@@ -47,10 +47,10 @@ module "pod00035" {
   cimc_subnets = [
     "10.44.40.1/25"
   ]
-  client_cluster_1_vmotion_subnets = [
+  mgmt_cluster_transit_subnets = [
     "10.44.43.1/26"
   ]
-  client_cluster_1_vmware_subnets = [
+  mgmt_cluster_edge_overlay_subnets = [
     "10.44.42.1/28"
   ]
   client_cluster_1_vxlan_subnets = [
@@ -59,7 +59,7 @@ module "pod00035" {
   mgmt_cluster_avamar_subnets = [
     "10.44.41.193/26"
   ]
-  mgmt_cluster_tools_subnets = [
+  mgmt_cluster_vsan_subnets = [
     "10.44.41.1/26"
   ]
   mgmt_cluster_vmotion_subnets = [
@@ -71,7 +71,7 @@ module "pod00035" {
   storage_mgmt_subnets = [
     "10.44.41.129/26"
   ]
-  mgmt_vmm_subnets = [
+  mgmt_cluster_host_overlay_subnets = [
     "10.44.41.65/26"
   ]
   client_avamar_subnets = [
