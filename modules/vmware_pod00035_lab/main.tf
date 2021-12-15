@@ -337,7 +337,7 @@ module "mgmt_cluster_vsan" {
   source = "./modules/epg-bd-config"
 
   epg_name          = "mgmt_cluster_vsan"
-  vlan_tag          = "vlan-103"
+  vlan_tag          = "vlan-102"
   subnets           = var.mgmt_cluster_vsan_subnets
   access_generic_id = aci_access_generic.mgmt_esx.id
 
@@ -401,7 +401,7 @@ module "mgmt_vmm" {
   source = "./modules/epg-bd-config"
 
   epg_name          = "mgmt_vmm"
-  vlan_tag          = "vlan-102"
+  vlan_tag          = "vlan-103"
   subnets           = var.mgmt_vmm_subnets
   access_generic_id = aci_access_generic.mgmt_esx.id
 
