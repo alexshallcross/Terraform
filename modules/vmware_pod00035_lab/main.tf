@@ -390,10 +390,11 @@ module "mgmt_cluster_host_overlay" {
   access_generic_id = aci_access_generic.mgmt_esx.id
 
   pod_id   = var.pod_id
-  app_prof = aci_application_profile.mgmt.id
+  app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = "uni/tn-mgmt"
-  vrf      = "uni/tn-mgmt/ctx-inb"
+  tenant   = var.ukcloud_mgmt_tenant
+  l3_out   = [var.ukcloud_mgmt_l3_out]
+  vrf      = var.ukcloud_mgmt_vrf
 }
 
 module "mgmt_vmm" {
