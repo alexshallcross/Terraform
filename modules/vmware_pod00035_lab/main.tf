@@ -301,12 +301,12 @@ resource "aci_subnet" "subnet" {
 #### EPG/BDs ####
 #################
 
-module "mgmt_cluster_tranit" {
+module "mgmt_cluster_transit" {
   source = "./modules/epg-bd-config"
 
-  epg_name          = "mgmt_cluster_tranit"
-  vlan_tag          = "vlan-105"
-  subnets           = var.mgmt_cluster_tranit_subnets
+  epg_name          = "mgmt_cluster_transit"
+  vlan_tag          = "vlan-106"
+  subnets           = var.mgmt_cluster_transit_subnets
   access_generic_id = aci_access_generic.client_esx.id
 
   pod_id   = var.pod_id
@@ -321,40 +321,8 @@ module "mgmt_cluster_vmotion" {
   source = "./modules/epg-bd-config"
 
   epg_name          = "mgmt_cluster_vmotion"
-  vlan_tag          = "vlan-106"
+  vlan_tag          = "vlan-107"
   subnets           = var.mgmt_cluster_vmotion_subnets
-  access_generic_id = aci_access_generic.client_esx.id
-
-  pod_id   = var.pod_id
-  app_prof = aci_application_profile.vmware.id
-  phys_dom = aci_physical_domain.vmware.id
-  tenant   = var.ukcloud_mgmt_tenant
-  l3_out   = [var.ukcloud_mgmt_l3_out]
-  vrf      = var.ukcloud_mgmt_vrf
-}
-
-module "client_cluster_1_vxlan" {
-  source = "./modules/epg-bd-config"
-
-  epg_name          = "client_cluster_1_vxlan"
-  vlan_tag          = "vlan-115"
-  subnets           = var.client_cluster_1_vxlan_subnets
-  access_generic_id = aci_access_generic.client_esx.id
-
-  pod_id   = var.pod_id
-  app_prof = aci_application_profile.vmware.id
-  phys_dom = aci_physical_domain.vmware.id
-  tenant   = var.ukcloud_mgmt_tenant
-  l3_out   = [var.ukcloud_mgmt_l3_out]
-  vrf      = var.ukcloud_mgmt_vrf
-}
-
-module "mgmt_cluster_avamar" {
-  source = "./modules/epg-bd-config"
-
-  epg_name          = "mgmt_cluster_avamar"
-  vlan_tag          = "vlan-156"
-  subnets           = var.mgmt_cluster_avamar_subnets
   access_generic_id = aci_access_generic.client_esx.id
 
   pod_id   = var.pod_id
@@ -369,7 +337,7 @@ module "mgmt_cluster_vsan" {
   source = "./modules/epg-bd-config"
 
   epg_name          = "mgmt_cluster_vsan"
-  vlan_tag          = "vlan-102"
+  vlan_tag          = "vlan-103"
   subnets           = var.mgmt_cluster_vsan_subnets
   access_generic_id = aci_access_generic.mgmt_esx.id
 
@@ -385,7 +353,7 @@ module "mgmt_cluster_edge_overlay" {
   source = "./modules/epg-bd-config"
 
   epg_name          = "mgmt_cluster_edge_overlay"
-  vlan_tag          = "vlan-104"
+  vlan_tag          = "vlan-105"
   subnets           = var.mgmt_cluster_edge_overlay_subnets
   access_generic_id = aci_access_generic.mgmt_esx.id
 
@@ -417,7 +385,7 @@ module "mgmt_cluster_host_overlay" {
   source = "./modules/epg-bd-config"
 
   epg_name          = "mgmt_cluster_host_overlay"
-  vlan_tag          = "vlan-103"
+  vlan_tag          = "vlan-104"
   subnets           = var.mgmt_cluster_host_overlay_subnets
   access_generic_id = aci_access_generic.mgmt_esx.id
 
@@ -428,20 +396,19 @@ module "mgmt_cluster_host_overlay" {
   vrf      = "uni/tn-mgmt/ctx-inb"
 }
 
-module "client_avamar" {
+module "mgmt_vmm" {
   source = "./modules/epg-bd-config"
 
-  epg_name          = "client_avamar"
-  vlan_tag          = "vlan-155"
-  subnets           = var.client_avamar_subnets
-  access_generic_id = aci_access_generic.client_esx.id
+  epg_name          = "mgmt_vmm"
+  vlan_tag          = "vlan-102"
+  subnets           = var.mgmt_vmm_subnets
+  access_generic_id = aci_access_generic.mgmt_esx.id
 
   pod_id   = var.pod_id
-  app_prof = aci_application_profile.avamar.id
+  app_prof = aci_application_profile.mgmt.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = var.protection_tenant
-  l3_out   = [var.protection_l3_out]
-  vrf      = var.protection_vrf
+  tenant   = "uni/tn-mgmt"
+  vrf      = "uni/tn-mgmt/ctx-inb"
 }
 
 #########################

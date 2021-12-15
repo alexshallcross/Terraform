@@ -65,6 +65,9 @@ module "pod00035" {
   mgmt_cluster_host_overlay_subnets = [
     "10.44.41.65/26"
   ]
+  mgmt_vmm_subnets = [
+    "10.44.42.65/26"
+  ]
 
   vmm_ci      = "vcv00035i2"
   vmm_host    = "10.44.42.2"
