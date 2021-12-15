@@ -307,7 +307,7 @@ module "mgmt_cluster_transit" {
   epg_name          = "mgmt_cluster_transit"
   vlan_tag          = "vlan-106"
   subnets           = var.mgmt_cluster_transit_subnets
-  access_generic_id = aci_access_generic.client_esx.id
+  access_generic_id = aci_access_generic.mgmt_esx.id
 
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
@@ -323,7 +323,7 @@ module "mgmt_cluster_vmotion" {
   epg_name          = "mgmt_cluster_vmotion"
   vlan_tag          = "vlan-107"
   subnets           = var.mgmt_cluster_vmotion_subnets
-  access_generic_id = aci_access_generic.client_esx.id
+  access_generic_id = aci_access_generic.mgmt_esx.id
 
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
