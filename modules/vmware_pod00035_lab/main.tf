@@ -307,7 +307,7 @@ module "mgmt_cluster_transit" {
   epg_name          = "mgmt_cluster_transit"
   vlan_tag          = "vlan-106"
   subnets           = var.mgmt_cluster_transit_subnets
-  access_generic_id = aci_access_generic.client_esx.id
+  access_generic_id = aci_access_generic.mgmt_esx.id
 
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
@@ -323,7 +323,7 @@ module "mgmt_cluster_vmotion" {
   epg_name          = "mgmt_cluster_vmotion"
   vlan_tag          = "vlan-107"
   subnets           = var.mgmt_cluster_vmotion_subnets
-  access_generic_id = aci_access_generic.client_esx.id
+  access_generic_id = aci_access_generic.mgmt_esx.id
 
   pod_id   = var.pod_id
   app_prof = aci_application_profile.vmware.id
@@ -337,7 +337,7 @@ module "mgmt_cluster_vsan" {
   source = "./modules/epg-bd-config"
 
   epg_name          = "mgmt_cluster_vsan"
-  vlan_tag          = "vlan-103"
+  vlan_tag          = "vlan-102"
   subnets           = var.mgmt_cluster_vsan_subnets
   access_generic_id = aci_access_generic.mgmt_esx.id
 
@@ -390,17 +390,18 @@ module "mgmt_cluster_host_overlay" {
   access_generic_id = aci_access_generic.mgmt_esx.id
 
   pod_id   = var.pod_id
-  app_prof = aci_application_profile.mgmt.id
+  app_prof = aci_application_profile.vmware.id
   phys_dom = aci_physical_domain.vmware.id
-  tenant   = "uni/tn-mgmt"
-  vrf      = "uni/tn-mgmt/ctx-inb"
+  tenant   = var.ukcloud_mgmt_tenant
+  l3_out   = [var.ukcloud_mgmt_l3_out]
+  vrf      = var.ukcloud_mgmt_vrf
 }
 
 module "mgmt_vmm" {
   source = "./modules/epg-bd-config"
 
   epg_name          = "mgmt_vmm"
-  vlan_tag          = "vlan-102"
+  vlan_tag          = "vlan-103"
   subnets           = var.mgmt_vmm_subnets
   access_generic_id = aci_access_generic.mgmt_esx.id
 
