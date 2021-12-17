@@ -903,6 +903,207 @@ resource "aci_application_epg" "pod00023_public_services" {
   }
 }
 
+resource "aci_application_profile" "pod00023_avamar_mgmt" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00023_avamar_mgmt"
+}
+
+resource "aci_application_epg" "pod00023_mgmt_cluster_avamar" {
+  application_profile_dn = aci_application_profile.pod00023_avamar_mgmt.id
+  name                   = "pod00023_mgmt_cluster_avamar"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_mgmt_cluster_avamar.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_profile" "pod00023_client_cluster" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00023_client_cluster"
+}
+
+resource "aci_application_epg" "pod00023_client_cluster_vmotion" {
+  application_profile_dn = aci_application_profile.pod00023_client_cluster.id
+  name                   = "pod00023_client_cluster_vmotion"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_client_cluster_vmotion.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00023_client_cluster_vmware" {
+  application_profile_dn = aci_application_profile.pod00023_client_cluster.id
+  name                   = "pod00023_client_cluster_vmware"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_client_cluster_vmware.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00023_client_cluster_vxlan" {
+  application_profile_dn = aci_application_profile.pod00023_client_cluster.id
+  name                   = "pod00023_client_cluster_vxlan"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_client_cluster_vxlan.id
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_profile" "pod00023_management" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00023_management"
+}
+
+resource "aci_application_epg" "pod00023_cimc" {
+  application_profile_dn = aci_application_profile.pod00023_management.id
+  name                   = "pod00023_cimc"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_cimc.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00023_mgmt_cluster_tools" {
+  application_profile_dn = aci_application_profile.pod00023_management.id
+  name                   = "pod00023_mgmt_cluster_tools"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_mgmt_cluster_tools.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00023_mgmt_cluster_vmotion" {
+  application_profile_dn = aci_application_profile.pod00023_management.id
+  name                   = "pod00023_mgmt_cluster_vmotion"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_mgmt_cluster_vmotion.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00023_mgmt_cluster_vmware" {
+  application_profile_dn = aci_application_profile.pod00023_management.id
+  name                   = "pod00023_mgmt_cluster_vmware"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_mgmt_cluster_vmware.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_profile" "pod00023_storage" {
+  tenant_dn = aci_tenant.skyscape_mgmt.id
+  name      = "pod00023_storage"
+}
+
+resource "aci_application_epg" "pod00023_scaleio_data1" {
+  application_profile_dn = aci_application_profile.pod00023_storage.id
+  name                   = "pod00023_scaleio_data1"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_scaleio_data1.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00023_scaleio_data2" {
+  application_profile_dn = aci_application_profile.pod00023_storage.id
+  name                   = "pod00023_scaleio_data2"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_scaleio_data2.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
+resource "aci_application_epg" "pod00023_scaleio_mgmt" {
+  application_profile_dn = aci_application_profile.pod00023_storage.id
+  name                   = "pod00023_scaleio_mgmt"
+  relation_fv_rs_bd      = aci_bridge_domain.bd_pod00023_scaleio_mgmt.id
+  relation_fv_rs_prov = [
+    "uni/tn-common/brc-default",
+  ]
+  relation_fv_rs_cons = [
+    "uni/tn-common/brc-default",
+  ]
+  lifecycle {
+    ignore_changes = [
+      relation_fv_rs_graph_def,
+    ]
+  }
+}
+
 ##################################
 #### skyscape_mgmt Networking ####
 ##################################
@@ -1178,6 +1379,90 @@ resource "aci_bridge_domain" "bd_pod00023_monitoring" {
 resource "aci_bridge_domain" "bd_pod00023_public_services" {
   tenant_dn           = aci_tenant.skyscape_mgmt.id
   name                = "bd_pod00023_public_services"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_mgmt_cluster_avamar" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_mgmt_cluster_avamar"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_client_cluster_vmotion" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_client_cluster_vmotion"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_client_cluster_vmware" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_client_cluster_vmware"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_client_cluster_vxlan" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_client_cluster_vxlan"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_client_cluster_cimc" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_client_cluster_cimc"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_cimc" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_cimc"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_mgmt_cluster_tools" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_mgmt_cluster_tools"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_mgmt_cluster_vmotion" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_mgmt_cluster_vmotion"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_mgmt_cluster_vmware" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_mgmt_cluster_vmware"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_scaleio_data1" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_scaleio_data1"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_scaleio_data2" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_scaleio_data2"
+  arp_flood           = "yes"
+  ep_move_detect_mode = "garp"
+}
+
+resource "aci_bridge_domain" "bd_pod00023_scaleio_mgmt" {
+  tenant_dn           = aci_tenant.skyscape_mgmt.id
+  name                = "bd_pod00023_scaleio_mgmt"
   arp_flood           = "yes"
   ep_move_detect_mode = "garp"
 }
